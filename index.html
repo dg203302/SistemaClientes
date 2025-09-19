@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagina administrador</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Registro de clientes</h1>
+
+  <form id="registroForm">
+    <label for="nombre">Ingrese el nombre completo:</label><br>
+    <input id="nombre" type="text" required><br><br>
+
+    <label for="correo">Ingrese el mail:</label><br>
+    <input id="correo" type="email" name="correo" 
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required><br><br>
+
+    <label for="contraseña">Cree una contraseña segura:</label><br>
+    <input id="contraseña" type="password" required><br><br>
+
+    <input type="submit" value="Registrar"> 
+  </form>
+
+  <div id="mensaje"></div>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E'
+
+    const { createClient } = supabase
+    const client = createClient(supabaseUrl, supabaseKey)
+
+    const form = document.getElementById('registroForm')
+    const mensaje = document.getElementById('mensaje')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const Nombre = document.getElementById('nombre').value
+      const Mail = document.getElementById('correo').value
+      const Contra = document.getElementById('contraseña').value
+      const { data, error } = await client
+        .from('Clientes')
+        .insert([{ Mail, Nombre, Contra }])
+
+      if (error) {
+        console.error('Error al registrar:', error.message)
+        mensaje.innerText = '❌ Error al registrar: ' + error.message
+      } else {
+        console.log('Cliente registrado correctamente:', data)
+        mensaje.innerText = '✅ Cliente registrado correctamente'
+        form.reset()
+      }
+    })
+  </script>
+</body>
+</html>
