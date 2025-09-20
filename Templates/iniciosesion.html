@@ -6,13 +6,19 @@
     <title>Iniciar sesion</title>
 </head>
 <body>
-    <form action="">
-        <label for="correo"> Correo Electronico:</label>
+    <h1>
+       Bienvenido de nuevo
+    </h1>
+    <form id="inicioform">
+        <label for="correo"> Correo Electronico</label><br>
         <input id="correo" type="email" name="correo" 
-        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
-        <label for="contraseña"> ingrese la contraseña:</label>
-        <input id="contraseña" type="password" required>
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required> <br><br>
+        <label for="contraseña"> ingrese la contraseña</label><br>
+        <input id="contraseña" type="password" required><br><br>
+        <input type="submit" value="Iniciar sesion">
     </form>
-    
+    <div id="mensaje"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/Scripts/script_iniciosecion.js"></script>
 </body>
 </html>
