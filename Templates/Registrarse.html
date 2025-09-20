@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regsitro</title>
+  <link rel="stylesheet" href="/Styles/styles.css">
+</head>
+<body>
+  <h1>Registro de clientes</h1>
+
+  <form id="registroForm">
+    <label for="nombre">Ingrese el nombre completo:</label><br>
+    <input id="nombre" type="text" required><br><br>
+
+    <label for="correo">Ingrese el mail:</label><br>
+    <input id="correo" type="email" name="correo" 
+      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required><br><br>
+
+    <label for="contraseña">Cree una contraseña segura:</label><br>
+    <input id="contraseña" type="password" required><br><br>
+
+    <input type="submit" value="Registrar"> 
+  </form>
+
+  <div id="mensaje"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/script_registro.js"></script>
+</body>
+</html>
