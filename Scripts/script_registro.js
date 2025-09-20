@@ -4,22 +4,25 @@ const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 const form = document.getElementById('registroForm')
 const mensaje = document.getElementById('mensaje')
-
-form.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const Nombre = document.getElementById('nombre').value
-    const Mail = document.getElementById('correo').value
-    const Contra = document.getElementById('contraseña').value
-    const { data, error } = await client
-    .from('Clientes')
-    .insert([{ Mail, Nombre, Contra }])
-
-    if (error) {
-    console.error('Error al registrar:', error.message)
-    mensaje.innerText = '❌ Error al registrar: ' + error.message
-    } else {
-    console.log('Cliente registrado correctamente:', data)
-    mensaje.innerText = '✅ Cliente registrado correctamente'
-    form.reset()
-    }
-})
+if (verificar_contrasenia){
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        const Nombre = document.getElementById('nombre').value
+        const Mail = document.getElementById('correo').value
+        const Contra = document.getElementById('contraseña').value
+        const { data, error } = await client
+        .from('Clientes')
+        .insert([{ Mail, Nombre, Contra }])
+        if (error) {
+        console.error('Error al registrar:', error.message)
+        mensaje.innerText = '❌ Error al registrar: ' + error.message
+        } else {
+        console.log('Cliente registrado correctamente:', data)
+        mensaje.innerText = '✅ Cliente registrado correctamente'
+        form.reset()
+        }
+    })
+}
+else{
+    
+}
