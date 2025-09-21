@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesion</title>
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="/Styles/Estilos_inicio_sesion.css">
 </head>
 <body>
-    <h1>
-       Bienvenido de nuevo
-    </h1>
-    <form id="inicioform">
-        <label for="correo"> Correo Electronico</label><br>
-        <input id="correo" type="email" name="correo" 
-        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required> <br><br>
-        <label for="contraseña"> ingrese la contraseña</label><br>
-        <input id="contraseña" type="password" required><br><br>
-        <input type="submit" value="Iniciar sesion">
-    </form>
-    <div id="mensaje"></div>
+    <div class="card">
+        <h1>Bienvenido de nuevo</h1>
+        <form id="inicioform">
+            <label for="correo">Correo Electrónico</label>
+            <input id="correo" type="email" name="correo" 
+                placeholder="Tu correo" 
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                required>
+
+            <label for="contrasenia">Contraseña</label>
+            <input id="contrasenia" type="password" placeholder="Tu contraseña" required>
+
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+
+        <p><a href="/Templates/recuperar_contra.html">¿Olvidaste tu contraseña?</a></p>
+        <p>¿No tienes cuenta? <a href="/Templates/Registrarse.html">Regístrate aquí</a></p>
+        <div id="mensaje"></div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/Scripts/script_iniciosecion.js"></script>
+    <script type="module" src="/Scripts/script_iniciosecion.js"></script>
 </body>
 </html>

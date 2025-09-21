@@ -29,21 +29,34 @@ body {
   align-items: center;
 }
 
-/* Tarjeta estilo registro */
+/* Tarjeta estilo login */
 .card {
   background: var(--gradient-card);
   border-radius: 20px;
   padding: 2rem;
-  width: 380px;
+  width: 350px;
   box-shadow: 0px 8px 25px rgba(0,0,0,0.6);
   text-align: center;
   animation: fadeIn 1s ease-in-out;
 }
 
+/* Icono */
+.icon {
+  width: 80px;
+  margin-bottom: 15px;
+}
+
+/* Título y slogan */
 .card h1 {
   color: var(--color-light);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1.8rem;
+}
+
+.slogan {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  color: rgba(255,255,255,0.8);
 }
 
 /* Formulario */
@@ -81,8 +94,7 @@ input::placeholder {
 }
 
 /* Botón */
-button,
-input[type="submit"] {
+button {
   width: 100%;
   padding: 12px;
   margin-top: 1rem;
@@ -96,13 +108,12 @@ input[type="submit"] {
   transition: 0.3s;
 }
 
-button:hover,
-input[type="submit"]:hover {
+button:hover {
   background: linear-gradient(90deg, var(--color-pink-dark), var(--color-purple));
   transform: translateY(-2px);
 }
 
-/* Links (opcional si quieres redirigir a login) */
+/* Links */
 a {
   color: var(--color-pink);
   text-decoration: none;
@@ -115,9 +126,28 @@ a:hover {
   color: var(--color-light);
 }
 
-p {
+/* Mensaje de privacidad */
+.privacy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
   margin-top: 10px;
+}
+
+/* Mensajes dinámicos */
+.mensaje {
+  margin-top: 15px;
   font-size: 0.9rem;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.mensaje.show {
+  opacity: 1;
+}
+.logo {
+  font-size: 3rem;
+  margin-bottom: 10px;
 }
 
 /* Animación de entrada */

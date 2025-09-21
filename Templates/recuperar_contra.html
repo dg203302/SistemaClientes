@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="/Styles/Estilos_recuperar_contra.css">
+</head>
+<body>
+    <div class="card">
+        <!-- Icono arriba -->
+         <div class="logo">📥</div>
+
+        <h1>Recuperar Contraseña</h1>
+        <p class="slogan">Ingresa tu correo y recibirás un enlace para restablecer tu contraseña.</p>
+
+        <form id="recuperarForm">
+            <label for="correo">Correo Electrónico</label>
+            <input id="correo" type="email" name="correo" 
+                placeholder="Tu correo" 
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                required>
+            <button type="submit" id="submitBtn">Enviar enlace</button> <br>
+        </form>
+
+        <p class="privacy">Tu correo será usado solo para recuperar tu contraseña.</p> <br>
+        <p><a href="/Templates/iniciosesion.html">Volver al inicio de sesión</a></p>
+
+        <div id="mensaje" class="mensaje"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/Scripts/script_recuperar_contrasena.js"></script>
+</body>
+</html>

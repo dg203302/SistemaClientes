@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Regsitro</title>
-  <link rel="stylesheet" href="/Styles/styles.css">
+  <title>Registro</title>
+  <link rel="stylesheet" href="/Styles/Estilos_registro.css">
 </head>
 <body>
-  <h1>Registro de clientes</h1>
+  <div class="card">
+    <h1>Registro de Clientes</h1>
 
-  <form id="registroForm">
-    <label for="nombre">Ingrese el nombre completo:</label><br>
-    <input id="nombre" type="text" required><br><br>
+    <form id="registroForm">
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" type="text" placeholder="Tu nombre" required>
 
-    <label for="correo">Ingrese el mail:</label><br>
-    <input id="correo" type="email" name="correo" 
-      pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required><br><br>
+      <label for="correo">Correo electrónico</label>
+      <input id="correo" type="email" name="correo" placeholder="ejemplo@mail.com"
+        pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
 
-    <label for="contraseña">Cree una contraseña segura:</label><br>
-    <input id="contraseña" type="password" required><br><br>
+      <label for="contraseña">Contraseña</label>
+      <input id="contraseña" type="password" placeholder="Crea una contraseña" required>
 
-    <input type="submit" value="Registrar"> 
-  </form>
+      <input type="submit" value="Registrar">
+    </form>
 
-  <div id="mensaje"></div>
+    <p>¿Ya tienes cuenta? <a href="/Templates/iniciosesion.html">Inicia sesión aquí</a></p>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/Scripts/script_registro.js"></script>
+  <script type="module" src="/Scripts/script_registro.js"></script>
 </body>
 </html>
