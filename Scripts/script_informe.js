@@ -6,6 +6,8 @@ function generarmensaje(mensaje){
             return "no existe un usuario registrado a ese mail";
         case "contraseña incorrecta":
             return "Contraseña Incorrecta"
+        case "mal codigo":
+            return "Codigo de recuperacion erroneo"
         default:
             return "Ocurrió un error inesperado.";
   }
@@ -29,6 +31,7 @@ window.onload = function(){
             boton_s.style.display = "flex";
             let contenedor = document.getElementsByClassName("informe");
             contenedor[0].classList.add("fracaso");
+            console.log(inform)
         }
         else if (valor === "1"){ //contraseña equivocada
             titulo_info.textContent="Registro Fallido"
@@ -39,6 +42,7 @@ window.onload = function(){
             boton_s.style.display = "flex";
             let contenedor = document.getElementsByClassName("informe")
             contenedor[0].classList.add("fracaso");
+            console.log(inform)
         }
         else if (valor === "2"){ //registro fallido
             titulo_info.textContent="Registro Fallido"
@@ -47,9 +51,44 @@ window.onload = function(){
             boton_info.textContent = "Reintentar"
             let contenedor = document.getElementsByClassName("informe")
             contenedor[0].classList.add("fracaso");
+            console.log(inform)
         }
         else if (valor === "3"){ //registro exitoso
             titulo_info.textContent="Registro Exitoso"
+            boton_info.href = "iniciosesion.html";
+            boton_info.textContent = "Continuar";
+            let contenedor = document.getElementsByClassName("informe")
+            contenedor[0].classList.add("exito");
+        }
+        else if (valor === "4"){ //recuperar contra fallido
+            titulo_info.textContent="Recuperacion de contraseña fallido"
+            texto_info.textContent = generarmensaje(inform);
+            boton_info.href = "recuperar_contra.html";
+            boton_info.textContent= "Regresar"
+            let contenedor = document.getElementsByClassName("informe");
+            contenedor[0].classList.add("fracaso");
+            console.log(inform)
+        }
+        else if (valor === "5"){ //validar codigo recuperacion fallido
+            titulo_info.textContent="Validacion de codigo fallida"
+            texto_info.textContent = generarmensaje(inform);
+            boton_info.href = "recuperar_contra.html";
+            boton_info.textContent= "Regresar a Recuperar Contraseña"
+            let contenedor = document.getElementsByClassName("informe");
+            contenedor[0].classList.add("fracaso");
+            console.log(inform)
+        }
+        else if (valor === "6"){
+            titulo_info.textContent="Cambio de contraseña fallido"
+            texto_info.textContent = generarmensaje(inform);
+            boton_info.href = "recuperar_contra.html";
+            boton_info.textContent= "Regresar a Recuperar Contraseña"
+            let contenedor = document.getElementsByClassName("informe");
+            contenedor[0].classList.add("fracaso");
+            console.log(inform)
+        }
+        else if (valor === "7"){ //recuperacion de contraseña exitoso
+            titulo_info.textContent="Contraseña Recuperada Exitosamente"
             boton_info.href = "iniciosesion.html";
             boton_info.textContent = "Continuar";
             let contenedor = document.getElementsByClassName("informe")

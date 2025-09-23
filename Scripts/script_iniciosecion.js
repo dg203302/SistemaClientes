@@ -5,13 +5,11 @@ const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 const form = document.getElementById('inicioform')
 const mensaje = document.getElementById('mensaje')
-
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const Mail = document.getElementById('correo').value
     const Contra_ingre = document.getElementById('contrasenia').value
     const hash_contra = hashing(Contra_ingre);
-
     const { data, error } = await client
     .from('Clientes')
     .select('Nombre, Mail, Contra, Puntos')
