@@ -19,9 +19,11 @@ window.onload = function(){
     let titulo_info = document.getElementById("titulo_informe");
     let texto_info = this.document.getElementById("texto_informe");
     let boton_info = document.getElementById("boton_info");
+    let icono = document.getElementById("icono-status");
     if (boton_info) {
         if (valor === "0"){ //usuario invalido
             titulo_info.textContent="Registro Fallido"
+            icono.className = "fa-solid fa-circle-xmark";
             texto_info.textContent = generarmensaje(inform);
             boton_info.href = "Registrarse.html";
             boton_info.textContent= "Registrarse"
@@ -35,6 +37,7 @@ window.onload = function(){
         }
         else if (valor === "1"){ //contraseña equivocada
             titulo_info.textContent="Registro Fallido"
+            icono.className = "fa-solid fa-circle-xmark";
             texto_info.textContent = generarmensaje(inform);
             boton_info.href = "iniciosesion.html"
             boton_info.textContent = "Reintentar"
@@ -46,6 +49,7 @@ window.onload = function(){
         }
         else if (valor === "2"){ //registro fallido
             titulo_info.textContent="Registro Fallido"
+            icono.className = "fa-solid fa-circle-xmark";
             texto_info.textContent = generarmensaje(inform);
             boton_info.href = "Registrarse.html"
             boton_info.textContent = "Reintentar"
@@ -55,6 +59,7 @@ window.onload = function(){
         }
         else if (valor === "3"){ //registro exitoso
             titulo_info.textContent="Registro Exitoso"
+            icono.className = "fa-solid fa-circle-check";
             boton_info.href = "iniciosesion.html";
             boton_info.textContent = "Continuar";
             let contenedor = document.getElementsByClassName("informe")
