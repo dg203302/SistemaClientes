@@ -60,6 +60,12 @@ label {
   color: var(--color-light);
 }
 
+#registroForm input:focus {
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 8px var(--color-pink);
+}
+
+
 input {
   width: 100%;
   padding: 12px;
