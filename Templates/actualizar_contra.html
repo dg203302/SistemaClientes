@@ -1,17 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="description" content="Formulario para actualizar tu contraseña de forma segura en Mi Aplicación.">
+    <meta name="author" content="Mi Aplicación">
+    <title>Actualizar Contraseña | El Lote</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/Styles/actualizar_contra.css">
 </head>
 <body>
-    <form id="form_actualizar">
-        <label for="nueva_contra">Nueva Contraseña</label>
-        <input id="nueva_contra" type="password" placeholder="Crea una nueva contraseña" required>
-        <!--aca poner un campito para repetir la contraseña despues-->
-      <input type="submit" value="Actualizar Contraseña">
-    </form>
+    <main class="contenedor">
+        <header class="form-header">
+           <div class="logo">⚙️</div>
+            <h1>Actualizar Contraseña</h1>
+            <p class="descripcion">Ingresa una nueva contraseña para mantener tu cuenta segura.</p>
+        </header>
+
+        <form id="form_actualizar" class="formulario">
+            <div class="campo">
+                <label for="nueva_contra">Nueva Contraseña</label>
+                <input 
+                    id="nueva_contra" 
+                    type="password" 
+                    placeholder="Crea una nueva contraseña" 
+                    required 
+                    minlength="8"
+                    aria-label="Nueva contraseña">
+            </div>
+
+            <div class="campo">
+                <label for="repetir_contra">Repetir Contraseña</label>
+                <input 
+                    id="repetir_contra" 
+                    type="password" 
+                    placeholder="Repite tu nueva contraseña" 
+                    required 
+                    minlength="8"
+                    aria-label="Repetir contraseña">
+            </div>
+
+            <input type="submit" value="Actualizar Contraseña" class="btn">
+        </form>
+
+        <footer class="form-footer">
+            <p>&copy; 2025 Mi Aplicación. Todos los derechos reservados.</p>
+            <a href="/dashboard" class="volver">← Volver al Panel</a>
+        </footer>
+    </main>
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="../Scripts/script_actualizar_contra.js"></script>
 </body>
