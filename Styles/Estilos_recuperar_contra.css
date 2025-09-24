@@ -11,7 +11,7 @@
   --gradient-bg: linear-gradient(135deg, var(--color-dark), var(--color-purple-dark), var(--color-purple));
   --gradient-card: linear-gradient(145deg, var(--color-purple-dark), var(--color-pink-dark));
 }
-
+recuperarFor
 /* Reset básico */
 * {
   margin: 0;
@@ -71,6 +71,11 @@ label {
   text-align: left;
   margin-bottom: 5px;
   color: var(--color-light);
+}
+
+#recuperarForm input:focus {
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 0 8px var(--color-pink);
 }
 
 input {
