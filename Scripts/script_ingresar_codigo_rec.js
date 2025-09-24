@@ -5,8 +5,7 @@ const client = createClient(supabaseUrl, supabaseKey)
 var codigo_BD = 0
 var tele_recu = ''
 window.onload = async () => {
-    const params = new URLSearchParams(window.location.search);
-    const tel = params.get('tele');
+    const tel = sessionStorage.getItem("telefono_usuario_recu");
     tele_recu=tel;
     const {data,error} = await client
     .from('Codigos_recuperacion')
@@ -27,7 +26,7 @@ document.getElementById("ing_codigo_rec").addEventListener('submit', function(e)
     if (parseInt(codi_ing) == codigo_BD){
         console.log("los codigos coinciden \n codigo de la bd: "+codigo_BD+"\n codigo ingresado: "+ codi_ing)
         
-        window.location.href = `actualizar_contra.html?tele=${encodeURIComponent(tele_recu)}`
+        window.location.href = "actualizar_contra.html"
     }
     else{
         const valor = 5;

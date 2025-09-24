@@ -28,7 +28,8 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
             const valor = 4;
             window.location.href = `Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
         }else{
-            window.location.href = `ingresar_codigo_rec.html?tele=${encodeURIComponent(tel)}`
+            sessionStorage.setItem("telefono_usuario_recu",JSON.stringify(tel))
+            window.location.href = "ingresar_codigo_rec.html"
             //aca poner el envio del mensaje con el codigo!
         }
 })

@@ -99,5 +99,12 @@ window.onload = function(){
             let contenedor = document.getElementsByClassName("informe")
             contenedor[0].classList.add("exito");
         }
+        else if (valor === "8"){ //fallo en la recuperacion de puntos
+            titulo_info.textContent="Fallo en la recuperacion de puntos"
+            boton_info.href = "Pagina_principal.html";
+            boton_info.textContent = "Continuar";
+            let contenedor = document.getElementsByClassName("informe")
+            contenedor[0].classList.add("exito");
+        }
     }
 }

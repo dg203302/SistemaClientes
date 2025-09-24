@@ -25,9 +25,8 @@ form.addEventListener('submit', async (e) => {
         window.location.href = `Informe.html?informe=${encodeURIComponent("contraseña incorrecta")}&valor=${encodeURIComponent(valor)}`;
     }
     else{
-        sessionStorage.setItem('telefono_usuario', data.Telef);
-        sessionStorage.setItem('nombre_usuario', data.Nombre);
-        sessionStorage.setItem('puntos_usuario', data.Puntos);
+        localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos}))
+        //por ahora no voy a usar el telefono
         window.location.href = "Pagina_principal.html";
     }
 })

@@ -26,8 +26,7 @@ const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 document.getElementById("form_actualizar").addEventListener("submit", async (e) =>{
     e.preventDefault();
-    const params = new URLSearchParams(window.location.search);
-    const tel = params.get('tele');
+    const tel = sessionStorage.getItem("telefono_usuario_recu")
     let contra_nue = document.getElementById("nueva_contra").value;
     let contra_rep = document.getElementById("repetir_contra").value;
     if (contra_nue == contra_rep){
@@ -44,6 +43,7 @@ document.getElementById("form_actualizar").addEventListener("submit", async (e) 
             }
             else{
                 const valor = 7;
+                sessionStorage.clear()
                 window.location.href = `Informe.html?informe=${encodeURIComponent("exito")}&valor=${encodeURIComponent(valor)}`;
             }  
         }
