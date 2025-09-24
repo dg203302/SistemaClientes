@@ -7,13 +7,13 @@ const form = document.getElementById('inicioform')
 const mensaje = document.getElementById('mensaje')
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
-    const Mail = document.getElementById('correo').value
+    const Telef = document.getElementById('telef').value
     const Contra_ingre = document.getElementById('contrasenia').value
     const hash_contra = hashing(Contra_ingre);
     const { data, error } = await client
     .from('Clientes')
-    .select('Nombre, Mail, Contra, Puntos')
-    .eq('Mail', Mail)
+    .select('Nombre, Telef, Contra, Puntos')
+    .eq('Telef', Telef)
     .single(); 
     if (error){
         const valor = 0;
@@ -25,7 +25,7 @@ form.addEventListener('submit', async (e) => {
         window.location.href = `Informe.html?informe=${encodeURIComponent("contraseña incorrecta")}&valor=${encodeURIComponent(valor)}`;
     }
     else{
-        sessionStorage.setItem('mail_usuario', data.Mail);
+        sessionStorage.setItem('telefono_usuario', data.Telef);
         sessionStorage.setItem('nombre_usuario', data.Nombre);
         sessionStorage.setItem('puntos_usuario', data.Puntos);
         window.location.href = "Pagina_principal.html";

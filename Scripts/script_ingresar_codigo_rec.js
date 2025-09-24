@@ -3,15 +3,15 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 var codigo_BD = 0
-var mail_recu = ''
+var tele_recu = ''
 window.onload = async () => {
     const params = new URLSearchParams(window.location.search);
-    const mail = params.get('email');
-    mail_recu=mail;
+    const tel = params.get('tele');
+    tele_recu=tel;
     const {data,error} = await client
     .from('Codigos_recuperacion')
     .select('codigo_rec')
-    .eq('Mail',mail)
+    .eq('Telef',tel)
     .single()
     if (error){
         const valor = 5;
@@ -27,7 +27,7 @@ document.getElementById("ing_codigo_rec").addEventListener('submit', function(e)
     if (parseInt(codi_ing) == codigo_BD){
         console.log("los codigos coinciden \n codigo de la bd: "+codigo_BD+"\n codigo ingresado: "+ codi_ing)
         
-        window.location.href = `actualizar_contra.html?email=${encodeURIComponent(mail_recu)}`
+        window.location.href = `actualizar_contra.html?tele=${encodeURIComponent(tele_recu)}`
     }
     else{
         const valor = 5;

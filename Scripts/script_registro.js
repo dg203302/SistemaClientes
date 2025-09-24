@@ -28,13 +28,13 @@ const form = document.getElementById('registroForm')
 form.addEventListener('submit', async (e) => {
     e.preventDefault()
     const Nombre = document.getElementById('nombre').value
-    const Mail = document.getElementById('correo').value
+    const Telef = document.getElementById('telef').value
     const Contra_ingresada = document.getElementById('contraseña').value
     if (verificar_contra(Contra_ingresada)){
         const Contra = hashing(Contra_ingresada);
         const { data, error } = await client
         .from('Clientes')
-        .insert([{ Mail, Nombre, Contra }])
+        .insert([{ Telef, Nombre, Contra }])
         if (error){
             const mensaje = error.message
             const valor = 2;
