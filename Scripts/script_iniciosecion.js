@@ -27,6 +27,6 @@ form.addEventListener('submit', async (e) => {
     else{
         localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos}))
         //por ahora no voy a usar el telefono
-        window.location.href = "dashboard.html";
+        window.location.href = "Pagina_principal_inicio.html";
     }
 })

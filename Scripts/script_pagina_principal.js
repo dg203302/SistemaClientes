@@ -1,3 +1,5 @@
+
+// esto para la plantilla de pagina_principal_puntos
 const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E'
 const { createClient } = supabase
@@ -23,13 +25,18 @@ async function refrescarPuntos(){
         cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
     }
 }
+
+// esto para la plantilla de pagina_principal_puntos
+
+
 function cerrarSesion(){
     localStorage.removeItem("usuario_loggeado")
     window.location.href = "/index.html"
 }
 window.onload=function(){
     let saludo = document.getElementById("Saludo")
-    let cant_puntos = document.getElementById("cant_puntos")
     saludo.textContent = "Bienvenido: "+ usuario_l.nombre_u
+    // esto para la plantilla de pagina_principal_puntos
+    let cant_puntos = document.getElementById("cant_puntos")
     cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
 }
