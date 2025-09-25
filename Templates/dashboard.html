@@ -7,32 +7,38 @@
   <link rel="stylesheet" href="/Styles/dashboard.css">
 </head>
 <body>
+  <!-- Botón hamburguesa -->
   <input type="checkbox" id="menu-toggle">
-<label for="menu-toggle" class="menu-icon">&#9776;</label>
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
 
-<nav class="sidebar">
-  <ul>
-    <li><a href="#">Inicio</a></li>
-    <li><a href="#">Mis Puntos</a></li>
-    <li><a href="#">Promociones</a></li>
-    <li><a href="#">Premios</a></li>
-    <li><a href="#">Avisos</a></li>
-    <li><a href="#">Mapa</a></li>
-    <li><a href="#">Mi Perfil</a></li>
-    <li><a href="#">Cerrar Sesión</a></li>
-  </ul>
-</nav>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Mis Puntos</a></li>
+      <li><a href="#">Promociones</a></li>
+      <li><a href="#">Premios</a></li>
+      <li><a href="#">Avisos</a></li>
+      <li><a href="#">Mapa</a></li>
+      <li><a href="#">Mi Perfil</a></li>
+      <li><a href="#" onclick="cerrarSesion()">Cerrar Sesión</a></li>
+    </ul>
+  </nav>
 
+  <!-- Header -->
   <header>
-    <h1>Bienvenido, <span id="nombre-usuario">Juan Pérez</span></h1>
+    <h1 id="Saludo">Bienvenido, <span id="nombre-usuario">Usuario</span></h1>
   </header>
-
-  <main>
-    <footer>
-  <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
-</footer>
-
-
-
+<main>
+  
+</main>
  
-   
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/Scripts/dashboard.js"></script>
+</body>
+</html>

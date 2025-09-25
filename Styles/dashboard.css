@@ -5,12 +5,11 @@
   --color-pink-dark: #854F6C;
   --color-pink: #DFB6B2;
   --color-light: #FBE4D8;
-   --color-bg: #121212; /* Fondo oscuro premium */
-    /* Nuevos colores claros */
-  --color-white-soft: #FAFAFA;   /* Blanco suave */
-  --color-ivory: #F5F5F0;        /* Marfil/crema */
-  --color-pearl: #ECECEC;  
-  }
+  --color-bg: #121212;
+  --color-white-soft: #FAFAFA;
+  --color-ivory: #F5F5F0;
+  --color-pearl: #ECECEC;
+}
 
 * {
   margin: 0;
@@ -27,6 +26,7 @@ body {
   flex-direction: column;
 }
 
+/* Header */
 header {
   text-align: center;
   padding: 1.5rem;
@@ -39,6 +39,7 @@ header h1 span {
   color: var(--color-pink);
 }
 
+/* Main grid */
 main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -47,46 +48,56 @@ main {
   flex: 1;
 }
 
+/* Cards */
 .card {
   background: linear-gradient(145deg, var(--color-purple-dark), var(--color-pink-dark));
   padding: 1.5rem;
   border-radius: 15px;
-  box-shadow: 0px 8px 20px rgba(0,0,0,0.5);
-  animation: fadeIn 0.8s ease forwards;
+  box-shadow: 0px 8px 25px rgba(0,0,0,0.6), inset 0px -2px 10px rgba(255,255,255,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 30px rgba(0,0,0,0.7), inset 0px -2px 10px rgba(255,255,255,0.08);
 }
 
 .card h2 {
+  font-size: 1.4rem;
   margin-bottom: 1rem;
   color: var(--color-pink);
 }
 
 .cantidad-puntos {
   font-size: 2rem;
-  font-weight: bold;
-  color: var(--color-light);
-}
-
-.promociones ul, 
-.premios ul {
-  list-style: none;
-}
-
-.promociones li,
-.premios li {
+  font-weight: 700;
+  color: #00ffcc;
   margin-bottom: 0.5rem;
 }
 
-.avisos p {
-  background: rgba(255,255,255,0.1);
-  padding: 0.8rem;
+.card button {
+  background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark));
+  border: none;
+  color: white;
+  padding: 10px 18px;
   border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
+.card button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  background: linear-gradient(90deg, var(--color-pink-dark), var(--color-purple));
+}
+
+/* Mapa */
 #map {
   width: 100%;
-  height: 200px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
+  height: 250px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
 }
 
 /* Footer */
@@ -99,29 +110,10 @@ footer {
   border-top-right-radius: 15px;
   box-shadow: 0 -3px 10px rgba(0,0,0,0.5);
   font-size: 0.9rem;
-  letter-spacing: 0.5px;
   margin-top: 2rem;
-  transition: background 0.3s;
 }
 
-footer:hover {
-  background: linear-gradient(90deg, var(--color-pink-dark), var(--color-purple-dark));
-}
-
-/* Para links dentro del footer, si los hubiera */
-footer a {
-  color: var(--color-light);
-  text-decoration: none;
-  font-weight: 600;
-  margin: 0 5px;
-  transition: color 0.3s;
-}
-
-footer a:hover {
-  color: var(--color-pink);
-}
-
-/* Botón hamburguesa */
+/* Sidebar */
 .menu-icon {
   position: fixed;
   top: 1rem;
@@ -132,16 +124,14 @@ footer a:hover {
   z-index: 1001;
 }
 
-/* Ocultar checkbox */
 #menu-toggle {
   display: none;
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px; /* Oculto */
+  left: -250px;
   width: 250px;
   height: 100%;
   background: var(--color-purple-dark);
@@ -153,7 +143,6 @@ footer a:hover {
 
 .sidebar ul {
   list-style: none;
-  padding: 0;
 }
 
 .sidebar ul li {
@@ -174,15 +163,8 @@ footer a:hover {
   border-radius: 8px;
 }
 
-/* Mostrar el menú cuando está activado */
 #menu-toggle:checked ~ .sidebar {
   left: 0;
-}
-
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 600px) {
