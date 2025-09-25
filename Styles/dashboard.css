@@ -5,7 +5,12 @@
   --color-pink-dark: #854F6C;
   --color-pink: #DFB6B2;
   --color-light: #FBE4D8;
-}
+   --color-bg: #121212; /* Fondo oscuro premium */
+    /* Nuevos colores claros */
+  --color-white-soft: #FAFAFA;   /* Blanco suave */
+  --color-ivory: #F5F5F0;        /* Marfil/crema */
+  --color-pearl: #ECECEC;  
+  }
 
 * {
   margin: 0;
@@ -84,13 +89,96 @@ main {
   border-radius: 10px;
 }
 
+/* Footer */
 footer {
-  text-align: center;
-  padding: 1rem;
-  background: var(--color-purple-dark);
-  font-size: 0.9rem;
+  background: linear-gradient(90deg, var(--color-purple-dark), var(--color-pink-dark));
   color: var(--color-light);
+  text-align: center;
+  padding: 1rem 2rem;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.5);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-top: 2rem;
+  transition: background 0.3s;
 }
+
+footer:hover {
+  background: linear-gradient(90deg, var(--color-pink-dark), var(--color-purple-dark));
+}
+
+/* Para links dentro del footer, si los hubiera */
+footer a {
+  color: var(--color-light);
+  text-decoration: none;
+  font-weight: 600;
+  margin: 0 5px;
+  transition: color 0.3s;
+}
+
+footer a:hover {
+  color: var(--color-pink);
+}
+
+/* Botón hamburguesa */
+.menu-icon {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-size: 2rem;
+  color: var(--color-light);
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Ocultar checkbox */
+#menu-toggle {
+  display: none;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Oculto */
+  width: 250px;
+  height: 100%;
+  background: var(--color-purple-dark);
+  padding-top: 4rem;
+  transition: left 0.3s ease;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 1rem 0;
+}
+
+.sidebar ul li a {
+  color: var(--color-light);
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.8rem 1.5rem;
+  display: block;
+  transition: background 0.3s;
+}
+
+.sidebar ul li a:hover {
+  background: var(--color-purple);
+  border-radius: 8px;
+}
+
+/* Mostrar el menú cuando está activado */
+#menu-toggle:checked ~ .sidebar {
+  left: 0;
+}
+
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
