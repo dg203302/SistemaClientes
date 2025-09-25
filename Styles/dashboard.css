@@ -1,0 +1,104 @@
+:root {
+  --color-dark: #190019;
+  --color-purple-dark: #2B124C;
+  --color-purple: #522B5B;
+  --color-pink-dark: #854F6C;
+  --color-pink: #DFB6B2;
+  --color-light: #FBE4D8;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--color-dark), var(--color-purple-dark), var(--color-purple));
+  color: var(--color-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--color-purple-dark);
+  color: var(--color-light);
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
+}
+
+header h1 span {
+  color: var(--color-pink);
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  flex: 1;
+}
+
+.card {
+  background: linear-gradient(145deg, var(--color-purple-dark), var(--color-pink-dark));
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.5);
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+  color: var(--color-pink);
+}
+
+.cantidad-puntos {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-light);
+}
+
+.promociones ul, 
+.premios ul {
+  list-style: none;
+}
+
+.promociones li,
+.premios li {
+  margin-bottom: 0.5rem;
+}
+
+.avisos p {
+  background: rgba(255,255,255,0.1);
+  padding: 0.8rem;
+  border-radius: 10px;
+}
+
+#map {
+  width: 100%;
+  height: 200px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--color-purple-dark);
+  font-size: 0.9rem;
+  color: var(--color-light);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/Styles/Estilo_ingresar_codigo_rec.css">
 
     <!--una vez terminado borrar
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -12,14 +13,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ingreso codigo rec</title>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <form id="ing_codigo_rec">
-        <label for="codigo4">Código de 4 dígitos</label>
-        <input id="codigo4" name="codigo" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="one-time-code" placeholder="XXXX" required>
-        <input type="submit" value="Validar">
-    </form>
+     <div class="contenedor">
+        <form id="ing_codigo_rec">
+            <div class="icono">
+                <i class="fas fa-key"></i>
+            </div>
+            <h1>Validar Código</h1>
+            <p class="descripcion">Ingresa el código de 4 dígitos que enviamos a tu numero de teléfono para continuar con la recuperación.</p>
+
+            <label for="codigo4">Código de 4 dígitos</label>
+            <input id="codigo4" name="codigo" type="text" 
+                   inputmode="numeric" pattern="[0-9]{4}" maxlength="4" 
+                   autocomplete="one-time-code" placeholder="••••" required>
+
+            <input type="submit" value="Validar">
+
+            <div class="acciones">
+                <a href="">Reenviar código</a>
+                <a href="login.html">Volver al inicio</a>
+            </div>
+        </form>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="../Scripts/script_ingresar_codigo_rec.js"></script>
+    <!-- <script type="module" src="../Scripts/script_ingresar_codigo_rec.js"></script> -->
 </body>
 </html>
