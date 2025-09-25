@@ -28,18 +28,17 @@
             <label for="codigo4">Código de 4 dígitos</label>
             <input id="codigo4" name="codigo" type="text" 
                    inputmode="numeric" pattern="[0-9]{4}" maxlength="4" 
-                   autocomplete="one-time-code" placeholder="••••" required>
+                   autocomplete="one-time-code" placeholder="••••" >
 
             <input type="submit" value="Validar">
-
             <div class="acciones">
-                <a href="">Reenviar código</a>
-                <a href="login.html">Volver al inicio</a>
+                <a id="boton_reinv" href="">Reenviar codigo</a>
+                <a href="/index.html">Volver al inicio</a>
             </div>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- <script type="module" src="../Scripts/script_ingresar_codigo_rec.js"></script> -->
+    <script type="module" src="/Scripts/script_ingresar_codigo_rec.js"></script>
 </body>
 </html>

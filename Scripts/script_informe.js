@@ -1,9 +1,9 @@
 function generarmensaje(mensaje){
     switch (mensaje) {
         case 'duplicate key value violates unique constraint "Clientes_pkey"':
-            return "Ya existe un usuario con ese mail registrado";
+            return "Ya existe un usuario con ese telefono registrado";
         case 'Cannot coerce the result to a single JSON object':
-            return "no existe un usuario registrado a ese mail";
+            return "no existe un usuario registrado a ese telefono";
         case "contraseña incorrecta":
             return "Contraseña Incorrecta"
         case "mal codigo":
