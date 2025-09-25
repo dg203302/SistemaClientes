@@ -34,9 +34,10 @@ function cerrarSesion(){
     window.location.href = "/index.html"
 }
 window.onload=function(){
+    console.log(usuario_l.nombre_u, usuario_l.puntos_u, usuario_l.tele_u, usuario_l.f_creacion_u)
     let saludo = document.getElementById("Saludo")
     saludo.textContent = "Bienvenido: "+ usuario_l.nombre_u
     // esto para la plantilla de pagina_principal_puntos
-    let cant_puntos = document.getElementById("cant_puntos")
-    cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
+    //let cant_puntos = document.getElementById("cant_puntos")
+    //cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
 }

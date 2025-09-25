@@ -12,7 +12,7 @@ form.addEventListener('submit', async (e) => {
     const hash_contra = hashing(Contra_ingre);
     const { data, error } = await client
     .from('Clientes')
-    .select('Nombre, Telef, Contra, Puntos')
+    .select('Nombre, Telef, Contra, Puntos , Fecha_creacion')
     .eq('Telef', Telef)
     .single(); 
     if (error){
@@ -25,7 +25,7 @@ form.addEventListener('submit', async (e) => {
         window.location.href = `Informe.html?informe=${encodeURIComponent("contraseña incorrecta")}&valor=${encodeURIComponent(valor)}`;
     }
     else{
-        localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos}))
+        localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos, f_creacion_u: data.Fecha_creacion}))
         //por ahora no voy a usar el telefono
         window.location.href = "Pagina_principal_inicio.html";
     }
