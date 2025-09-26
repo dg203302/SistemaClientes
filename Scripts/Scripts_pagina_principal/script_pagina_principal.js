@@ -15,7 +15,7 @@ async function refrescarPuntos(){
     .single()
     if (error){
         const valor = 8
-        window.location.href = `Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }
     else{
         let cant_puntos = document.getElementById("cant_puntos")
@@ -31,7 +31,7 @@ async function refrescarPuntos(){
 
 function cerrarSesion(){
     localStorage.removeItem("usuario_loggeado")
-    window.location.href = "/index.html"
+    window.location.href = "../../index.html"
 }
 window.onload=function(){
     console.log(usuario_l.nombre_u, usuario_l.puntos_u, usuario_l.tele_u, usuario_l.f_creacion_u)
