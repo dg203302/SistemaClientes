@@ -4,7 +4,7 @@ const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
     e.preventDefault();
-    let tel = JSON.stringify(document.getElementById("telef").value);
+    let tel = document.getElementById("telef").value;
     const { data, error } = await client
         .from('Clientes')
         .select('Telef')
@@ -14,7 +14,7 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
         const valor = 4;
         window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }else{
-        sessionStorage.setItem("telefono_usuario_recu", (JSON.stringify(tel)))
+        sessionStorage.setItem("telefono_usuario_recu", (tel))
         window.location.href = "/Templates/Templates_recuperar_contrasenia/Preguntas_cambiar_contraseña.html"
     }
 })
