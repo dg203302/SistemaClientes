@@ -9,8 +9,8 @@
 </head>
 <body>
     <div class="card">
-        <h1>Configurar preguntas de seguridad</h1>
-        <p>Responde las siguientes preguntas. Estas respuestas se usarán para recuperar tu contraseña en caso necesario.</p>
+        <h1>Responder preguntas de seguridad</h1>
+        <p>Responde las siguientes preguntas para recuperar tu contraseña.</p>
 
         <form id="Preguntas_seg" >
             <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
@@ -22,13 +22,13 @@
             <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
             <input type="text" id="Pregunta_3" name="Pregunta_3" placeholder="Ej: Matrix" autocomplete="off" required>
 
-            <button type="submit">Terminar Registro</button>
-            <button type="reset">Borrar Respuestas</button>
+            <button type="submit">Terminar Validacion</button>
+            <button type="reset">Limpiar Respuestas</button>
         </form>
 
         <p><a href="iniciosesion.html">Volver al inicio de sesión</a></p>
     </div>
       <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_registro_final.js"></script>
+    <script type="module" src="/Scripts/Scripts_recuperar_contrasenia/script_validar_preguntas.js"></script>
 </body>
 </html>
