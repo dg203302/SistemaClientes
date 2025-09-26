@@ -1,5 +1,4 @@
 import {hashing} from "../script_hash.js"
-import { hashing } from "../script_hash.js"
 function verificar_contra(contra){
     if (contra.length < 4){
         alert("La Contraseña debe tener como minimo 4 caracteres");

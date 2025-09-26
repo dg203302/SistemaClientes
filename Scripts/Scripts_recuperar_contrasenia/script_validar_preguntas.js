@@ -43,8 +43,8 @@ document.getElementById("Preguntas_seg").addEventListener('submit', function(e){
         return
     }
 
-    if ((encriptar(document.getElementById("Pregunta_1").value).equals(Resp_1_bd))&&(encriptar(document.getElementById("Pregunta_2").value).equals(Resp_2_bd))&&(encriptar(document.getElementById("Pregunta_3").value).equals(Resp_3_bd))){
-        console.log("los codigos coinciden \n codigo de la bd: "+codigo_BD+"\n codigo ingresado: "+ codi_ing)
+    if ((encriptar(document.getElementById("Pregunta_1").value)===(Resp_1_bd))&&(encriptar(document.getElementById("Pregunta_2").value)===(Resp_2_bd))&&(encriptar(document.getElementById("Pregunta_3").value)===(Resp_3_bd))){
+        console.log("los codigos coinciden")
         window.location.href = "/Templates/Templates_recuperar_contrasenia/actualizar_contra.html"
     }
     else{
