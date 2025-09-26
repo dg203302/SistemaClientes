@@ -30,6 +30,6 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
         }else{
             sessionStorage.setItem("telefono_usuario_recu", tel)
             //aca poner el envio del mensaje con el codigo!
-            window.location.href = "/Templates/Templates_recuperar_contrasenia/ingresar_codigo_rec.html"
+            window.location.href = "/Templates/Templates_recuperar_contrasenia/Preguntas_cambiar_contraseña.html"
         }
 })

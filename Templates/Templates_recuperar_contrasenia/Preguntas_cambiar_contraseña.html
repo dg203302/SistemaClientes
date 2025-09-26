@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas de Seguridad</title>
+    <meta name="description" content="Formulario para configurar preguntas de seguridad que ayudarán a recuperar tu contraseña.">
+    <link rel="stylesheet" href="/Styles/Styles_inicio_sesion_registro/Estilos_Preguntas_registro.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Configurar preguntas de seguridad</h1>
+        <p>Responde las siguientes preguntas. Estas respuestas se usarán para recuperar tu contraseña en caso necesario.</p>
+
+        <form id="Preguntas_seg" >
+            <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
+            <input type="text" id="Pregunta_1" name="Pregunta_1" placeholder="Ej: Rocky" autocomplete="off" required>
+
+            <label for="Pregunta_2">¿En qué ciudad naciste?</label>
+            <input type="text" id="Pregunta_2" name="Pregunta_2" placeholder="Ej: Buenos Aires" autocomplete="off" required>
+
+            <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
+            <input type="text" id="Pregunta_3" name="Pregunta_3" placeholder="Ej: Matrix" autocomplete="off" required>
+
+            <button type="submit">Terminar Registro</button>
+            <button type="reset">Borrar Respuestas</button>
+        </form>
+
+        <p><a href="iniciosesion.html">Volver al inicio de sesión</a></p>
+    </div>
+      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_registro_final.js"></script>
+</body>
+</html>
