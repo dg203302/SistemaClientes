@@ -14,7 +14,7 @@ window.onload = async () => {
     .single()
     if (error){
         const valor = 5;
-    window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }
     else{
         codigo_BD=data.codigo_rec;
@@ -31,11 +31,11 @@ document.getElementById("ing_codigo_rec").addEventListener('submit', function(e)
     if (parseInt(codi_ing) == codigo_BD){
         console.log("los codigos coinciden \n codigo de la bd: "+codigo_BD+"\n codigo ingresado: "+ codi_ing)
         
-    window.location.href = "../../Templates/Templates_recuperar_contrasenia/actualizar_contra.html"
+    window.location.href = "/Templates/Templates_recuperar_contrasenia/actualizar_contra.html"
     }
     else{
         const valor = 5;
-    window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent("mal codigo")}&valor=${encodeURIComponent(valor)}`;
+    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent("mal codigo")}&valor=${encodeURIComponent(valor)}`;
     }
 })
 
@@ -48,7 +48,7 @@ document.getElementById("boton_reinv").addEventListener("click", async (e)=>{
         .single();
     if (error){
         const valor = 4;
-    window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }else {
         let codigo_gen = ''
         for (let i = 0; i < 4; i++) {
@@ -62,7 +62,7 @@ document.getElementById("boton_reinv").addEventListener("click", async (e)=>{
         }
         if(error){
             const valor = 4;
-            window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+            window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
         }else{
             alert("Codigo Reenviado")
             codigo_BD=codigo_recu;

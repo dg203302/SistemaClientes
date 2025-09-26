@@ -12,7 +12,7 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
         .single();
     if (error){
         const valor = 4;
-    window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+        window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }else {
         let codigo_gen = ''
         for (let i = 0; i < 4; i++) {
@@ -26,10 +26,10 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
         }
         if(error){
             const valor = 4;
-            window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+            window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
         }else{
-            sessionStorage.setItem("telefono_usuario_recu",(JSON.stringify(tel)).replace(/\D/g, ""))
+            sessionStorage.setItem("telefono_usuario_recu", tel)
             //aca poner el envio del mensaje con el codigo!
-            window.location.href = "../../Templates/Templates_recuperar_contrasenia/ingresar_codigo_rec.html"
+            window.location.href = "/Templates/Templates_recuperar_contrasenia/ingresar_codigo_rec.html"
         }
 })

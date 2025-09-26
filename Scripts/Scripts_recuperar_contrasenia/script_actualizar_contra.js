@@ -1,4 +1,5 @@
 import {hashing} from "../script_hash.js"
+import { hashing } from "../script_hash.js"
 function verificar_contra(contra){
     if (contra.length < 4){
         alert("La Contraseña debe tener como minimo 4 caracteres");
@@ -37,15 +38,15 @@ document.getElementById("form_actualizar").addEventListener("submit", async (e) 
             .update({Contra: nue_contra_hash})
             .eq('Telef',tel)
             .single();
-            if (error){
-                const valor = 6;
-                window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
-            }
-            else{
-                const valor = 7;
-                sessionStorage.clear()
-                window.location.href = `../../Templates/Template_informe/Informe.html?informe=${encodeURIComponent("exito")}&valor=${encodeURIComponent(valor)}`;
-            }  
+                if (error){
+                    const valor = 6;
+                    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+                }
+                else{
+                    const valor = 7;
+                    const mensaje = "Contraseña actualizada";
+                    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
+                }  
         }
     }
     else{
