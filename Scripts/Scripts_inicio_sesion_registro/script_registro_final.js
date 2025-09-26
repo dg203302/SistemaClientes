@@ -4,12 +4,13 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 document.getElementById('Preguntas_seg').addEventListener("submit", async(e)=>{
+    e.preventDefault()
     let r1 = document.getElementById("Pregunta_1").value
     let r2 = document.getElementById("Pregunta_2").value
     let r3 = document.getElementById("Pregunta_3").value
     const { data, error } = await client
             .from('Clientes')
-            .insert([{ Telef: sessionStorage.getItem("Tele_nuevo_usuario"), Nombre: sessionStorage.getItem("Tele_nuevo_usuario"), Contra: sessionStorage.getItem("Contra_nuevo_usuario"), Resp_1: encriptar(r1), Resp_2: encriptar(r2), Resp_3: encriptar(r3)}])
+            .insert([{ Telef: sessionStorage.getItem("Tele_nuevo_usuario"), Nombre: sessionStorage.getItem("Nombre_nuevo_usuario"), Contra: sessionStorage.getItem("Contra_nuevo_usuario"), Resp_1: encriptar(r1), Resp_2: encriptar(r2), Resp_3: encriptar(r3)}])
             if (error){
                 const mensaje = error.message
                 const valor = 2;

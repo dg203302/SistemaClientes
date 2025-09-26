@@ -60,7 +60,7 @@ window.onload = function(){
         else if (valor === "3"){ //registro exitoso
             titulo_info.textContent="Registro Exitoso"
             icono.className = "fa-solid fa-circle-check";
-            boton_info.href = "/Templates_inicio_sesion_registro/iniciosesion.html";
+            boton_info.href = "/Templates/Templates_inicio_sesion_registro/iniciosesion.html";
             boton_info.textContent = "Continuar";
             let contenedor = document.getElementsByClassName("informe")
             contenedor[0].classList.add("exito");
