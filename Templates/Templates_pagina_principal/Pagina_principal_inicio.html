@@ -4,21 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Usuario</title>
-  <!-- Mantener enlaces existentes -->
   <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
-  <style>
-    /* Pequeños ajustes para el mockup, el resto lo maneja tu CSS */
-    .header-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header-icons { display: flex; gap: 12px; font-size: 1.2rem; }
-  </style>
-  </head>
+</head>
 <body>
+
   <!-- Botón hamburguesa -->
   <input type="checkbox" id="menu-toggle">
   <label for="menu-toggle" class="menu-icon">&#9776;</label>
@@ -47,13 +38,13 @@
   <!-- Contenido principal -->
   <main>
     <!-- Tarjeta grande de puntos -->
-    <section class="card" aria-label="Tus puntos">
+    <section class="card puntos-card" aria-label="Tus puntos">
       <h2>Puntos</h2>
       <p id="cant_puntos" class="cantidad-puntos">Tiene: 1000 Puntos</p>
-      <button type="button" onclick="refrescarPuntos()">Refrescar Puntos (Poner icono)</button>
+      <button type="button" onclick="refrescarPuntos()">Refrescar Puntos</button>
     </section>
 
-    <!-- Dos tarjetas: Promos Puntos y Promociones Tienda -->
+    <!-- Tarjetas de Promos y Promociones -->
     <section class="card" aria-label="Promos puntos">
       <h2>Promos Puntos</h2>
       <p>Canjea tus puntos por beneficios exclusivos.</p>
@@ -66,15 +57,15 @@
       <button type="button">Ver promociones</button>
     </section>
 
-    <!-- Mapa grande -->
-    <section id="map" aria-label="Mapa">
-      <p style="text-align:center; opacity:.8">MAPS (vista previa)</p>
+    <!-- Mapa -->
+    <section class="card" id="map" aria-label="Mapa">
+      <p style="text-align:center; opacity:.6">Mapa del local (vista previa)</p>
     </section>
   </main>
 
   <footer>
     <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
   </footer>
-  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js"></script>
+
 </body>
 </html>
