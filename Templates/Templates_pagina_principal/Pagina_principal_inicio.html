@@ -4,8 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Usuario</title>
+  <!-- Mantener enlaces existentes -->
   <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css">
-</head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
+  <style>
+    /* Pequeños ajustes para el mockup, el resto lo maneja tu CSS */
+    .header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-icons { display: flex; gap: 12px; font-size: 1.2rem; }
+  </style>
+  </head>
 <body>
   <!-- Botón hamburguesa -->
   <input type="checkbox" id="menu-toggle">
@@ -15,30 +27,54 @@
   <nav class="sidebar">
     <ul>
       <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
-      <li><a href="#">Mis Puntos</a></li>
-      <li><a href="#">Promociones</a></li>
-      <li><a href="#">Premios</a></li>
       <li><a href="#">Avisos</a></li>
-      <li><a href="#">Mapa</a></li>
-      <li><a href="#">Mi Perfil</a></li>
+      <li><a href="#">Perfil</a></li>
+      <li><a href="#">Contacto</a></li>
+      <li><a href="#">Créditos</a></li>
       <li><a href="#" onclick="cerrarSesion()">Cerrar Sesión</a></li>
     </ul>
   </nav>
 
   <!-- Header -->
-  <header>
+  <header class="header-bar">
     <h1 id="Saludo">Bienvenido, <span id="nombre-usuario">Usuario</span></h1>
+    <div class="header-icons" aria-label="Acciones de usuario">
+      <span title="Notificaciones">🔔</span>
+      <span title="Perfil">👤</span>
+    </div>
   </header>
-<main>
-  
-</main>
- 
+
+  <!-- Contenido principal -->
+  <main>
+    <!-- Tarjeta grande de puntos -->
+    <section class="card" aria-label="Tus puntos">
+      <h2>Puntos</h2>
+      <p id="cant_puntos" class="cantidad-puntos">Tiene: 1000 Puntos</p>
+      <button type="button" onclick="refrescarPuntos()">Refrescar Puntos (Poner icono)</button>
+    </section>
+
+    <!-- Dos tarjetas: Promos Puntos y Promociones Tienda -->
+    <section class="card" aria-label="Promos puntos">
+      <h2>Promos Puntos</h2>
+      <p>Canjea tus puntos por beneficios exclusivos.</p>
+      <button type="button">Ver promos</button>
+    </section>
+
+    <section class="card" aria-label="Promociones tienda">
+      <h2>Promociones Tienda</h2>
+      <p>Ofertas vigentes y descuentos semanales.</p>
+      <button type="button">Ver promociones</button>
+    </section>
+
+    <!-- Mapa grande -->
+    <section id="map" aria-label="Mapa">
+      <p style="text-align:center; opacity:.8">MAPS (vista previa)</p>
+    </section>
+  </main>
+
   <footer>
     <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
   </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js"></script>
 </body>
 </html>
