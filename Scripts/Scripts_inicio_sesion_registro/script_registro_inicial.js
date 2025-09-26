@@ -30,6 +30,6 @@ document.getElementById('registroForm').addEventListener('submit', async (e) => 
         sessionStorage.setItem("Nombre_nuevo_usuario",JSON.stringify(Nombre))
         sessionStorage.setItem("Tele_nuevo_usuario",JSON.stringify(Telef))
         sessionStorage.setItem("Contra_nuevo_usuario",JSON.stringify(Contra))
-        window.location.href = "Preguntas_registro.html"
+        window.location.href = "/Templates/Templates_inicio_sesion_registro/Preguntas_registro.html"
     }
 })
