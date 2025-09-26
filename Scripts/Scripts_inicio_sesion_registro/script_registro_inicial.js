@@ -27,9 +27,9 @@ document.getElementById('registroForm').addEventListener('submit', async (e) => 
     const Contra_ingresada = document.getElementById('contraseña').value
     if (verificar_contra(Contra_ingresada)){
         const Contra = hashing(Contra_ingresada);
-        sessionStorage.setItem("Nombre_nuevo_usuario",JSON.stringify(Nombre))
-        sessionStorage.setItem("Tele_nuevo_usuario",JSON.stringify(Telef))
-        sessionStorage.setItem("Contra_nuevo_usuario",JSON.stringify(Contra))
+        sessionStorage.setItem("Nombre_nuevo_usuario",Nombre)
+        sessionStorage.setItem("Tele_nuevo_usuario",Telef)
+        sessionStorage.setItem("Contra_nuevo_usuario",Contra)
         window.location.href = "/Templates/Templates_inicio_sesion_registro/Preguntas_registro.html"
     }
 })

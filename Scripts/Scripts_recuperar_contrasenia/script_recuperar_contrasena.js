@@ -14,7 +14,7 @@ document.getElementById("recuperarForm").addEventListener("submit",async (e) =>{
         const valor = 4;
         window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
     }else{
-        sessionStorage.setItem("telefono_usuario_recu", (tel))
+        sessionStorage.setItem("telefono_usuario_recu", tel)
         window.location.href = "/Templates/Templates_recuperar_contrasenia/Preguntas_cambiar_contraseña.html"
     }
 })
