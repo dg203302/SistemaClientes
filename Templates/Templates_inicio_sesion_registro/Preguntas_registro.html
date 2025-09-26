@@ -9,9 +9,7 @@
 </head>
 <body>
     <div class="card">
-        <h1>Configurar preguntas de seguridad</h1>
-        <p>Responde las siguientes preguntas. Estas respuestas se usarán para recuperar tu contraseña en caso necesario.</p>
-
+        <h1> preguntas de seguridad</h1>
         <form id="Preguntas_seg" action="/recuperar" method="post">
             <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
             <input type="text" id="Pregunta_1" name="Pregunta_1" placeholder="Ej: Rocky" autocomplete="off" required>
@@ -24,8 +22,9 @@
 
             <button type="submit">Terminar Registro</button>
             <button type="reset">Borrar Respuestas</button>
-        </form>
-
+        </form> <br>
+        
+<p>Responde las siguientes preguntas. Estas respuestas se usarán para recuperar tu contraseña en caso necesario.</p>
         <p><a href="/login">Volver al inicio de sesión</a></p>
     </div>
 </body>
