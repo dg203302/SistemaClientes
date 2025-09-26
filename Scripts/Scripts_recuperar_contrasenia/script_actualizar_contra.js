@@ -42,6 +42,7 @@ document.getElementById("form_actualizar").addEventListener("submit", async (e) 
                     window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
                 }
                 else{
+                    sessionStorage.clear()
                     const valor = 7;
                     const mensaje = "Contraseña actualizada";
                     window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;

@@ -16,6 +16,7 @@ document.getElementById('Preguntas_seg').addEventListener("submit", async(e)=>{
                 const valor = 2;
                 window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
             }else{
+                sessionStorage.clear()
                 const mensaje = "Registro Exitoso!";
                 const valor = 3;
                 window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
