@@ -175,39 +175,45 @@ footer {
 .sidebar {
   position: fixed;
   top: 0;
-  left: -260px;
-  width: 260px;
+  left: -250px;
+  width: 250px;
   height: 100%;
   background: var(--color-purple-dark);
   padding-top: 4rem;
   transition: left 0.3s ease;
   box-shadow: 4px 0 15px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
   z-index: 1000;
 }
 
-.sidebar ul {
+/* Menu items (arriba) */
+.sidebar .menu-items {
   list-style: none;
   padding: 0;
 }
-
-.sidebar ul li {
-  margin: 1rem 0;
-}
-
+/* Links */
 .sidebar ul li a {
   color: var(--color-light);
   text-decoration: none;
   font-size: 1.1rem;
-  padding: 0.9rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   display: block;
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.3s;
 }
 
 .sidebar ul li a:hover {
   background: var(--color-purple);
   border-radius: 8px;
-  color: var(--color-pink);
 }
+
+/* Pegar Cerrar Sesión al final */
+.sidebar .menu-footer {
+  list-style: none;
+  margin-top: auto; /* Esto empuja el Cerrar Sesión al fondo */
+  padding: 0 0 1rem 0;
+}
+
 
 #menu-toggle:checked ~ .sidebar {
   left: 0;
