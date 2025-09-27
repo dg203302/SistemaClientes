@@ -34,3 +34,15 @@ async function refrescarPuntos(){
         cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
     }
 }
+
+function initStreetView() {
+    const ubicacion = { lat: -31.564160131917813, lng: -68.5079447539319 };
+    const panorama = new google.maps.StreetViewPanorama(
+    document.getElementById("street-view"),
+    {
+        position: ubicacion,
+        pov: { heading: 34, pitch: 10 }, // orientación inicial
+        zoom: 1
+    }
+    );
+}
