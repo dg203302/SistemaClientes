@@ -26,9 +26,13 @@ body {
   display: flex;
   flex-direction: column;
 }
+
 /* Header principal (centrado) */
 header.header-bar {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   text-align: center;
   padding: 1.5rem 2rem;
   background: var(--color-purple-dark);
@@ -37,6 +41,7 @@ header.header-bar {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 header h1 {
@@ -85,7 +90,7 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.8rem;
-  padding: 2rem;
+  padding: 7rem 2rem 5rem; /* espacio por header y footer fixed */
   flex: 1;
 }
 
@@ -146,6 +151,10 @@ main {
 
 /* Footer */
 footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   background: linear-gradient(90deg, var(--color-purple-dark), var(--color-pink-dark));
   color: var(--color-light);
   text-align: center;
@@ -154,7 +163,7 @@ footer {
   border-top-right-radius: 15px;
   box-shadow: 0 -3px 10px rgba(0,0,0,0.5);
   font-size: 0.9rem;
-  margin-top: 2rem;
+  z-index: 1000;
 }
 
 /* Sidebar */
@@ -165,7 +174,7 @@ footer {
   font-size: 2rem;
   color: var(--color-light);
   cursor: pointer;
-  z-index: 1001;
+  z-index: 2001; /* encima de todo */
 }
 
 #menu-toggle {
@@ -184,7 +193,7 @@ footer {
   box-shadow: 4px 0 15px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 2000; /* más alto que header/footer */
 }
 
 /* Menu items (arriba) */
@@ -192,6 +201,7 @@ footer {
   list-style: none;
   padding: 0;
 }
+
 /* Links */
 .sidebar ul li a {
   color: var(--color-light);
@@ -210,10 +220,9 @@ footer {
 /* Pegar Cerrar Sesión al final */
 .sidebar .menu-footer {
   list-style: none;
-  margin-top: auto; /* Esto empuja el Cerrar Sesión al fondo */
+  margin-top: auto;
   padding: 0 0 1rem 0;
 }
-
 
 #menu-toggle:checked ~ .sidebar {
   left: 0;
