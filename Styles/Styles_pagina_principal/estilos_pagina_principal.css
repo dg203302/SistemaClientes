@@ -26,21 +26,22 @@ body {
   display: flex;
   flex-direction: column;
 }
+/* Header principal (centrado) */
 header.header-bar {
   position: relative;
-  text-align: center; /* centra el contenido */
+  text-align: center;
   padding: 1.5rem 2rem;
   background: var(--color-purple-dark);
   color: var(--color-light);
   box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
   display: flex;
-  justify-content: center; /* centra horizontalmente */
+  justify-content: center;
   align-items: center;
 }
 
 header h1 {
   font-size: 1.8rem;
-  margin: 0 auto; /* centra el h1 dentro del flex */
+  margin: 0 auto;
 }
 
 header h1 span {
@@ -48,7 +49,7 @@ header h1 span {
   color: var(--color-pink);
 }
 
-/* Mantener los iconos del header a la derecha */
+/* Iconos del header */
 .header-icons {
   position: absolute;
   right: 2rem;
@@ -59,6 +60,24 @@ header h1 span {
 
 .header-icons span:hover {
   transform: scale(1.2);
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 500px) {
+  .header-icons {
+    flex-direction: column; /* vertical */
+    right: 1rem;
+    top: 1rem;
+    gap: 8px;
+  }
+
+  header.header-bar {
+    padding: 2rem 1rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
 }
 
 /* Main grid */
