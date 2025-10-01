@@ -33,16 +33,15 @@ document.getElementById('Preguntas_seg').addEventListener("submit", async(e)=>{
     let r3 = document.getElementById("Pregunta_3").value
     const { data, error } = await client
             .from('Clientes')
-            .insert([{ Telef: sessionStorage.getItem("Tele_nuevo_usuario"), Nombre: sessionStorage.getItem("Nombre_nuevo_usuario"), Contra: sessionStorage.getItem("Contra_nuevo_usuario"), Resp_1: encriptar(r1), Resp_2: encriptar(r2), Resp_3: encriptar(r3)}])
+            .update({Resp_1: encriptar(r1), Resp_2: encriptar(r2), Resp_3: encriptar(r3)})
+            .eq("Telef", usuario_l.tele_u)
             if (error){
                 const mensaje = error.message
                 const valor = 2;
                 window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
             }else{
-                sessionStorage.clear()
-                const mensaje = "Registro Exitoso!";
-                const valor = 3;
-                window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
+                alert("Respuestas de seguridad actualizadas correctamente!")
+                window.location.href = "/Templates/Templates_pagina_principal/Perfil_usuario.html";
             }
 })
 
