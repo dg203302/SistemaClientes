@@ -1,4 +1,4 @@
-import {hashing} from "../script_hash.js"
+import {hashing} from "/Scripts/script_hash.js"
 function verificar_contra(contra){
     if (contra.length < 4){
         alert("La Contraseña debe tener como minimo 4 caracteres");
@@ -20,13 +20,15 @@ function verificar_contra(contra){
         return true
     }
 }
+
 const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E'
 const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
+const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
+
 document.getElementById("form_actualizar").addEventListener("submit", async (e) =>{
     e.preventDefault();
-    const tel = sessionStorage.getItem("telefono_usuario_recu")
     let contra_nue = document.getElementById("nueva_contra").value;
     let contra_rep = document.getElementById("repetir_contra").value;
     if (contra_nue == contra_rep){
@@ -35,17 +37,15 @@ document.getElementById("form_actualizar").addEventListener("submit", async (e) 
             const { error } =  await client
             .from('Clientes')
             .update({Contra: nue_contra_hash})
-            .eq('Telef',tel)
+            .eq('Telef',usuario_l.tele_u)
             .single();
                 if (error){
                     const valor = 6;
                     window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
                 }
                 else{
-                    sessionStorage.clear()
-                    const valor = 7;
-                    const mensaje = "Contraseña actualizada";
-                    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
+                    alert("Contraseña actualizada correctamente")
+                    window.location.href = "/Templates/Templates_pagina_principal/Perfil_usuario.html"
                 }  
         }
     }

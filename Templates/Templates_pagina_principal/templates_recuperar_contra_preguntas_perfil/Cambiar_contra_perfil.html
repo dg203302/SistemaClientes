@@ -12,31 +12,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Contraseña</title>
-    <link rel="stylesheet" href="/Styles/Styles_recuperar_contrasenia/Estilos_recuperar_contra.css">
+    <link rel="stylesheet" href="/Styles/Styles_pagina_principal/styles_recuperar_contra_preguntas/estilo_recuperar_contra_perfil.css">
 </head>
 <body>
-    <div class="card">
-        <!-- Icono arriba -->
-         <div class="logo">📥</div>
+    <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
 
-        <h1>Recuperar Contraseña</h1>
-        <p class="slogan">ingresa el numero de telefono para recuperar la contraseña.</p>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Contacto.html">Contacto</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Creditos.html">Créditos</a></li>
+    </ul>
 
-        <form id="recuperarForm">
-            <label for="telef">Numero de Telefono</label>
-            <input id="telef" type="number" name="telef" 
-                placeholder="Tu Numero de Telefono sin +" 
-                pattern="^54\d{13}$" 
-                required>
-            <button type="submit" id="submitBtn">Siguiente</button> <br>
-        </form>
+    <ul class="menu-footer">
+    <li>
+  <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">
+    ⏻
+  </a>
+</li>
 
-        <p class="privacy">Tu numero de telefono será usado solo para recuperar tu contraseña.</p> <br>
-    <p><a href="../Templates_inicio_sesion_registro/iniciosesion.html">Volver al inicio de sesión</a></p>
+  </ul>
+  </nav>
 
-        <div id="mensaje" class="mensaje"></div>
+  <!-- Header mejorado -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 id="saludo-principal" class="welcome-text">
+        <span class="greeting">Bienvenido,</span>
+        <span id="nombre-usuario" class="user-name">Usuario</span>
+      </h1>
+      
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="/Templates/Templates_pagina_principal/Avisos.html" 
+           class="action-btn notifications-btn" 
+           aria-label="Ver avisos y notificaciones"
+           title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" 
+           class="action-btn profile-btn" 
+           aria-label="Ver perfil de usuario"
+           title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
     </div>
+  </header>
 
+  <!-- Contenido principal -->
+      <main class="contenedor">
+        <header class="form-header">
+           <div class="logo">⚙️</div>
+            <h1>Actualizar Contraseña</h1>
+            <p class="descripcion">Ingresa una nueva contraseña para mantener tu cuenta segura.</p>
+        </header>
+
+        <form id="form_actualizar" class="formulario">
+            <div class="campo">
+                <label for="nueva_contra">Nueva Contraseña</label>
+                <input 
+                    id="nueva_contra" 
+                    type="password" 
+                    placeholder="Crea una nueva contraseña" 
+                    required
+                    aria-label="Nueva contraseña">
+            </div>
+
+            <div class="campo">
+                <label for="repetir_contra">Repetir Contraseña</label>
+                <input 
+                    id="repetir_contra" 
+                    type="password" 
+                    placeholder="Repite tu nueva contraseña" 
+                    required 
+                    aria-label="Repetir contraseña">
+            </div>
+
+            <input type="submit" value="Actualizar Contraseña" class="btn">
+        </form>
+        <footer class="form-footer">
+            <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" class="volver">← Volver al perfil de usuario</a>
+        </footer>
+    </main>
+    <footer>
+        <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="/Scripts/Scripts_pagina_principal/scripts_recuperar_contra_perfil_preguntas/script_recupera_contra_perfil.js"></script>
 </body>
