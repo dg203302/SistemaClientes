@@ -38,10 +38,10 @@
 
 /* Categorías (badges) */
 .cat { display: inline-block; padding: .35rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 700; color: #fff; min-width: 76px; text-align: center; }
-.cat.cierre { background: linear-gradient(90deg, #a81e40, #e63946); }
-.cat.horario { background: linear-gradient(90deg, #1d6fa5, #60a5fa); }
-.cat.promos { background: linear-gradient(90deg, #1e9f86, #0fb9b1); }
-.cat.general { background: linear-gradient(90deg, #6b4e9b, #8b5cf6); }
+.cat.Cierre { background: linear-gradient(90deg, #a81e40, #e63946); }
+.cat.Horario { background: linear-gradient(90deg, #1d6fa5, #60a5fa); }
+.cat.Promos { background: linear-gradient(90deg, #1e9f86, #0fb9b1); }
+.cat.General { background: linear-gradient(90deg, #6b4e9b, #8b5cf6); }
 
 /* Timeline de cierres */
 .timeline { list-style: none; padding-left: 0; display: grid; gap: .9rem; position: relative; }

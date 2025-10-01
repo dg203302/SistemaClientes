@@ -58,74 +58,16 @@
 
   <!-- Contenido principal -->
   <main>
-
     <!-- Avisos vigentes -->
     <section class="card" aria-label="Mensajes">
       <div class="section-header">
         <h2>Mensajes</h2>
-        <span class="count" aria-label="Cantidad de avisos">3</span>
+        <span class="count" id="contador_msg" aria-label="Cantidad de avisos">0</span>
       </div>
-      <ul class="notice-list">
-        <li class="notice">
-          <span class="cat cierre">Cierre</span>
-          <div class="notice-content">
-            <h3>Cerrado por feriado</h3>
-            <p>El local permanecerá cerrado el <time datetime="2025-10-12">12 de octubre</time> por feriado nacional.</p>
-            <div class="meta">
-              <time datetime="2025-10-01">Publicado: 1 oct 2025</time>
-              <span>Válido: 11–12 oct</span>
-            </div>
-          </div>
-        </li>
-        <li class="notice">
-          <span class="cat horario">Horario</span>
-          <div class="notice-content">
-            <h3>Horario extendido</h3>
-            <p>Durante este mes abrimos de 8 a 21 hs de lunes a sábado.</p>
-            <div class="meta">
-              <time datetime="2025-09-28">Publicado: 28 sep 2025</time>
-              <span>Válido: todo octubre</span>
-            </div>
-          </div>
-        </li>
-        <li class="notice">
-          <span class="cat promos">Promos</span>
-          <div class="notice-content">
-            <h3>2x1 en cafetería</h3>
-            <p>Todos los miércoles de octubre. Aplica a café americano y latte.</p>
-            <div class="meta">
-              <time datetime="2025-09-27">Publicado: 27 sep 2025</time>
-              <span>Válido: 1–31 oct</span>
-            </div>
-          </div>
-        </li>
+      <ul class="notice-list" id="contenedor_msgs">
       </ul>
     </section>
 
-    <!-- Próximos cierres (timeline) -->
-    <section class="card" aria-label="Próximos cierres">
-      <div class="section-header">
-        <h2>Próximos cierres</h2>
-      </div>
-      <ol class="timeline">
-        <li>
-          <span class="dot"></span>
-          <div class="tl-content">
-            <strong>Feriado nacional</strong>
-            <time datetime="2025-10-12">Dom 12/10</time>
-            <p>Cerrado todo el día.</p>
-          </div>
-        </li>
-        <li>
-          <span class="dot"></span>
-          <div class="tl-content">
-            <strong>Mantenimiento eléctrico</strong>
-            <time datetime="2025-11-03">Lun 03/11</time>
-            <p>Cerrado de 14:00 a 16:00.</p>
-          </div>
-        </li>
-      </ol>
-    </section>
   </main>
 
   <footer>
