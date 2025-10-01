@@ -12,11 +12,6 @@ window.onload=function(){
     cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
 }
 
-function cerrarSesion(){
-    localStorage.removeItem("usuario_loggeado")
-    window.location.href = "/index.html"
-}
-
 async function refrescarPuntos(){
     const { data, error } = await client
     .from("Clientes")
@@ -30,7 +25,7 @@ async function refrescarPuntos(){
     else{
         let cant_puntos = document.getElementById("cant_puntos")
         usuario_l.puntos_u = data.Puntos;
-        localStorage.setItem("usuario_loggeado", usuario_l)
+        localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
         cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
     }
 }
@@ -43,6 +38,5 @@ function initStreetView() {
         position: ubicacion,
         pov: { heading: 34, pitch: 10 }, // orientación inicial
         zoom: 1
-    }
-    );
+    });
 }

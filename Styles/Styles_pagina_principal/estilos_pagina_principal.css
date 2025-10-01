@@ -17,6 +17,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+}
 
 body {
   font-family: 'Poppins', sans-serif;
@@ -87,12 +90,17 @@ header h1 span {
 
 /* Main grid */
 main {
+  margin-top: 20px ;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.8rem;
   padding: 7rem 2rem 5rem; /* espacio por header y footer fixed */
   flex: 1;
 }
+
+.horarios { display: grid; gap: .5rem; margin-top: .6rem; }
+.horarios .row { display: flex; justify-content: space-between; background: rgba(0,0,0,.15); border: 1px solid rgba(255,255,255,.1); padding: .6rem .8rem; border-radius: 10px; }
+.horarios .row.cerrado { opacity: .8; }
 
 /* Cards */
 .card {

@@ -19,22 +19,25 @@
   <nav class="sidebar">
     <ul>
       <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
-      <li><a href="Avisos.html">Avisos</a></li>
-      <li><a href="Perfil_usuario.html">Perfil</a></li>
       <li><a href="Contacto.html">Contacto</a></li>
       <li><a href="Creditos.html">Créditos</a></li>
     </ul>
 
     <ul class="menu-footer">
-    <li><a href="#" onclick="cerrarSesion()">⏻</a></li>
+    <li>
+  <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">
+    ⏻
+  </a>
+</li>
+
   </ul>
   </nav>
   <!-- Header -->
   <header class="header-bar">
-    <h1>Créditos — Sobre nosotros</h1>
+    <h1>Créditos</h1>
     <div class="header-icons" aria-label="Acciones de usuario">
-      <span title="Notificaciones">🔔</span>
-      <span title="Perfil">👤</span>
+      <a href="Avisos.html">🔔</a>
+      <a href="Perfil_usuario.html">👤</a>
     </div>
   </header>
 
@@ -53,13 +56,19 @@
         <li class="member">
           <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="Avatar integrante" />
           <div class="member-body">
-            <h3>Nombre Apellido</h3>
+            <h3>Landa Juan Pablo</h3>
             <p class="role">Frontend • UI/UX</p>
             <p class="bio">Diseño e implementación de interfaces, performance y accesibilidad.</p>
             <div class="skills">
               <span class="badge">HTML</span>
               <span class="badge">CSS</span>
               <span class="badge">JavaScript</span>
+              <span class="badge">python</span>
+              <span class="badge">java</span>
+              <span class="badge">c++</span>
+              <span class="badge">SQL</span>
+              <span class="badge">Y mas habilidades....</span>
+
             </div>
             <div class="contact-links">
               <a class="link-btn" target="_blank" rel="noopener" href="#">GitHub</a>
@@ -71,7 +80,7 @@
         <li class="member">
           <img src="https://avatars.githubusercontent.com/u/2?v=4" alt="Avatar integrante" />
           <div class="member-body">
-            <h3>Nombre Apellido</h3>
+            <h3>Garcia Diego</h3>
             <p class="role">Backend • Datos</p>
             <p class="bio">APIs, seguridad, bases de datos y automatizaciones.</p>
             <div class="skills">

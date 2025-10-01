@@ -18,56 +18,140 @@
   <nav class="sidebar">
     <ul>
       <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
-      <li><a href="Avisos.html">Avisos</a></li>
-      <li><a href="Perfil_usuario.html">Perfil</a></li>
       <li><a href="Contacto.html">Contacto</a></li>
       <li><a href="Creditos.html">Créditos</a></li>
     </ul>
 
     <ul class="menu-footer">
-    <li><a href="#" onclick="cerrarSesion()">⏻</a></li>
+    <li>
+  <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">
+    ⏻
+  </a>
+</li>
+
   </ul>
   </nav>
 
-  <!-- Header -->
-  <header class="header-bar">
-    <h1 id="Saludo">Bienvenido, <span id="nombre-usuario">Usuario</span></h1>
-    <div class="header-icons" aria-label="Acciones de usuario">
-      <span title="Notificaciones">🔔</span>
-      <span title="Perfil">👤</span>
+  <!-- Header mejorado -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 id="saludo-principal" class="welcome-text">
+        <span class="greeting">Bienvenido,</span>
+        <span id="nombre-usuario" class="user-name">Usuario</span>
+      </h1>
+      
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="Avisos.html" 
+           class="action-btn notifications-btn" 
+           aria-label="Ver avisos y notificaciones"
+           title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="Perfil_usuario.html" 
+           class="action-btn profile-btn" 
+           aria-label="Ver perfil de usuario"
+           title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
     </div>
   </header>
 
   <!-- Contenido principal -->
   <main>
     <!-- Tarjeta grande de puntos -->
-    <section class="card puntos-card" aria-label="Tus puntos">
-      <h2>Puntos</h2>
-      <p id="cant_puntos" class="cantidad-puntos">Tiene: Puntos</p>
-      <button type="button" onclick="refrescarPuntos()">Refrescar Puntos (Poner icono)</button>
+    <section class="card featured-card points-card" aria-label="Resumen de puntos">
+      <div class="card-header">
+        <div class="card-icon points-icon">💎</div>
+        <div class="card-title-group">
+          <h2 class="card-title">Mis Puntos</h2>
+          <p class="card-subtitle">Recompensas acumuladas</p>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <div class="points-display">
+          <span id="cant_puntos" class="points-value" data-points="0">Tiene: Puntos</span>
+        </div>
+        
+        <div class="points-actions">
+          <button type="button" 
+                  class="btn btn-primary refresh-btn" 
+                  onclick="refrescarPuntos()"
+                  aria-label="Actualizar cantidad de puntos">
+            <span class="btn-icon">🔄</span>
+            Refrescar Puntos
+          </button>
+        </div>
+      </div>
     </section>
 
     <!-- Tarjetas de Promos y Promociones -->
-    <section class="card" aria-label="Promos puntos">
-      <h2>Promos Puntos</h2>
-      <p>Canjea tus puntos por beneficios exclusivos.</p>
-      <button type="button">Ver promos</button>
+    <section class="card promo-card points-promo" aria-label="Promociones con puntos">
+      <div class="card-header">
+        <div class="card-icon promo-icon">🎁</div>
+        <div class="card-title-group">
+          <h3 class="card-title">Canje de Puntos</h3>
+          <p class="card-subtitle">Beneficios exclusivos</p>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <p class="card-description">Canjea tus puntos por beneficios exclusivos.</p>
+      </div>
+      
+      <div class="card-actions">
+        <button type="button" class="btn btn-secondary">
+          Ver promos
+        </button>
+      </div>
     </section>
 
-    <section class="card" aria-label="Promociones tienda">
-      <h2>Promociones Tienda</h2>
-      <p>Ofertas vigentes y descuentos semanales.</p>
-      <button type="button">Ver promociones</button>
+    <section class="card promo-card store-promo" aria-label="Promociones de tienda">
+      <div class="card-header">
+        <div class="card-icon store-icon">🏪</div>
+        <div class="card-title-group">
+          <h3 class="card-title">Ofertas de Tienda</h3>
+          <p class="card-subtitle">Descuentos vigentes</p>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <p class="card-description">Ofertas vigentes y descuentos semanales.</p>
+      </div>
+      
+      <div class="card-actions">
+        <button type="button" class="btn btn-secondary">
+          Ver promociones
+        </button>
+      </div>
     </section>
 
     <!-- Mapa -->
-    <section class="card" id="street-view" aria-label="Mapa">
-      <div id="map"></div>
+      <section id="mapa" class="card" aria-label="Ubicación en el mapa">
+      <h2>Ubicación</h2>
+      <section class="card" id="street-view" aria-label="Mapa">
+        <div id="map"></div>
+      </section>
     </section>
-
-  </main>
-
-  <footer>
+    
+<!-- Horarios detallados -->
+    <section class="card" aria-label="Horarios detallados">
+      <h2>Horarios de atención</h2>
+      <div class="horarios">
+        <div class="row"><span>Lunes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Martes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Miércoles</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Jueves</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Viernes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Sábado</span><span>9:00 – 14:00</span></div>
+        <div class="row cerrado"><span>Domingo</span><span>Cerrado</span></div>
+      </div><br>
+      <p class="muted">Los horarios pueden ajustarse en feriados. Consultá la sección <a href="Avisos.html">Avisos</a>.</p>
+    </section>
+  </main>  <footer>
     <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
   </footer>
       <script async defer

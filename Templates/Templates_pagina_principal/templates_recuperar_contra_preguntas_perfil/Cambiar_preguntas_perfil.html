@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas de Seguridad</title>
+    <meta name="description" content="Formulario para configurar preguntas de seguridad que ayudarán a recuperar tu contraseña.">
+    <link rel="stylesheet" href="/Styles/Styles_pagina_principal/styles_recuperar_contra_preguntas/estilo_recuperar_preguntas.css">
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon" aria-label="Abrir menú">&#9776;</label>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="Contacto.html">Contacto</a></li>
+      <li><a href="Creditos.html">Créditos</a></li>
+    </ul>
+
+    <ul class="menu-footer">
+    <li>
+  <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">
+    ⏻
+  </a>
+</li>
+
+  </ul>
+  </nav>
+  <!-- Header -->
+  <header class="header-bar">
+    <h1>Tu Perfil</h1>
+<div class="header-icons" aria-label="Acciones de usuario">
+      <a href="Avisos.html">🔔</a>
+      <a href="Perfil_usuario.html">👤</a>
+    </div>  </header>
+
+  <!-- Contenido principal -->
+  <main>
+    <div class="card">
+        <h1>Cambiar respuestas de seguridad</h1>
+        <p>Cambia las respuestas a las siguientes preguntas de seguridad.</p>
+
+        <form id="Preguntas_seg" >
+            <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
+            <input type="text" id="Pregunta_1" name="Pregunta_1" autocomplete="off" required>
+
+            <label for="Pregunta_2">¿En qué ciudad naciste?</label>
+            <input type="text" id="Pregunta_2" name="Pregunta_2" autocomplete="off" required>
+
+            <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
+            <input type="text" id="Pregunta_3" name="Pregunta_3" autocomplete="off" required>
+
+            <button type="submit">Terminar Cambio</button>
+            <button type="reset">Limpiar Respuestas</button>
+        </form>
+
+        <p><a href="/Templates/Templates_pagina_principal/Perfil_usuario.html">Volver a perfil</a></p>
+    </div>
+    <footer>
+        <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/Scripts/Scripts_pagina_principal/scripts_recuperar_contra_perfil_preguntas/script_recuperar_preguntas_perfil.js"></script>
+</body>
+</html>
