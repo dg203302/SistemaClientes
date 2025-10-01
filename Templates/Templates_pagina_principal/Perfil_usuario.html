@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil de Usuario</title>
+  <!-- Estilos compartidos (variables, header, sidebar, cards) -->
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css" />
+  <!-- Estilos específicos del perfil -->
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_perfil_usuario.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Reutiliza funciones globales como cerrarSesion(), y relleno de nombre si aplica -->
+  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon" aria-label="Abrir menú">&#9776;</label>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="Avisos.html">Avisos</a></li>
+      <li><a href="Perfil_usuario.html">Perfil</a></li>
+      <li><a href="Contacto.html">Contacto</a></li>
+      <li><a href="Creditos.html">Créditos</a></li>
+    </ul>
+
+    <ul class="menu-footer">
+    <li><a href="#" onclick="cerrarSesion()">⏻</a></li>
+  </ul>
+  </nav>
+  <!-- Header -->
+  <header class="header-bar">
+    <h1>Tu Perfil, <span id="nombre-usuario">Usuario</span></h1>
+    <div class="header-icons" aria-label="Acciones de usuario">
+      <span title="Notificaciones">🔔</span>
+      <span title="Perfil">👤</span>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main>
+    <!-- Resumen del perfil -->
+    <section class="card profile-summary" aria-label="Resumen del perfil">
+      <div class="avatar-wrapper">
+        <img id="avatar-preview" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Avatar del usuario" />
+        <label for="avatar" class="btn secondary">Cambiar foto</label>
+        <input id="avatar" type="file" accept="image/*" aria-label="Elegir nueva foto de perfil" />
+      </div>
+      <div class="summary-fields">
+        <h2 id="perfil-nombre">Nombre Apellido</h2>
+        <p id="perfil-email" class="muted">correo@ejemplo.com</p>
+        <div class="badges">
+          <span class="badge">Miembro</span>
+          <span class="badge points"><strong id="perfil-puntos">0</strong> pts</span>
+        </div>
+        <p id="perfil-desde" class="muted">Miembro desde: —</p>
+      </div>
+    </section>
+
+    <!-- Información personal -->
+    <section class="card" aria-label="Información personal">
+      <h2>Información personal</h2>
+      <form class="form-grid" aria-describedby="ayuda-personal">
+        <div class="form-control">
+          <label for="nombres">Nombres</label>
+          <input id="nombres" name="nombres" type="text" placeholder="Juan" />
+        </div>
+        <div class="form-control">
+          <label for="apellidos">Apellidos</label>
+          <input id="apellidos" name="apellidos" type="text" placeholder="Pérez" />
+        </div>
+        <div class="form-control">
+          <label for="dni">Documento</label>
+          <input id="dni" name="dni" type="text" inputmode="numeric" placeholder="12345678" />
+        </div>
+        <div class="form-control">
+          <label for="nacimiento">Fecha de nacimiento</label>
+          <input id="nacimiento" name="nacimiento" type="date" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn">Guardar cambios</button>
+        </div>
+      </form>
+      <p id="ayuda-personal" class="muted">Estos datos solo son visibles para ti.</p>
+    </section>
+
+    <!-- Contacto -->
+    <section class="card" aria-label="Información de contacto">
+      <h2>Contacto</h2>
+      <form class="form-grid">
+        <div class="form-control">
+          <label for="correo">Correo</label>
+          <input id="correo" name="correo" type="email" placeholder="correo@ejemplo.com" />
+        </div>
+        <div class="form-control">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" name="telefono" type="tel" placeholder="+54 9 11 5555-5555" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn">Actualizar contacto</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Dirección -->
+    <section class="card" aria-label="Dirección principal">
+      <h2>Dirección</h2>
+      <form class="form-grid">
+        <div class="form-control">
+          <label for="calle">Calle y número</label>
+          <input id="calle" name="calle" type="text" placeholder="Av. Siempre Viva 742" />
+        </div>
+        <div class="form-control">
+          <label for="ciudad">Ciudad</label>
+          <input id="ciudad" name="ciudad" type="text" placeholder="Ciudad" />
+        </div>
+        <div class="form-control">
+          <label for="provincia">Provincia</label>
+          <input id="provincia" name="provincia" type="text" placeholder="Provincia" />
+        </div>
+        <div class="form-control">
+          <label for="cp">Código Postal</label>
+          <input id="cp" name="cp" type="text" inputmode="numeric" placeholder="1000" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn">Guardar dirección</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Preferencias -->
+    <section class="card" aria-label="Preferencias de cuenta">
+      <h2>Preferencias</h2>
+      <ul class="prefs">
+        <li>
+          <span>Boletín y novedades</span>
+          <label class="switch">
+            <input type="checkbox" id="pref-newsletter" checked />
+            <span class="slider"></span>
+          </label>
+        </li>
+        <li>
+          <span>Notificaciones push</span>
+          <label class="switch">
+            <input type="checkbox" id="pref-push" />
+            <span class="slider"></span>
+          </label>
+        </li>
+        <li>
+          <span>Compartir ubicación para promos cercanas</span>
+          <label class="switch">
+            <input type="checkbox" id="pref-location" />
+            <span class="slider"></span>
+          </label>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Seguridad -->
+    <section class="card" aria-label="Seguridad de la cuenta">
+      <h2>Seguridad</h2>
+      <div class="security-list">
+        <a class="link-btn" href="../Templates_recuperar_contrasenia/actualizar_contra.html">Cambiar contraseña</a>
+        <a class="link-btn" href="../Templates_recuperar_contrasenia/Preguntas_cambiar_contraseña.html">Preguntas de seguridad</a>
+        <button type="button" class="btn danger">Cerrar todas las sesiones</button>
+      </div>
+      <p class="muted">Recomendación: usa una contraseña única y activa el correo de recuperación.</p>
+    </section>
+
+    <!-- Actividad reciente -->
+    <section class="card" aria-label="Actividad reciente">
+      <h2>Actividad reciente</h2>
+      <ul class="activity">
+        <li>
+          <span class="dot"></span>
+          Iniciaste sesión desde un nuevo dispositivo — <time datetime="2025-01-10">10 ene 2025</time>
+        </li>
+        <li>
+          <span class="dot"></span>
+          Canjeaste 200 puntos por un cupón — <time datetime="2025-01-05">5 ene 2025</time>
+        </li>
+        <li>
+          <span class="dot"></span>
+          Actualizaste tu número de teléfono — <time datetime="2024-12-28">28 dic 2024</time>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+</body>
+</html>

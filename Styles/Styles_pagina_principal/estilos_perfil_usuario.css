@@ -1,0 +1,245 @@
+/* Perfil de usuario: estilos específicos sobre la base compartida */
+
+/* Utiliza las variables de colores ya definidas en estilos_pagina_principal.css */
+
+/* Destacar sección activa en el menú */
+.sidebar a.active {
+  background: var(--color-purple);
+  border-radius: 8px;
+}
+
+/* Resumen del perfil */
+.profile-summary {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.avatar-wrapper {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  gap: 0.6rem;
+  justify-items: center;
+}
+
+.avatar-wrapper img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.avatar-wrapper input[type="file"] {
+  display: none;
+}
+
+.summary-fields h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.muted {
+  color: #e9d9d1;
+  opacity: 0.85;
+}
+
+.badges {
+  margin: 0.6rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-light);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.badge.points {
+  background: linear-gradient(90deg, #1e9f86, #0fb9b1);
+}
+
+/* Formularios */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem 1.2rem;
+  margin-top: 0.8rem;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-control label {
+  font-weight: 600;
+  color: var(--color-pink);
+}
+
+.form-control input,
+.form-control select,
+.form-control textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-light);
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  outline: none;
+}
+
+.form-control input:focus {
+  border-color: var(--color-pink);
+  box-shadow: 0 0 0 3px rgba(223, 182, 178, 0.25);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.2rem;
+}
+
+/* Botones */
+.btn {
+  background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark));
+  border: none;
+  color: #fff;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn.danger {
+  background: linear-gradient(90deg, #a81e40, #e63946);
+}
+
+.link-btn {
+  display: inline-block;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--color-light);
+  border-radius: 10px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.link-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Preferencias: switches */
+.prefs {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+.prefs li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.2rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.switch input { display: none; }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255,255,255,0.25);
+  transition: 0.3s;
+  border-radius: 999px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background: linear-gradient(90deg, var(--color-pink), var(--color-purple));
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Seguridad */
+.security-list {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0.6rem 0 0.2rem 0;
+}
+
+/* Actividad */
+.activity {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  padding-left: 0.2rem;
+}
+
+.activity li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.activity .dot {
+  width: 10px;
+  height: 10px;
+  background: #00ffcc;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00ffcc;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .profile-summary {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .form-actions { justify-content: stretch; }
+}

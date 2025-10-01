@@ -1,0 +1,43 @@
+/* Estilos específicos para la página de Contacto */
+
+.sidebar a.active { background: var(--color-purple); border-radius: 8px; }
+
+.summary { display: grid; gap: 1rem; }
+.info-grid { list-style: none; padding-left: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.info-grid h3 { color: var(--color-pink); margin-bottom: .35rem; }
+
+.quick-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+.btn { background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark)); border: none; color: #fff; padding: .6rem .9rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+.btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,.3); }
+
+.horarios { display: grid; gap: .5rem; margin-top: .6rem; }
+.horarios .row { display: flex; justify-content: space-between; background: rgba(0,0,0,.15); border: 1px solid rgba(255,255,255,.1); padding: .6rem .8rem; border-radius: 10px; }
+.horarios .row.cerrado { opacity: .8; }
+
+.map-embed { margin-top: .6rem; }
+.map-actions { margin-top: .6rem; }
+
+.social { list-style: none; padding-left: 0; display: flex; gap: .6rem; flex-wrap: wrap; }
+.link-btn { display: inline-block; padding: .5rem .8rem; background: rgba(255,255,255,.12); color: var(--color-light); border-radius: 10px; text-decoration: none; border: 1px solid rgba(255,255,255,.2); }
+
+.policies { list-style: disc; padding-left: 1.2rem; display: grid; gap: .3rem; }
+
+/* Formulario */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem 1.2rem; margin-top: .6rem; }
+.form-control { display: flex; flex-direction: column; gap: .35rem; }
+.form-control.full { grid-column: 1 / -1; }
+.form-control label { font-weight: 600; color: var(--color-pink); }
+.form-control input, .form-control textarea {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--color-light);
+  padding: 0.6rem 0.7rem;
+  border-radius: 10px;
+  outline: none;
+}
+.form-control input:focus, .form-control textarea:focus { border-color: var(--color-pink); box-shadow: 0 0 0 3px rgba(223,182,178,.25); }
+.form-actions { grid-column: 1 / -1; display: flex; gap: .6rem; justify-content: flex-end; }
+
+@media (max-width: 560px) {
+  .social { justify-content: center; }
+}

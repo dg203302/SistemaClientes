@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Créditos — Sobre el equipo</title>
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css" />
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_creditos.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon" aria-label="Abrir menú">&#9776;</label>
+
+  <!-- Sidebar -->
+   <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="Avisos.html">Avisos</a></li>
+      <li><a href="Perfil_usuario.html">Perfil</a></li>
+      <li><a href="Contacto.html">Contacto</a></li>
+      <li><a href="Creditos.html">Créditos</a></li>
+    </ul>
+
+    <ul class="menu-footer">
+    <li><a href="#" onclick="cerrarSesion()">⏻</a></li>
+  </ul>
+  </nav>
+  <!-- Header -->
+  <header class="header-bar">
+    <h1>Créditos — Sobre nosotros</h1>
+    <div class="header-icons" aria-label="Acciones de usuario">
+      <span title="Notificaciones">🔔</span>
+      <span title="Perfil">👤</span>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main>
+    <!-- Presentación -->
+    <section class="card" aria-label="Presentación del equipo">
+      <h2>El equipo detrás del proyecto</h2>
+      <p>Somos un grupo de desarrolladores apasionados por crear experiencias web rápidas, seguras y fáciles de usar. Si te interesa una página como esta para tu negocio, ¡hablemos!</p>
+    </section>
+
+    <!-- Integrantes -->
+    <section class="card" aria-label="Integrantes del equipo">
+      <h2>Integrantes</h2>
+      <ul class="team">
+        <li class="member">
+          <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="Avatar integrante" />
+          <div class="member-body">
+            <h3>Nombre Apellido</h3>
+            <p class="role">Frontend • UI/UX</p>
+            <p class="bio">Diseño e implementación de interfaces, performance y accesibilidad.</p>
+            <div class="skills">
+              <span class="badge">HTML</span>
+              <span class="badge">CSS</span>
+              <span class="badge">JavaScript</span>
+            </div>
+            <div class="contact-links">
+              <a class="link-btn" target="_blank" rel="noopener" href="#">GitHub</a>
+              <a class="link-btn" target="_blank" rel="noopener" href="#">LinkedIn</a>
+              <a class="link-btn" href="mailto:dev@example.com">Email</a>
+            </div>
+          </div>
+        </li>
+        <li class="member">
+          <img src="https://avatars.githubusercontent.com/u/2?v=4" alt="Avatar integrante" />
+          <div class="member-body">
+            <h3>Nombre Apellido</h3>
+            <p class="role">Backend • Datos</p>
+            <p class="bio">APIs, seguridad, bases de datos y automatizaciones.</p>
+            <div class="skills">
+              <span class="badge">Node</span>
+              <span class="badge">Supabase</span>
+              <span class="badge">SQL</span>
+            </div>
+            <div class="contact-links">
+              <a class="link-btn" target="_blank" rel="noopener" href="#">GitHub</a>
+              <a class="link-btn" target="_blank" rel="noopener" href="#">LinkedIn</a>
+              <a class="link-btn" href="mailto:dev2@example.com">Email</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Tecnologías -->
+    <section class="card" aria-label="Tecnologías utilizadas">
+      <h2>Tecnologías utilizadas</h2>
+      <ul class="tech">
+        <li>HTML5 + CSS3</li>
+        <li>JavaScript (Vanilla)</li>
+        <li>Supabase (auth, storage, database)</li>
+        <li>Google Maps Platform</li>
+      </ul>
+    </section>
+
+    <!-- Contribuciones -->
+    <section class="card" aria-label="Contribuciones">
+      <h2>Contribuciones destacadas</h2>
+      <ul class="contribs">
+        <li>Arquitectura de componentes y estilos responsive.</li>
+        <li>Integración con Supabase para autenticación y puntos.</li>
+        <li>Diseño de páginas: Inicio, Perfil, Avisos, Contacto.</li>
+        <li>Buenas prácticas de accesibilidad y semántica.</li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="card cta" aria-label="Trabajemos juntos">
+      <h2>¿Querés un sitio como este?</h2>
+      <p>Desarrollamos soluciones a medida para tu negocio. Sitios rápidos, modernos y listos para escalar.</p>
+      <div class="cta-actions">
+        <a class="btn" href="Contacto.html">Contactanos</a>
+        <a class="btn secondary" target="_blank" rel="noopener" href="#">Ver portfolio</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+</body>
+</html>

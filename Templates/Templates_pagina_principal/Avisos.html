@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avisos y Comunicados</title>
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css" />
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_avisos.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon" aria-label="Abrir menú">&#9776;</label>
+
+   <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="Avisos.html">Avisos</a></li>
+      <li><a href="Perfil_usuario.html">Perfil</a></li>
+      <li><a href="Contacto.html">Contacto</a></li>
+      <li><a href="Creditos.html">Créditos</a></li>
+    </ul>
+
+    <ul class="menu-footer">
+    <li><a href="#" onclick="cerrarSesion()">⏻</a></li>
+  </ul>
+  </nav>
+
+  <!-- Header -->
+  <header class="header-bar">
+    <h1>Avisos y Comunicados</h1>
+    <div class="header-icons" aria-label="Acciones de usuario">
+      <span title="Notificaciones">🔔</span>
+      <span title="Perfil">👤</span>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main>
+    <!-- Filtros -->
+    <section class="card filters" aria-label="Filtros de avisos">
+      <form class="filters-grid">
+        <div class="form-control">
+          <label for="filtro-tipo">Tipo</label>
+          <select id="filtro-tipo">
+            <option value="todos">Todos</option>
+            <option value="cierre">Cierres</option>
+            <option value="horario">Horarios</option>
+            <option value="promos">Promociones</option>
+            <option value="general">General</option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label for="filtro-desde">Desde</label>
+          <input id="filtro-desde" type="date" />
+        </div>
+        <div class="form-control">
+          <label for="filtro-hasta">Hasta</label>
+          <input id="filtro-hasta" type="date" />
+        </div>
+        <div class="form-control">
+          <label for="filtro-estado">Estado</label>
+          <select id="filtro-estado">
+            <option value="vigentes">Vigentes</option>
+            <option value="programados">Programados</option>
+            <option value="archivados">Archivados</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn">Aplicar</button>
+          <button type="reset" class="btn secondary">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Avisos vigentes -->
+    <section class="card" aria-label="Avisos vigentes">
+      <div class="section-header">
+        <h2>Vigentes</h2>
+        <span class="count" aria-label="Cantidad de avisos">3</span>
+      </div>
+      <ul class="notice-list">
+        <li class="notice">
+          <span class="cat cierre">Cierre</span>
+          <div class="notice-content">
+            <h3>Cerrado por feriado</h3>
+            <p>El local permanecerá cerrado el <time datetime="2025-10-12">12 de octubre</time> por feriado nacional.</p>
+            <div class="meta">
+              <time datetime="2025-10-01">Publicado: 1 oct 2025</time>
+              <span>Válido: 11–12 oct</span>
+            </div>
+          </div>
+        </li>
+        <li class="notice">
+          <span class="cat horario">Horario</span>
+          <div class="notice-content">
+            <h3>Horario extendido</h3>
+            <p>Durante este mes abrimos de 8 a 21 hs de lunes a sábado.</p>
+            <div class="meta">
+              <time datetime="2025-09-28">Publicado: 28 sep 2025</time>
+              <span>Válido: todo octubre</span>
+            </div>
+          </div>
+        </li>
+        <li class="notice">
+          <span class="cat promos">Promos</span>
+          <div class="notice-content">
+            <h3>2x1 en cafetería</h3>
+            <p>Todos los miércoles de octubre. Aplica a café americano y latte.</p>
+            <div class="meta">
+              <time datetime="2025-09-27">Publicado: 27 sep 2025</time>
+              <span>Válido: 1–31 oct</span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Próximos cierres (timeline) -->
+    <section class="card" aria-label="Próximos cierres">
+      <div class="section-header">
+        <h2>Próximos cierres</h2>
+      </div>
+      <ol class="timeline">
+        <li>
+          <span class="dot"></span>
+          <div class="tl-content">
+            <strong>Feriado nacional</strong>
+            <time datetime="2025-10-12">Dom 12/10</time>
+            <p>Cerrado todo el día.</p>
+          </div>
+        </li>
+        <li>
+          <span class="dot"></span>
+          <div class="tl-content">
+            <strong>Mantenimiento eléctrico</strong>
+            <time datetime="2025-11-03">Lun 03/11</time>
+            <p>Cerrado de 14:00 a 16:00.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Mensajes generales -->
+    <section class="card" aria-label="Mensajes generales">
+      <div class="section-header">
+        <h2>Mensajes</h2>
+      </div>
+      <div class="messages">
+        <article class="msg info">
+          <h3>Nuevo canal de WhatsApp</h3>
+          <p>Sumate para recibir recordatorios de promos y cambios de horario.</p>
+        </article>
+        <article class="msg warning">
+          <h3>Alta demanda</h3>
+          <p>Los sábados a la tarde puede haber fila. ¡Gracias por la paciencia!</p>
+        </article>
+        <article class="msg success">
+          <h3>Gracias por tus reseñas</h3>
+          <p>Tu apoyo nos ayuda a mejorar cada día.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Archivados -->
+    <section class="card" aria-label="Avisos archivados">
+      <div class="section-header">
+        <h2>Archivados</h2>
+        <a class="link-btn" href="#">Ver todos</a>
+      </div>
+      <ul class="archive">
+        <li>
+          <span class="cat cierre">Cierre</span>
+          <span class="text">Inventario trimestral — <time datetime="2025-08-02">2 ago 2025</time></span>
+        </li>
+        <li>
+          <span class="cat general">General</span>
+          <span class="text">Nueva política de devoluciones — <time datetime="2025-07-15">15 jul 2025</time></span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+</body>
+</html>
