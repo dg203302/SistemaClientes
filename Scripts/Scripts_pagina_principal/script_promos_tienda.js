@@ -4,5 +4,6 @@ const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 
 window.onload = async function() {
-    //cargar ofertas despues
+    let contenedor_promos = document.getElementById("Conten_promos");
+    
 }
