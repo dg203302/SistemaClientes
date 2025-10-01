@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="prueba.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Tarjeta grande de puntos -->
+    <section class="card featured-card points-card" aria-label="Resumen de puntos">
+      <div class="card-header">
+        <div class="card-icon points-icon">💎</div>
+        <div class="card-title-group">
+          <h2 class="card-title">Mis Puntos</h2>
+          <p class="card-subtitle"></p>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <div class="points-display">
+          <span id="cant_puntos" class="points-value" data-points="0">Tiene: Puntos</span>
+        </div>
+        
+        <div class="points-actions">
+          <button type="button" 
+                  class="btn btn-primary refresh-btn" 
+                  onclick="refrescarPuntos()"
+                  aria-label="Actualizar cantidad de puntos">
+            <span class="btn-icon">🔄</span>
+            Refrescar Puntos
+          </button>
+        </div>
+      </div>
+</body>
+</html>
