@@ -1,12 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="prueba.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Usuario</title>
+  <link rel="stylesheet" href="prueba.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Antes del cierre de </body> -->
+<script src="/Scripts/sidebar-functionality.js"></script>
 </head>
 <body>
+
+  
+
+  <!-- Header mejorado -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 id="saludo-principal" class="welcome-text">
+        <span class="greeting">Bienvenido,</span>
+        <span id="nombre-usuario" class="user-name">Usuario</span>
+      </h1>
+      
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="Avisos.html" 
+           class="action-btn notifications-btn" 
+           aria-label="Ver avisos y notificaciones"
+           title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="Perfil_usuario.html" 
+           class="action-btn profile-btn" 
+           aria-label="Ver perfil de usuario"
+           title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main>
     <!-- Tarjeta grande de puntos -->
     <section class="card featured-card points-card" aria-label="Resumen de puntos">
       <div class="card-header">
@@ -20,7 +55,7 @@
       <div class="card-content">
         <div class="points-display">
           <span id="cant_puntos" class="points-value" data-points="0">Tiene: Puntos</span>
-        </div>
+        </div> <br>
         
         <div class="points-actions">
           <button type="button" 
@@ -32,5 +67,75 @@
           </button>
         </div>
       </div>
+    </section>
+
+    <!-- Tarjetas de Promos y Promociones -->
+    <section class="card promo-card points-promo" aria-label="Promociones con puntos">
+      <div class="card-header">
+        <div class="card-icon promo-icon">🎁</div>
+        <div class="card-title-group">
+          <h3 class="card-title">Canje de Puntos</h3><br>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <p class="card-description">Canjea tus puntos por beneficios exclusivos.</p>
+      </div> <br>
+      
+      <div class="card-actions">
+        <button type="button" class="btn btn-secondary">
+          Ver promos
+        </button>
+      </div>
+    </section>
+
+    <section class="card promo-card store-promo" aria-label="Promociones de tienda">
+      <div class="card-header">
+        <div class="card-icon store-icon">🏪</div>
+        <div class="card-title-group">
+          <h3 class="card-title">Ofertas de Tienda</h3> <br>
+      </div>
+      
+      <div class="card-content">
+        <p class="card-description">Ofertas vigentes y descuentos semanales.</p>
+      </div> <br>
+      
+      <div class="card-actions">
+        <button type="button" class="btn btn-secondary">
+          Ver promociones
+        </button>
+      </div>
+    </section>
+
+    <!-- Mapa -->
+      <section id="mapa" class="card" aria-label="Ubicación en el mapa">
+      <h2>Ubicación</h2>
+      <section class="card" id="street-view" aria-label="Mapa">
+        <div id="map"></div>
+      </section>
+    </section>
+    
+<!-- Horarios detallados -->
+    <section class="card" aria-label="Horarios detallados">
+      <h2>Horarios de atención</h2>
+      <div class="horarios">
+        <div class="row"><span>Lunes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Martes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Miércoles</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Jueves</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Viernes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Sábado</span><span>9:00 – 14:00</span></div>
+        <div class="row cerrado"><span>Domingo</span><span>Cerrado</span></div>
+      </div><br>
+      <p class="muted">Los horarios pueden ajustarse en feriados. Consultá la sección <a href="Avisos.html">Avisos</a>.</p>
+    </section>
+  </main>  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzIFykBS4anUaW8Ff0sGw0MlWe6jfMABo&callback=initStreetView">
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js"></script>
 </body>
 </html>
