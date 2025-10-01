@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promociones y Puntos</title>
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/Promociones_puntos.css" />
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Contacto.html">Contacto</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Creditos.html">Créditos</a></li>
+    </ul>
+    <ul class="menu-footer">
+      <li>
+        <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;" title="Cerrar sesión">⏻</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 id="saludo-principal" class="welcome-text">
+        <span class="greeting">Promociones</span>
+        <span class="user-name">y Canjes</span>
+      </h1>
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="/Templates/Templates_pagina_principal/Avisos.html" class="action-btn notifications-btn" aria-label="Ver avisos y notificaciones" title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" class="action-btn profile-btn" aria-label="Ver perfil de usuario" title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="promos" role="main">
+    <!-- Barra de herramientas: búsqueda y filtros -->
+    <section class="promos-toolbar" aria-label="Herramientas de búsqueda y orden">
+      <div class="saldo" aria-live="polite" title="Tus puntos actuales">
+        <span class="label">Tus puntos:</span>
+        <span class="valor" id="puntos-usuario">—</span>
+      </div>
+
+      <div class="filtros">
+        <label class="sr-only" for="buscar">Buscar premios</label>
+        <input id="buscar" class="buscar" type="search" placeholder="Buscar premios..." aria-label="Buscar premios" />
+
+        <label class="sr-only" for="ordenar">Ordenar por</label>
+        <select id="ordenar" class="ordenar" aria-label="Ordenar por">
+          <option value="puntos-asc">Puntos: menor a mayor</option>
+          <option value="puntos-desc">Puntos: mayor a menor</option>
+          <option value="nombre-asc">Nombre A-Z</option>
+          <option value="nombre-desc">Nombre Z-A</option>
+        </select>
+
+        <label class="sr-only" for="categoria">Categoría</label>
+        <select id="categoria" class="categoria" aria-label="Filtrar por categoría">
+          <option value="todas">Todas</option>
+          <option value="productos">Productos</option>
+          <option value="servicios">Servicios</option>
+          <option value="descuentos">Descuentos</option>
+          <option value="experiencias">Experiencias</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Grilla de promociones -->
+    <section class="grid-promos" aria-label="Listado de premios disponibles">
+      <!-- Ejemplos de tarjetas de promoción -->
+      <article class="promo-card" data-categoria="productos">
+        <div class="promo-media" aria-hidden="true">🎁</div>
+        <div class="promo-body">
+          <h2 class="promo-title">Taza Edición Limitada</h2>
+          <p class="promo-desc">Taza de cerámica con el logo del local. Ideal para tu café de la mañana.</p>
+          <ul class="promo-meta">
+            <li><span class="meta-label">Puntos necesarios:</span> <strong class="meta-value">600</strong></li>
+            <li><span class="meta-label">Stock:</span> <span class="meta-value">Disponible</span></li>
+            <li><span class="meta-label">Validez:</span> <span class="meta-value">Hasta 31/12/2025</span></li>
+          </ul>
+          <details class="promo-terms">
+            <summary>Términos y condiciones</summary>
+            <p>Válido un canje por usuario. Sujeto a disponibilidad. No acumulable con otras promociones.</p>
+          </details>
+        </div>
+        <div class="promo-actions">
+          <button class="btn-canjear" type="button" aria-label="Canjear Taza Edición Limitada">Canjear</button>
+        </div>
+      </article>
+
+      <article class="promo-card" data-categoria="descuentos">
+        <div class="promo-media" aria-hidden="true">💸</div>
+        <div class="promo-body">
+          <h2 class="promo-title">10% de Descuento</h2>
+          <p class="promo-desc">Aplica sobre el total de tu compra en el local. No válidos en combos.</p>
+          <ul class="promo-meta">
+            <li><span class="meta-label">Puntos necesarios:</span> <strong class="meta-value">300</strong></li>
+            <li><span class="meta-label">Validez:</span> <span class="meta-value">30 días desde canje</span></li>
+          </ul>
+          <details class="promo-terms">
+            <summary>Términos y condiciones</summary>
+            <p>No acumulable con otras promociones. Válido solo en compras presenciales.</p>
+          </details>
+        </div>
+        <div class="promo-actions">
+          <button class="btn-canjear" type="button" aria-label="Canjear 10% de Descuento">Canjear</button>
+        </div>
+      </article>
+
+      <article class="promo-card" data-categoria="experiencias">
+        <div class="promo-media" aria-hidden="true">🎟️</div>
+        <div class="promo-body">
+          <h2 class="promo-title">Entrada VIP Evento</h2>
+          <p class="promo-desc">Acceso preferencial a nuestro próximo evento con asiento reservado.</p>
+          <ul class="promo-meta">
+            <li><span class="meta-label">Puntos necesarios:</span> <strong class="meta-value">1200</strong></li>
+            <li><span class="meta-label">Stock:</span> <span class="meta-value">Pocas unidades</span></li>
+            <li><span class="meta-label">Validez:</span> <span class="meta-value">Fecha del evento</span></li>
+          </ul>
+          <details class="promo-terms">
+            <summary>Términos y condiciones</summary>
+            <p>El canje no es reembolsable. Requiere presentar DNI. La entrada es intransferible.</p>
+          </details>
+        </div>
+        <div class="promo-actions">
+          <button class="btn-canjear" type="button" aria-label="Canjear Entrada VIP Evento">Canjear</button>
+        </div>
+      </article>
+
+      <article class="promo-card" data-categoria="servicios">
+        <div class="promo-media" aria-hidden="true">🧼</div>
+        <div class="promo-body">
+          <h2 class="promo-title">Servicio de Limpieza Express</h2>
+          <p class="promo-desc">Limpieza rápida de tu producto o equipo realizada en el local.</p>
+          <ul class="promo-meta">
+            <li><span class="meta-label">Puntos necesarios:</span> <strong class="meta-value">450</strong></li>
+            <li><span class="meta-label">Validez:</span> <span class="meta-value">90 días desde canje</span></li>
+          </ul>
+          <details class="promo-terms">
+            <summary>Términos y condiciones</summary>
+            <p>Requiere turno previo. No incluye repuestos ni consumibles.</p>
+          </details>
+        </div>
+        <div class="promo-actions">
+          <button class="btn-canjear" type="button" aria-label="Canjear Servicio de Limpieza Express">Canjear</button>
+        </div>
+      </article>
+    </section>
+
+    <footer class="promos-footer">
+      <a class="volver" href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">← Volver al inicio</a>
+    </footer>
+  </main>
+
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+
+  <!-- Opcional: En el futuro se puede enlazar un script para cargar dinámicamente premios y puntos del usuario -->
+</body>
+</html>

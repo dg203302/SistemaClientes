@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ofertas del Día</title>
+  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/Ofertas_tienda.css" />
+</head>
+<body>
+  <!-- Botón hamburguesa -->
+  <input type="checkbox" id="menu-toggle" />
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Contacto.html">Contacto</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Creditos.html">Créditos</a></li>
+    </ul>
+    <ul class="menu-footer">
+      <li>
+        <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;" title="Cerrar sesión">⏻</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Header -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 class="welcome-text">
+        <span class="greeting">Ofertas</span>
+        <span class="user-name">de la Tienda</span>
+      </h1>
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="/Templates/Templates_pagina_principal/Avisos.html" class="action-btn notifications-btn" aria-label="Ver avisos y notificaciones" title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" class="action-btn profile-btn" aria-label="Ver perfil de usuario" title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="ofertas" role="main">
+    <!-- Barra de herramientas: búsqueda, filtro, orden -->
+    <section class="ofertas-toolbar" aria-label="Herramientas de búsqueda y orden">
+      <div class="resumen">
+        <span class="label">Ofertas activas:</span>
+        <span class="valor" id="ofertas-activas">—</span>
+      </div>
+
+      <div class="filtros">
+        <label class="sr-only" for="buscar">Buscar ofertas</label>
+        <input id="buscar" class="buscar" type="search" placeholder="Buscar ofertas..." aria-label="Buscar ofertas" />
+
+        <label class="sr-only" for="ordenar">Ordenar por</label>
+        <select id="ordenar" class="ordenar" aria-label="Ordenar por">
+          <option value="vigencia">Vigencia</option>
+          <option value="descuento-desc">Descuento mayor</option>
+          <option value="descuento-asc">Descuento menor</option>
+          <option value="nombre-asc">Nombre A-Z</option>
+          <option value="nombre-desc">Nombre Z-A</option>
+        </select>
+
+        <label class="sr-only" for="tipo">Tipo</label>
+        <select id="tipo" class="tipo" aria-label="Filtrar por tipo">
+          <option value="todas">Todas</option>
+          <option value="2x1">2x1</option>
+          <option value="porcentaje">% Descuento</option>
+          <option value="precio-fijo">Precio fijo</option>
+          <option value="combo">Combo</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Grilla de ofertas -->
+    <section class="grid-ofertas" aria-label="Listado de ofertas disponibles">
+      <!-- Ejemplos -->
+      <article class="oferta-card" data-tipo="2x1">
+        <div class="oferta-media" aria-hidden="true">🥤</div>
+        <div class="oferta-body">
+          <div class="oferta-head">
+            <h2 class="oferta-title">2x1 en Coca Cola 500ml</h2>
+            <span class="badge badge-2x1">2x1</span>
+          </div>
+          <p class="oferta-desc">Llevá 2 botellas de 500ml y pagás 1. Válido para Coca Cola clásica y Zero.</p>
+          <ul class="oferta-meta">
+            <li><span class="meta-label">Vigencia:</span> <span class="meta-value">Hoy</span></li>
+            <li><span class="meta-label">Horario:</span> <span class="meta-value">10:00 a 20:00</span></li>
+            <li><span class="meta-label">Límite:</span> <span class="meta-value">2 promos por persona</span></li>
+          </ul>
+          <details class="oferta-terms">
+            <summary>Términos y condiciones</summary>
+            <p>No acumulable con otras promos. Aplica solo a presentaciones de 500ml. Hasta agotar stock.</p>
+          </details>
+        </div>
+        <div class="oferta-actions">
+          <button class="btn-usar" type="button" aria-label="Usar oferta 2x1 Coca Cola">Usar ahora</button>
+        </div>
+      </article>
+
+      <article class="oferta-card" data-tipo="porcentaje">
+        <div class="oferta-media" aria-hidden="true">🍕</div>
+        <div class="oferta-body">
+          <div class="oferta-head">
+            <h2 class="oferta-title">20% en Pizzas Familiares</h2>
+            <span class="badge badge-desc">-20%</span>
+          </div>
+          <p class="oferta-desc">Descuento válido en pizzas tamaño familiar. No aplica a adicionales.</p>
+          <ul class="oferta-meta">
+            <li><span class="meta-label">Vigencia:</span> <span class="meta-value">Hasta 15/10/2025</span></li>
+            <li><span class="meta-label">Días:</span> <span class="meta-value">Lun a Jue</span></li>
+          </ul>
+          <details class="oferta-terms">
+            <summary>Términos y condiciones</summary>
+            <p>Válido para consumo en salón o take-away. No acumulable con combos.</p>
+          </details>
+        </div>
+        <div class="oferta-actions">
+          <button class="btn-usar" type="button" aria-label="Usar 20% en Pizzas Familiares">Usar ahora</button>
+        </div>
+      </article>
+
+      <article class="oferta-card" data-tipo="combo">
+        <div class="oferta-media" aria-hidden="true">🍔</div>
+        <div class="oferta-body">
+          <div class="oferta-head">
+            <h2 class="oferta-title">Combo Burger + Papas + Bebida</h2>
+            <span class="badge badge-combo">Combo</span>
+          </div>
+          <p class="oferta-desc">Hamburguesa clásica, porción de papas y bebida a precio promocional.</p>
+          <ul class="oferta-meta">
+            <li><span class="meta-label">Precio promo:</span> <span class="meta-value">$4.999</span></li>
+            <li><span class="meta-label">Vigencia:</span> <span class="meta-value">Fin de semana</span></li>
+          </ul>
+          <details class="oferta-terms">
+            <summary>Términos y condiciones</summary>
+            <p>Las imágenes son ilustrativas. Precio sujeto a cambios sin previo aviso.</p>
+          </details>
+        </div>
+        <div class="oferta-actions">
+          <button class="btn-usar" type="button" aria-label="Usar combo burger">Usar ahora</button>
+        </div>
+      </article>
+    </section>
+
+    <footer class="ofertas-footer">
+      <a class="volver" href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">← Volver al inicio</a>
+    </footer>
+  </main>
+
+  <footer>
+    <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
+  </footer>
+
+</body>
+</html>
