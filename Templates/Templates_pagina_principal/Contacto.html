@@ -7,19 +7,19 @@
   <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css" />
   <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_contacto.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js" defer></script>
+
 </head>
 <body>
   <!-- Botón hamburguesa -->
-  <input type="checkbox" id="menu-toggle" />
-  <label for="menu-toggle" class="menu-icon" aria-label="Abrir menú">&#9776;</label>
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
 
-   <!-- Sidebar -->
+  <!-- Sidebar -->
   <nav class="sidebar">
     <ul>
-      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
-      <li><a href="Contacto.html">Contacto</a></li>
-      <li><a href="Creditos.html">Créditos</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Pagina_principal_inicio.html">Inicio</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Contacto.html">Contacto</a></li>
+      <li><a href="/Templates/Templates_pagina_principal/Creditos.html">Créditos</a></li>
     </ul>
 
     <ul class="menu-footer">
@@ -32,12 +32,30 @@
   </ul>
   </nav>
 
-  <!-- Header -->
-  <header class="header-bar">
-    <h1>Información de contacto</h1>
-    <div class="header-icons" aria-label="Acciones de usuario">
-      <a href="Avisos.html">🔔</a>
-      <a href="Perfil_usuario.html">👤</a>
+  <!-- Header mejorado -->
+  <header class="header-bar" role="banner">
+    <div class="header-content">
+      <h1 id="saludo-principal" class="welcome-text">
+        <span class="greeting">Bienvenido,</span>
+        <span id="nombre-usuario" class="user-name">Usuario</span>
+      </h1>
+      
+      <nav class="header-actions" aria-label="Acciones rápidas">
+        <a href="/Templates/Templates_pagina_principal/Avisos.html" 
+           class="action-btn notifications-btn" 
+           aria-label="Ver avisos y notificaciones"
+           title="Avisos">
+          <span class="btn-icon">🔔</span>
+          <span class="btn-text">Avisos</span>
+        </a>
+        <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" 
+           class="action-btn profile-btn" 
+           aria-label="Ver perfil de usuario"
+           title="Mi Perfil">
+          <span class="btn-icon">👤</span>
+          <span class="btn-text">Perfil</span>
+        </a>
+      </nav>
     </div>
   </header>
 
