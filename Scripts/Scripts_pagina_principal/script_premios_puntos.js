@@ -7,5 +7,5 @@ const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
 window.onload = async function() {
     let cantidad_puntos = document.getElementById("puntos-usuario");
     cantidad_puntos.textContent = usuario_l.puntos_u
+    //cargar promociones despues
 }
-console.log(usuario_l.nombre_u, usuario_l.puntos_u, usuario_l.tele_u, usuario_l.f_creacion_u)
