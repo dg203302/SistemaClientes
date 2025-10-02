@@ -1,7 +1,7 @@
 /* Estilos específicos para la página de Avisos */
 
 /* Activo en el menú */
-.sidebar a.active { background: var(--color-purple); border-radius: 8px; }
+.sidebar a.active { background: var(--color-purple, #7c3aed); border-radius: 8px; }
 
 /* Filtros */
 .filters-grid {
@@ -11,33 +11,38 @@
 }
 
 .form-control { display: flex; flex-direction: column; gap: 0.35rem; }
-.form-control label { font-weight: 600; color: var(--color-pink); }
+.form-control label { font-weight: 600; color: var(--color-pink, #ec4899); }
 .form-control input, .form-control select {
   background: rgba(0,0,0,0.2);
   border: 1px solid rgba(255,255,255,0.15);
-  color: var(--color-light);
+  color: var(--color-light, #f5f5f5);
   padding: 0.55rem 0.7rem;
   border-radius: 10px;
   outline: none;
 }
-.form-control input:focus, .form-control select:focus { border-color: var(--color-pink); box-shadow: 0 0 0 3px rgba(223,182,178,.25); }
+.form-control input:focus, .form-control select:focus { border-color: var(--color-pink, #ec4899); box-shadow: 0 0 0 3px rgba(223,182,178,.25); }
 .form-actions { grid-column: 1 / -1; display: flex; gap: .6rem; justify-content: flex-end; }
-.btn { background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark)); border: none; color: #fff; padding: .6rem .9rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
+.btn { background: linear-gradient(90deg, var(--color-purple, #7c3aed), var(--color-pink-dark, #db2777)); border: none; color: #fff; padding: .6rem .9rem; border-radius: 10px; font-weight: 600; cursor: pointer; }
 .btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,.3); }
-.link-btn { display: inline-block; padding: .5rem .8rem; background: rgba(255,255,255,.12); color: var(--color-light); border-radius: 10px; text-decoration: none; border: 1px solid rgba(255,255,255,.2); }
+.link-btn { display: inline-block; padding: .5rem .8rem; background: rgba(255,255,255,.12); color: var(--color-light, #f5f5f5); border-radius: 10px; text-decoration: none; border: 1px solid rgba(255,255,255,.2); }
 
 /* Sección header con contador */
 .section-header { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: .6rem; }
 .section-header .count { background: rgba(0,0,0,.25); padding: .2rem .6rem; border-radius: 999px; }
+/* Cuando el contador se pinta por id (contador_msg) */
+#contador_msg { background: rgba(0,0,0,.25); padding: .2rem .6rem; border-radius: 999px; display: inline-block; }
 
 /* Lista de avisos */
 .notice-list { list-style: none; display: grid; gap: .8rem; padding-left: 0; }
+/* El script agrega elementos dentro de #contenedor_msgs, que funciona como lista */
+#contenedor_msgs { list-style: none; display: grid; gap: .8rem; padding-left: 0; }
 .notice { display: grid; grid-template-columns: auto 1fr; gap: .8rem; align-items: start; padding: .8rem; border-radius: 12px; background: rgba(0,0,0,.18); border: 1px solid rgba(255,255,255,.1); }
-.notice h3 { font-size: 1.05rem; margin-bottom: .25rem; color: var(--color-ivory); }
+.notice .notice-content { display: grid; gap: .25rem; }
+.notice h3 { font-size: 1.05rem; margin-bottom: .25rem; color: var(--color-ivory, #fafaf5); }
 .notice .meta { display: flex; gap: 1rem; font-size: .9rem; opacity: .9; margin-top: .25rem; }
 
 /* Categorías (badges) */
-.cat { display: inline-block; padding: .35rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 700; color: #fff; min-width: 76px; text-align: center; }
+.cat { display: inline-block; padding: .35rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 700; color: #fff; min-width: 76px; text-align: center; background: linear-gradient(90deg, #6b4e9b, #8b5cf6); }
 .cat.Cierre { background: linear-gradient(90deg, #a81e40, #e63946); }
 .cat.Horario { background: linear-gradient(90deg, #1d6fa5, #60a5fa); }
 .cat.Promos { background: linear-gradient(90deg, #1e9f86, #0fb9b1); }
@@ -47,7 +52,7 @@
 .timeline { list-style: none; padding-left: 0; display: grid; gap: .9rem; position: relative; }
 .timeline li { display: grid; grid-template-columns: 16px 1fr; gap: .6rem; align-items: start; }
 .timeline .dot { width: 14px; height: 14px; background: #e63946; border-radius: 50%; box-shadow: 0 0 10px #e63946; margin-top: .25rem; }
-.tl-content strong { color: var(--color-pink); display: block; }
+.tl-content strong { color: var(--color-pink, #ec4899); display: block; }
 .tl-content time { opacity: .9; font-size: .9rem; }
 
 /* Mensajes generales */

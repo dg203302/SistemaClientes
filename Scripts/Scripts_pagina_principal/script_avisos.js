@@ -33,7 +33,7 @@ function crearmgsCard(notice) {
   // Categoría / etiqueta
   const cat = document.createElement("span");
   cat.classList.add("cat");
-  if (notice.tipo) cat.classList.add(notice.titulo_flotante);
+  if (notice.tipo){cat.classList.add(notice.titulo_flotante)};
   cat.textContent = notice.titulo_flotante;
 
   // Contenido
