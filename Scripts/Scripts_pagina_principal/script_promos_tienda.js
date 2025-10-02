@@ -6,7 +6,7 @@ const client = createClient(supabaseUrl, supabaseKey)
 window.onload = async function () {
     let contador=0
     const { data, error } = await client
-        .from("Promos_puntos")
+        .from("Ofertas")
         .select("*");
 
     if (error) {
