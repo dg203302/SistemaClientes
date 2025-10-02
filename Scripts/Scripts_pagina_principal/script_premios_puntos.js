@@ -100,19 +100,30 @@ function crearPromoCard(promo) {
 }
 
 function verificar_validez(puntosusu, puntoscanje){
-  return puntosusu<=puntoscanje
+  if (puntosusu<=puntoscanje){
+    return true
+  }
+  else{
+    alert("Puntos insuficientes")
+    return false
+  }
 }
 function verificar_vencimiento(fecha_venc){
   const [dia, mes, anio] = fecha_venc.split("/").map(Number);
   const fecha = new Date(anio, mes - 1, dia);
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
-  if (){
-    
+  if (hoy <= fecha){
+    return true
   }
-  return hoy <= fecha;
+  else{
+    alert("Promocion Vencida")
+    return false
+  }
 }
-
+function generar_codigo(){
+  return Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
+}
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
   const id_btn = boton_promo.dataset.id;
@@ -127,11 +138,25 @@ async function Canjearpuntos(event){
   else{
     if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
       usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
+      localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
       const {data, error} = await client
       .from("Clientes")
       .update({Puntos: usuario_l.puntos_u})
       .eq("Telef", usuario_l.tele_u)
-
+      if (error){
+        alert("error al actualizar los puntos")
+      }
+      else{
+        const {data, error} = await client
+        .from("Codigos_promos_puntos")
+        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: generar_codigo(), id_promo: id_btn}]);
+        if (error){
+          alert("error al registrar el canjeo")
+        }
+        else{
+          alert("registro correcto")
+        }
+      }
     }
   }
 }
