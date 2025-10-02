@@ -23,6 +23,16 @@ window.onload = async function () {
     let of_act = document.getElementById("ofertas-activas");
     of_act.textContent=contador
 };
+
+// Determina la clase de estilo del badge según el texto del campo flotante
+function getBadgeVariant(texto) {
+    const t = String(texto ?? '').trim().toLowerCase();
+    if (!t) return null;
+    if (t.includes('2x1')) return 'badge-2x1';
+    if (t.includes('%') || t.includes('desc')) return 'badge-desc'; // descuento
+    if (t.includes('combo')) return 'badge-combo';
+    return null; // usa estilo base .badge
+}
 function crearPromoTCard(oferta) {
   // Contenedor principal
   const article = document.createElement("article");
@@ -49,6 +59,8 @@ function crearPromoTCard(oferta) {
   const badge = document.createElement("span");
   badge.classList.add("badge");
   badge.textContent = oferta.campo_flotante;
+    const badgeVariant = getBadgeVariant(oferta.campo_flotante);
+    if (badgeVariant) badge.classList.add(badgeVariant);
 
   head.appendChild(titulo);
   head.appendChild(badge);

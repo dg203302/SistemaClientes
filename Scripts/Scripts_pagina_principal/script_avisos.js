@@ -24,17 +24,39 @@ window.onload = async function () {
     of_act.textContent=contador
 };
 
+// Normaliza y mapea la categoría a las clases CSS esperadas
+function obtenerCategoria(raw) {
+        const texto = String(raw ?? '').trim().toLowerCase();
+        // quitar acentos
+        const sinAcentos = texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const mapa = {
+                'cierre': 'Cierre',
+                'cerrado': 'Cierre',
+                'horario': 'Horario',
+                'promos': 'Promos',
+                'promo': 'Promos',
+                'promocion': 'Promos',
+                'promoción': 'Promos',
+                'general': 'General'
+        };
+        const clase = mapa[sinAcentos] || 'General';
+        return { cssClass: clase, label: clase };
+}
+
 function crearmgsCard(notice) {
   // Contenedor principal
   const li = document.createElement("li");
-  li.classList.add("notice");
-  if (notice.tipo) li.classList.add(notice.titulo_flotante);
+    li.classList.add("notice");
+
+    // Determinar categoría desde los campos disponibles
+    const catFuente = notice.titulo_flotante || notice.tipo || 'General';
+    const { cssClass, label } = obtenerCategoria(catFuente);
+    li.classList.add(cssClass);
 
   // Categoría / etiqueta
   const cat = document.createElement("span");
-  cat.classList.add("cat");
-  if (notice.tipo){cat.classList.add(notice.titulo_flotante)};
-  cat.textContent = notice.titulo_flotante;
+    cat.classList.add("cat", cssClass);
+    cat.textContent = label;
 
   // Contenido
   const content = document.createElement("div");
