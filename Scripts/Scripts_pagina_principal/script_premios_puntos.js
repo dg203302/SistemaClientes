@@ -102,16 +102,7 @@ function crearPromoCard(promo) {
 function verificar_validez(puntosusu, puntoscanje){
   return puntosusu<=puntoscanje
 }
-function verificar_vencimiento(fecha_venc){
-  const [dia, mes, anio] = fecha_venc.split("/").map(Number);
-  const fecha = new Date(anio, mes - 1, dia);
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0);
-  if (){
-    
-  }
-  return hoy <= fecha;
-}
+
 
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
@@ -136,23 +127,31 @@ async function Canjearpuntos(event){
   }
 }
 
-async function refrescarPuntos(){
-    const { data, error } = await client
+async function refrescarPuntos(evt) {
+  const btn = evt?.currentTarget || document.querySelector('.refresh-btn');
+  if (btn) btn.disabled = true;
+
+  const { data, error } = await client
     .from("Clientes")
     .select("Puntos")
-    .eq("Telef",usuario_l.tele_u)
-    .single()
-    if (error){
-        const valor = 8
-        window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
-    }
-    else{
-        let cant_puntos = document.getElementById("cant_puntos")
-        usuario_l.puntos_u = data.Puntos;
-        localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-        cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
-    }
+    .eq("Telef", usuario_l.tele_u)
+    .single();
+
+  if (error) {
+    const valor = 8;
+    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+  } else {
+    const saldo = document.getElementById("puntos-usuario"); // <- elemento correcto
+    usuario_l.puntos_u = data.Puntos;
+    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l));
+    if (saldo) saldo.textContent = String(usuario_l.puntos_u);
+  }
+
+  if (btn) btn.disabled = false;
 }
+
+// Exponer al global para que funcione el onclick inline
+window.refrescarPuntos = refrescarPuntos;
 
 function refrescarPromos(){
   window.location.reload();
