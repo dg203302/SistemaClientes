@@ -99,8 +99,61 @@ function crearPromoCard(promo) {
   return article;
 }
 
+function verificar_validez(puntosusu, puntoscanje){
+  return puntosusu<=puntoscanje
+}
+function verificar_vencimiento(fecha_venc){
+  const [dia, mes, anio] = fecha_venc.split("/").map(Number);
+  const fecha = new Date(anio, mes - 1, dia);
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  if (){
+    
+  }
+  return hoy <= fecha;
+}
+
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
   const id_btn = boton_promo.dataset.id;
-  
+  const {data, error} = await client
+  from("Promos_puntos")
+  select("cantidad_puntos_canjeo, validez")
+  .eq("id_promo", id_btn)
+  .single()
+  if (error){
+    alert("error al canjear los puntos" + error.message)
+  }
+  else{
+    if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
+      usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
+      const {data, error} = await client
+      .from("Clientes")
+      .update({Puntos: usuario_l.puntos_u})
+      .eq("Telef", usuario_l.tele_u)
+
+    }
+  }
+}
+
+async function refrescarPuntos(){
+    const { data, error } = await client
+    .from("Clientes")
+    .select("Puntos")
+    .eq("Telef",usuario_l.tele_u)
+    .single()
+    if (error){
+        const valor = 8
+        window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    }
+    else{
+        let cant_puntos = document.getElementById("cant_puntos")
+        usuario_l.puntos_u = data.Puntos;
+        localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+        cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
+    }
+}
+
+function refrescarPromos(){
+  window.location.reload();
 }
