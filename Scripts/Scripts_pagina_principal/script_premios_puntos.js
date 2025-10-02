@@ -100,7 +100,7 @@ function crearPromoCard(promo) {
 }
 
 function verificar_validez(puntosusu, puntoscanje){
-  if (puntosusu<=puntoscanje){
+  if (puntosusu>=puntoscanje){
     return true
   }
   else{
@@ -128,17 +128,17 @@ async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
   const id_btn = boton_promo.dataset.id;
   const {data, error} = await client
-  from("Promos_puntos")
-  select("cantidad_puntos_canjeo, validez")
+  .from("Promos_puntos")
+  .select("cantidad_puntos_canjeo, validez")
   .eq("id_promo", id_btn)
   .single()
   if (error){
     alert("error al canjear los puntos" + error.message)
   }
   else{
+    usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
+    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
     if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
-      usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
-      localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
       const {data, error} = await client
       .from("Clientes")
       .update({Puntos: usuario_l.puntos_u})
@@ -154,39 +154,30 @@ async function Canjearpuntos(event){
           alert("error al registrar el canjeo")
         }
         else{
-          alert("registro correcto")
+          alert("Promo canjeada exitosamente, revise el codigo en su perfil")
         }
       }
     }
   }
 }
-
-async function refrescarPuntos(evt) {
-  const btn = evt?.currentTarget || document.querySelector('.refresh-btn');
-  if (btn) btn.disabled = true;
-
-  const { data, error } = await client
+function rp(){
+  refrescarPuntos();
+}
+window.rp = rp;
+async function refrescarPuntos(){
+    const { data, error } = await client
     .from("Clientes")
     .select("Puntos")
-    .eq("Telef", usuario_l.tele_u)
-    .single();
-
-  if (error) {
-    const valor = 8;
-    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
-  } else {
-    const saldo = document.getElementById("puntos-usuario"); // <- elemento correcto
-    usuario_l.puntos_u = data.Puntos;
-    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l));
-    if (saldo) saldo.textContent = String(usuario_l.puntos_u);
-  }
-
-  if (btn) btn.disabled = false;
-}
-
-// Exponer al global para que funcione el onclick inline
-window.refrescarPuntos = refrescarPuntos;
-
-function refrescarPromos(){
-  window.location.reload();
+    .eq("Telef",usuario_l.tele_u)
+    .single()
+    if (error){
+        const valor = 8
+        window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    }
+    else{
+        let cantidad_puntos = document.getElementById("puntos-usuario");
+        usuario_l.puntos_u = data.Puntos;
+        localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+        cantidad_puntos.textContent = usuario_l.puntos_u;
+    }
 }

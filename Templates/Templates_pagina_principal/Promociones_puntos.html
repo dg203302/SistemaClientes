@@ -56,18 +56,23 @@
       <div class="points-actions">
           <button type="button" 
                   class="btn btn-primary refresh-btn" 
-                  onclick="refrescarPuntos()"
+                  onclick="rp()"
                   aria-label="Actualizar cantidad de puntos">
             <span class="btn-icon">🔄</span>
             Refrescar Puntos
           </button>
-      </div>
+          <button type="button" 
+                  class="btn btn-primary refresh-btn" 
+                  onclick="window.location.reload();"
+                  aria-label="Refrescar promociones">
+            <span class="btn-icon">🔄</span>
+            Refrescar promociones
+          </button>
+        </div>
+      </section>
       
-   
-    </section>
-
-    <!-- Grilla de promociones -->
-    <section class="grid-promos" id="Conten_promos" aria-label="Listado de premios disponibles">
+      <!-- Grilla de promociones -->
+      <section class="grid-promos" id="Conten_promos" aria-label="Listado de premios disponibles">
 
     </section>
   </main>
