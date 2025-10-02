@@ -62,13 +62,13 @@
   <main>
     <!-- Resumen del perfil -->
     <section class="card profile-summary" aria-label="Resumen del perfil">
-      
+      <!--
       <div class="avatar-wrapper">
         <img id="avatar-preview" src="https://avatars.githubusercontent.com/u/0?v=4" alt="Avatar del usuario" />
         <label for="avatar" class="btn secondary">Cambiar foto</label>
         <input id="avatar" type="file" accept="image/*" aria-label="Elegir nueva foto de perfil" />
       </div>
-      
+      -->
       <div class="summary-fields">
         <h2 id="perfil-nombre">Nombre</h2>
         <p id="perfil-tele" class="muted">264XXXXXXX</p>
@@ -79,6 +79,12 @@
         <p id="perfil-desde" class="muted">Miembro desde: —</p>
       </div>
     
+    </section>
+
+    <section class="card" aria-label="Codigos canjeados">
+      <h2>Codigos canjeados</h2>
+      <div class="security-list" id="codigos_canjds">
+      </div>
     </section>
 
     <!-- Seguridad -->
@@ -93,6 +99,7 @@
   <footer>
     <p>© 2025 Mi Negocio - Todos los derechos reservados</p>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal_perfil.js"></script>
 </body>
 </html>

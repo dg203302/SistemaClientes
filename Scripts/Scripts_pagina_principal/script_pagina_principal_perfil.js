@@ -1,4 +1,9 @@
+const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E'
+const { createClient } = supabase
+const client = createClient(supabaseUrl, supabaseKey)
 const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
+
 function corregir_fecha(fecha_iso){
     const fecha_fixed = fecha_iso.slice(0, 23) + "Z";
     const fecha = new Date(fecha_fixed);
@@ -23,4 +28,81 @@ window.onload = function (){
     tele_perfil.textContent = usuario_l.tele_u
     puntos_perfil.textContent = usuario_l.puntos_u
     miembro_desde.textContent = corregir_fecha(usuario_l.f_creacion_u)
+
+    cargar_codigos();
+}
+async function cargar_codigos(){
+    const {data, error} = await client
+    .from("Codigos_promos_puntos")
+    .select("codigo_canjeado, id_promo, fecha_creac")
+    .eq("Telef", usuario_l.tele_u)
+    if (error){
+        alert("error al acceder las promos")
+    }
+    else{
+        let contenedor_padre = document.getElementById("codigos_canjds");
+        for (const element of data) {
+            const card = await generar_Codigos(element); // esperar que se genere
+            contenedor_padre.appendChild(card);
+            }
+    }
+}
+
+async function generar_Codigos(datos_codigo){
+    const article = document.createElement("article");
+    article.classList.add("codigo-card");
+
+    // Body
+    const body = document.createElement("div");
+    body.classList.add("codigo-body");
+
+    // Head: título
+    const head = document.createElement("div");
+    head.classList.add("codigo-head");
+
+    const titulo = document.createElement("h2");
+    titulo.classList.add("codigo-title");
+    const promo = await obtener_nombre_promo(datos_codigo.id_promo);
+    titulo.textContent = promo ? promo.Nombre_promo : "Promo desconocida";
+
+    head.appendChild(titulo);
+
+    // Descripción
+    const desc = document.createElement("p");
+    desc.classList.add("codigo-canjeado");
+    desc.textContent = "  codido canjeado: "+datos_codigo.codigo_canjeado;
+
+    // Meta
+    const meta = document.createElement("ul");
+    meta.classList.add("codigo-meta");
+
+    const creacionLi = document.createElement("li");
+    creacionLi.innerHTML = `<span class="meta-label">Canjeado:</span> <span class="meta-value">${corregir_fecha(datos_codigo.fecha_creac)}</span>`;
+
+    meta.appendChild(creacionLi);
+
+    // Ensamblar body
+    body.appendChild(head);
+    body.appendChild(desc);
+    body.appendChild(meta);
+
+    // Ensamblar artículo
+    article.appendChild(body);
+
+    return article;
+
+}
+async function obtener_nombre_promo(id) {
+  const { data, error } = await client
+    .from("Promos_puntos")
+    .select("Nombre_promo")
+    .eq("id_promo", id)
+    .single();
+
+  if (error) {
+    console.error("Error al recuperar el nombre del código canjeado:", error.message);
+    return null;
+  }
+
+  return data; // { Nombre_promo: "..." }
 }
