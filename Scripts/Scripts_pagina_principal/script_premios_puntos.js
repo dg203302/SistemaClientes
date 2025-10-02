@@ -84,8 +84,10 @@ function crearPromoCard(promo) {
   const btn = document.createElement("button");
   btn.classList.add("btn-canjear");
   btn.type = "button";
+  btn.dataset.id = promo.id_promo;
   btn.setAttribute("aria-label", `Canjear ${promo.Nombre_promo}`);
   btn.textContent = "Canjear";
+  btn.addEventListener("click", (event) => Canjearpuntos(event));
 
   actions.appendChild(btn);
 
@@ -95,4 +97,10 @@ function crearPromoCard(promo) {
   article.appendChild(actions);
 
   return article;
+}
+
+async function Canjearpuntos(event){
+  const boton_promo= event.currentTarget;
+  const id_btn = boton_promo.dataset.id;
+  
 }
