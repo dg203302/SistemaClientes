@@ -106,3 +106,49 @@ async function obtener_nombre_promo(id) {
 
   return data; // { Nombre_promo: "..." }
 }
+
+// ...existing code...
+
+// Sección: Último código canjeado (solo promo + código desde BD)
+document.addEventListener('DOMContentLoaded', async () => {
+  const promoEl = document.getElementById('ultimo-canje-promo'); // ahora existe en el HTML
+  const codeEl = document.getElementById('ultimo-canje-code') || document.getElementById('ultimo-codigo-valor');
+  if (!codeEl) return;
+
+  try {
+    const { data, error } = await client
+      .from('Codigos_promos_puntos')
+      .select(`
+        codigo_canjeado,
+        id_promo,
+        Promos_puntos ( Nombre_promo )
+      `)
+      .eq('Telef', usuario_l.tele_u)
+      .order('fecha_creac', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    // Obtiene el nombre desde la relación o hace fallback por id_promo
+    let nombrePromo =
+      data?.Promos_puntos?.Nombre_promo ??
+      (Array.isArray(data?.Promos_puntos) ? data.Promos_puntos[0]?.Nombre_promo : undefined);
+
+    if (!nombrePromo && data?.id_promo) {
+      const aux = await obtener_nombre_promo(data.id_promo);
+      nombrePromo = aux?.Nombre_promo;
+    }
+
+    if (promoEl) promoEl.textContent = nombrePromo || '—';
+    codeEl.textContent = data?.codigo_canjeado || '—';
+    codeEl.title = data?.codigo_canjeado ? 'Código más reciente canjeado' : 'Sin códigos canjeados aún';
+  } catch (e) {
+    if (promoEl) promoEl.textContent = '—';
+    codeEl.textContent = '—';
+    codeEl.title = 'Sin códigos canjeados aún';
+    console.error(e);
+  }
+});
+
+// ...existing code...

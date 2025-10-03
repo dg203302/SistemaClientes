@@ -233,6 +233,95 @@ input:checked + .slider:before {
   border-radius: 50%;
   box-shadow: 0 0 8px #00ffcc;
 }
+/* ===== Último código canjeado ===== */
+.ultimo-canje {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 1rem;
+   background: linear-gradient(
+    90deg,
+    #522B5B 100% /* purple */
+    #854F6C 0%,  /* pink-dark */
+   
+  );
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+}
+
+.ultimo-canje__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ultimo-canje__title {
+  font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: #FBE4D8; /* light */
+  margin: 0;
+}
+
+.ultimo-canje__promo {
+  display: block;           /* ocupa todo el ancho disponible */
+  text-align: center;       /* centra el texto dentro */
+  color: #FBE4D8;
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg,#854F6C,#522B5B);
+  border: 1px solid rgba(255,255,255,0.15);
+  text-transform: capitalize;
+  margin: 0 auto;           /* opcional: centra la “píldora” en su contenedor */
+  width: fit-content;       /* hace que el bloque mida lo que necesite */
+   /* 🔥 Glow difuminado en los bordes */
+  box-shadow:  0 0 6px rgba(223,182,178,0.35),   /* inner subtle */
+    0 0 18px rgba(133,79,108,0.25),   /* medium halo */
+    0 0 40px rgba(82,43,91,0.18);     /* wide soft glow */
+  /* brillo en el texto */
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.35),
+    0 6px 18px rgba(133,79,108,0.12);
+
+}
+
+
+
+.ultimo-canje__display {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: #522b5b; /* purple */
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4),
+              inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.ultimo-canje__code {
+  display: inline-block;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  color: #FBE4D8; /* light */
+  background: linear-gradient(
+    90deg,
+    #854F6C 0%,  /* pink-dark */
+    #522B5B 100% /* purple */
+  );
+  border: 2px solid #DFB6B2; /* pink */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.35);
+  word-break: break-all;
+
+  box-shadow: 0 0 12px rgba(133, 79, 108, 0.6),
+              0 0 24px rgba(82, 43, 91, 0.4);
+}
 
 /* Responsive */
 @media (max-width: 640px) {
