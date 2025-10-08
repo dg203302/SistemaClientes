@@ -39,6 +39,17 @@ async function cargar_codigos(){
     if (error){
         alert("error al acceder las promos")
     }
+    else if (!data || data.length === 0) {
+      const cardUltimo = document.getElementsByClassName("card ultimo-canje");
+      if (cardUltimo[0]) cardUltimo[0].style.display = "none";
+
+      const contenedor_padre = document.getElementById("codigos_canjds");
+      if (contenedor_padre) {
+        const txt = document.createElement("p");
+        txt.textContent = "sin codigos canjeados";
+        contenedor_padre.appendChild(txt);
+      }
+    }
     else{
         let contenedor_padre = document.getElementById("codigos_canjds");
         for (const element of data) {
@@ -140,9 +151,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       nombrePromo = aux?.Nombre_promo;
     }
 
-    if (promoEl) promoEl.textContent = nombrePromo || '—';
-    codeEl.textContent = data?.codigo_canjeado || '—';
-    codeEl.title = data?.codigo_canjeado ? 'Código más reciente canjeado' : 'Sin códigos canjeados aún';
+    if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
+    codeEl.textContent = data?.codigo_canjeado || '—'
   } catch (e) {
     if (promoEl) promoEl.textContent = '—';
     codeEl.textContent = '—';

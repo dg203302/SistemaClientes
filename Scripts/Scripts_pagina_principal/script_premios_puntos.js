@@ -104,7 +104,7 @@ function verificar_validez(puntosusu, puntoscanje){
     return true
   }
   else{
-    alert("Puntos insuficientes")
+    alert("promocion vencida")
     return false
   }
 }
@@ -136,9 +136,9 @@ async function Canjearpuntos(event){
     alert("error al canjear los puntos" + error.message)
   }
   else{
-    usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
-    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-    if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
+    if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) || verificar_vencimiento(data.validez)){
+      usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
+      localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
       const {data, error} = await client
       .from("Clientes")
       .update({Puntos: usuario_l.puntos_u})
@@ -157,6 +157,9 @@ async function Canjearpuntos(event){
           alert("Promo canjeada exitosamente, revise el codigo en su perfil")
         }
       }
+    }
+    else{
+      return
     }
   }
 }

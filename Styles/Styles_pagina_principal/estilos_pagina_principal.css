@@ -330,3 +330,15 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+img{
+  padding-right: 3%;
+  max-width: 20%;
+  max-height: 20%;
+  object-fit: contain;
+}
+footer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
