@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.netlify.clienteslote.twa",
+        "sha256_cert_fingerprints": ["82:BD:8F:A2:6C:7C:8A:98:2D:78:5C:BF:C6:B0:81:BA:D2:83:65:A5:B2:77:C7:64:4C:A2:3F:3D:40:0D:F9:EF"]
+      }
+    }]
