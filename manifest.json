@@ -1,48 +1,484 @@
 {
-"name": "El Lote Clientes",
-"short_name": "el lote clientes",
-"start_url": "https://clienteslote.netlify.app/index.html",
-"display": "standalone",
-"description": "A description for your application",
-"lang": " The default language of your application",
-"dir": "auto",
-"theme_color": "#000000",
-"background_color": "#000000",
-"orientation": "any",
-"icons": [
+  "name": "El Lote Clientes",
+  "short_name": "el lote clientes",
+  "start_url": "https://clienteslote.netlify.app/index.html",
+  "display": "fullscreen",
+  "description": "A description for your application",
+  "lang": "en",
+  "dir": "auto",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait",
+  "icons": [
     {
-        "src": "https://www.pwabuilder.com/assets/icons/icon_512.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "maskable"
+      "src": "/iconos/windows11/SmallTile.scale-100.png",
+      "sizes": "71x71"
     },
     {
-        "src": "https://www.pwabuilder.com/assets/icons/icon_192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any"
-    }
-],
-"screenshots": [
+      "src": "/iconos/windows11/SmallTile.scale-125.png",
+      "sizes": "89x89"
+    },
     {
-        "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
-        "sizes": "2880x1800",
-        "type": "image/png",
-        "description": "A screenshot of the home page"
-    }
-],
-"related_applications": [
+      "src": "/iconos/windows11/SmallTile.scale-150.png",
+      "sizes": "107x107"
+    },
     {
-        "platform":"windows",
-        "url": " The URL to your app in that app store"
-    }
-],
-"prefer_related_applications": false,
-"shortcuts": [
+      "src": "/iconos/windows11/SmallTile.scale-200.png",
+      "sizes": "142x142"
+    },
     {
-        "name":"The name you would like to be displayed for your shortcut",
-        "url":"The url you would like to open when the user chooses this shortcut. This must be a URL local to your PWA. For example: If my start_url is /, this URL must be something like /shortcut",
-        "description":"A description of the functionality of this shortcut"
+      "src": "/iconos/windows11/SmallTile.scale-400.png",
+      "sizes": "284x284"
+    },
+    {
+      "src": "/iconos/windows11/Square150x150Logo.scale-100.png",
+      "sizes": "150x150"
+    },
+    {
+      "src": "/iconos/windows11/Square150x150Logo.scale-125.png",
+      "sizes": "188x188"
+    },
+    {
+      "src": "/iconos/windows11/Square150x150Logo.scale-150.png",
+      "sizes": "225x225"
+    },
+    {
+      "src": "/iconos/windows11/Square150x150Logo.scale-200.png",
+      "sizes": "300x300"
+    },
+    {
+      "src": "/iconos/windows11/Square150x150Logo.scale-400.png",
+      "sizes": "600x600"
+    },
+    {
+      "src": "/iconos/windows11/Wide310x150Logo.scale-100.png",
+      "sizes": "310x150"
+    },
+    {
+      "src": "/iconos/windows11/Wide310x150Logo.scale-125.png",
+      "sizes": "388x188"
+    },
+    {
+      "src": "/iconos/windows11/Wide310x150Logo.scale-150.png",
+      "sizes": "465x225"
+    },
+    {
+      "src": "/iconos/windows11/Wide310x150Logo.scale-200.png",
+      "sizes": "620x300"
+    },
+    {
+      "src": "/iconos/windows11/Wide310x150Logo.scale-400.png",
+      "sizes": "1240x600"
+    },
+    {
+      "src": "/iconos/windows11/LargeTile.scale-100.png",
+      "sizes": "310x310"
+    },
+    {
+      "src": "/iconos/windows11/LargeTile.scale-125.png",
+      "sizes": "388x388"
+    },
+    {
+      "src": "/iconos/windows11/LargeTile.scale-150.png",
+      "sizes": "465x465"
+    },
+    {
+      "src": "/iconos/windows11/LargeTile.scale-200.png",
+      "sizes": "620x620"
+    },
+    {
+      "src": "/iconos/windows11/LargeTile.scale-400.png",
+      "sizes": "1240x1240"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.scale-100.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.scale-125.png",
+      "sizes": "55x55"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.scale-150.png",
+      "sizes": "66x66"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.scale-200.png",
+      "sizes": "88x88"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.scale-400.png",
+      "sizes": "176x176"
+    },
+    {
+      "src": "/iconos/windows11/StoreLogo.scale-100.png",
+      "sizes": "50x50"
+    },
+    {
+      "src": "/iconos/windows11/StoreLogo.scale-125.png",
+      "sizes": "63x63"
+    },
+    {
+      "src": "/iconos/windows11/StoreLogo.scale-150.png",
+      "sizes": "75x75"
+    },
+    {
+      "src": "/iconos/windows11/StoreLogo.scale-200.png",
+      "sizes": "100x100"
+    },
+    {
+      "src": "/iconos/windows11/StoreLogo.scale-400.png",
+      "sizes": "200x200"
+    },
+    {
+      "src": "/iconos/windows11/SplashScreen.scale-100.png",
+      "sizes": "620x300"
+    },
+    {
+      "src": "/iconos/windows11/SplashScreen.scale-125.png",
+      "sizes": "775x375"
+    },
+    {
+      "src": "/iconos/windows11/SplashScreen.scale-150.png",
+      "sizes": "930x450"
+    },
+    {
+      "src": "/iconos/windows11/SplashScreen.scale-200.png",
+      "sizes": "1240x600"
+    },
+    {
+      "src": "/iconos/windows11/SplashScreen.scale-400.png",
+      "sizes": "2480x1200"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-unplated_targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-24.png",
+      "sizes": "24x24"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-30.png",
+      "sizes": "30x30"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-36.png",
+      "sizes": "36x36"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-44.png",
+      "sizes": "44x44"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/iconos/windows11/Square44x44Logo.altform-lightunplated_targetsize-256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-512-512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-192-192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-144-144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-96-96.png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-72-72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/iconos/android/android-launchericon-48-48.png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "/iconos/ios/16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "/iconos/ios/20.png",
+      "sizes": "20x20"
+    },
+    {
+      "src": "/iconos/ios/29.png",
+      "sizes": "29x29"
+    },
+    {
+      "src": "/iconos/ios/32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "/iconos/ios/40.png",
+      "sizes": "40x40"
+    },
+    {
+      "src": "/iconos/ios/50.png",
+      "sizes": "50x50"
+    },
+    {
+      "src": "/iconos/ios/57.png",
+      "sizes": "57x57"
+    },
+    {
+      "src": "/iconos/ios/58.png",
+      "sizes": "58x58"
+    },
+    {
+      "src": "/iconos/ios/60.png",
+      "sizes": "60x60"
+    },
+    {
+      "src": "/iconos/ios/64.png",
+      "sizes": "64x64"
+    },
+    {
+      "src": "/iconos/ios/72.png",
+      "sizes": "72x72"
+    },
+    {
+      "src": "/iconos/ios/76.png",
+      "sizes": "76x76"
+    },
+    {
+      "src": "/iconos/ios/80.png",
+      "sizes": "80x80"
+    },
+    {
+      "src": "/iconos/ios/87.png",
+      "sizes": "87x87"
+    },
+    {
+      "src": "/iconos/ios/100.png",
+      "sizes": "100x100"
+    },
+    {
+      "src": "/iconos/ios/114.png",
+      "sizes": "114x114"
+    },
+    {
+      "src": "/iconos/ios/120.png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "/iconos/ios/128.png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "/iconos/ios/144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/iconos/ios/152.png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "/iconos/ios/167.png",
+      "sizes": "167x167"
+    },
+    {
+      "src": "/iconos/ios/180.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/iconos/ios/192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/iconos/ios/256.png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "/iconos/ios/512.png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/iconos/ios/1024.png",
+      "sizes": "1024x1024"
     }
-]
+  ],
+  "screenshots": [
+    {
+      "src": "https://www.pwabuilder.com/assets/screenshots/screen1.png",
+      "sizes": "2880x1800",
+      "type": "image/png",
+      "description": "A screenshot of the home page"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "windows",
+      "url": " The URL to your app in that app store"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "The name you would like to be displayed for your shortcut",
+      "url": "The url you would like to open when the user chooses this shortcut. This must be a URL local to your PWA. For example: If my start_url is /, this URL must be something like /shortcut",
+      "description": "A description of the functionality of this shortcut"
+    }
+  ]
 }
