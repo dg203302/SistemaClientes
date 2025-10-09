@@ -34,7 +34,7 @@ window.onload = function (){
 async function cargar_codigos(){
     const {data, error} = await client
     .from("Codigos_promos_puntos")
-    .select("codigo_canjeado, id_promo, fecha_creac")
+    .select("codigo_canjeado, id_promo, fecha_creac, Canjeado")
     .eq("Telef", usuario_l.tele_u)
     if (error){
         alert("error al acceder las promos")
@@ -89,9 +89,17 @@ async function generar_Codigos(datos_codigo){
 
     const creacionLi = document.createElement("li");
     creacionLi.innerHTML = `<span class="meta-label">Canjeado:</span> <span class="meta-value">${corregir_fecha(datos_codigo.fecha_creac)}</span>`;
+    
+    const CanjeoLi = document.createElement("li");
+    if(datos_codigo.Canjeado != 0){
+      CanjeoLi.innerHTML = `<span class="meta-label">Codigo Validado</span>`;
+    }
+    else{
+      CanjeoLi.innerHTML = `<span class="meta-label">Codigo sin validar</span>`;
+    }
 
     meta.appendChild(creacionLi);
-
+    meta.appendChild(CanjeoLi);
     // Ensamblar body
     body.appendChild(head);
     body.appendChild(desc);
@@ -135,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         Promos_puntos ( Nombre_promo )
       `)
       .eq('Telef', usuario_l.tele_u)
+      .eq("Canjeado", 0)
       .order('fecha_creac', { ascending: false })
       .limit(1)
       .maybeSingle();
