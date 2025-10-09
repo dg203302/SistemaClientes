@@ -219,9 +219,3 @@ main.promos {
 @media (max-width: 600px) {
 	main.promos { padding: 7.5rem 1rem 6.25rem; }
 }
-
-img{
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}

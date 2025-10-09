@@ -104,7 +104,6 @@ function verificar_validez(puntosusu, puntoscanje){
     return true
   }
   else{
-    alert("promocion vencida")
     return false
   }
 }
@@ -117,12 +116,28 @@ function verificar_vencimiento(fecha_venc){
     return true
   }
   else{
-    alert("Promocion Vencida")
     return false
   }
 }
 function generar_codigo(){
   return Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
+}
+function verificar_promo(usuario_l,data){
+  if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
+    return true
+  }
+  else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
+    alert("promocion vencida y puntos insuficientes!")
+    return false
+  }
+  else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
+    alert("Puntos insuficientes")
+    return false
+  }
+  else if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
+    alert("Promocion vencida!")
+    return false
+  }
 }
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
@@ -136,9 +151,9 @@ async function Canjearpuntos(event){
     alert("error al canjear los puntos" + error.message)
   }
   else{
-    if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) || verificar_vencimiento(data.validez)){
-      usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
-      localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+    usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
+    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+    if (verificar_promo(usuario_l, data)){
       const {data, error} = await client
       .from("Clientes")
       .update({Puntos: usuario_l.puntos_u})
