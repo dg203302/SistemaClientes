@@ -40,3 +40,18 @@ function initStreetView() {
         zoom: 1
     });
 }
+
+async function agregarpuntos_prueba(){
+    const { data, error } = await client
+    .from("Clientes")
+    .update({Puntos: usuario_l.puntos_u+1000})
+    .eq("Telef",usuario_l.tele_u)
+    .single()
+    if(error){
+        alert("error al agregar puntos")
+    }
+    else{
+        alert("puntos agregados exitosamente, recarguelos")
+        refrescarPuntos()
+    }
+}

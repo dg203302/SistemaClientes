@@ -18,17 +18,16 @@
     <ul>
       <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
       <li><a href="Contacto.html">Contacto</a></li>
-      <li><a href="Creditos.html">Créditos</a></li>
     </ul>
 
     <ul class="menu-footer">
     <li>
-  <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">
-    ⏻
-  </a>
-</li>
-
-  </ul>
+      <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">↩</a>
+    </li>
+    <li>
+      <li><a href="Creditos.html">Créditos</a></li>
+    </li>
+    </ul>
   </nav>
 
   <!-- Header mejorado -->
@@ -82,6 +81,14 @@
                   aria-label="Actualizar cantidad de puntos">
             <span class="btn-icon">🔄</span>
             Refrescar Puntos
+          </button>
+          <br><br>
+          <button type="button" 
+                  class="btn btn-primary refresh-btn" 
+                  onclick="agregarpuntos_prueba()"
+                  aria-label="Agregar Puntos (Temporal)">
+            <span class="btn-icon">🔄</span>
+            Agregar Puntos
           </button>
         </div>
       </div>
