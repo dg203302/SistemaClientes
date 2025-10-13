@@ -128,6 +128,7 @@ function verificar_promo(usuario_l,data){
     return false
   }
   else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
+    console.log(usuario_l.puntos_u+" "+data.cantidad_puntos_canjeo)
     alert("Puntos insuficientes")
     return false
   }
@@ -139,33 +140,39 @@ function verificar_promo(usuario_l,data){
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
   const id_btn = boton_promo.dataset.id;
-  const {data, error} = await client
+  const {data: promoData, error: promoError} = await client
   .from("Promos_puntos")
   .select("cantidad_puntos_canjeo, validez")
   .eq("id_promo", id_btn)
   .single()
-  if (error){
-    alert("error al canjear los puntos" + error.message)
+  if (promoError){
+    alert("error al canjear los puntos" + promoError.message)
   }
   else{
-    usuario_l.puntos_u = usuario_l.puntos_u - data.cantidad_puntos_canjeo;
-    localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-    if (verificar_promo(usuario_l, data)){
-      const {data, error} = await client
+    // Validar la promoción antes de restar puntos
+    if (verificar_promo(usuario_l, promoData)){
+      const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
+      const { error: updateError } = await client
       .from("Clientes")
-      .update({Puntos: usuario_l.puntos_u})
+      .update({Puntos: nuevosPuntos})
       .eq("Telef", usuario_l.tele_u)
-      if (error){
+      if (updateError){
         alert("error al actualizar los puntos")
       }
       else{
-        const {data, error} = await client
+        const codigoGenerado = generar_codigo();
+        const { error: insertError } = await client
         .from("Codigos_promos_puntos")
-        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: generar_codigo(), id_promo: id_btn}]);
-        if (error){
+        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, id_promo: id_btn}]);
+        if (insertError){
           alert("error al registrar el canjeo")
         }
         else{
+          // Actualizar cache local y UI solo tras éxito
+          usuario_l.puntos_u = nuevosPuntos;
+          localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+          let cantidad_puntos = document.getElementById("puntos-usuario");
+          if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
           alert("Promo canjeada exitosamente, revise el codigo en su perfil")
         }
       }
@@ -191,6 +198,7 @@ async function refrescarPuntos(){
     }
     else{
         let cantidad_puntos = document.getElementById("puntos-usuario");
+        console.log(data.Puntos)
         usuario_l.puntos_u = data.Puntos;
         localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
         cantidad_puntos.textContent = usuario_l.puntos_u;
