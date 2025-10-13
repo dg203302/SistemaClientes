@@ -16,6 +16,7 @@ window.onload = async function () {
     }
 
     let contenedor_promos = document.getElementById("conten-ofertas");
+    data.reverse();
     data.forEach(element => {
         contenedor_promos.appendChild(crearPromoTCard(element));
         contador+=1;
@@ -26,12 +27,17 @@ window.onload = async function () {
 
 // Determina la clase de estilo del badge según el texto del campo flotante
 function getBadgeVariant(texto) {
-    const t = String(texto ?? '').trim().toLowerCase();
-    if (!t) return null;
-    if (t.includes('2x1')) return 'badge-2x1';
-    if (t.includes('%') || t.includes('desc')) return 'badge-desc'; // descuento
-    if (t.includes('combo')) return 'badge-combo';
-    return null; // usa estilo base .badge
+    const raw = String(texto ?? '').trim();
+    if (!raw) return null; // sin texto, no aplicar variante
+
+    // Prioridad: % (rojo) > X (verde) > otro (naranja)
+    if (raw.includes('%')) return 'badge-percent';
+
+    // Detecta formatos tipo 2x1, 3 x 2, usando x o × entre números (insensible a mayúsculas)
+    const hasXDeal = /\d\s*[x×]\s*\d/i.test(raw);
+    if (hasXDeal) return 'badge-x';
+
+    return 'badge-other';
 }
 function crearPromoTCard(oferta) {
   // Contenedor principal

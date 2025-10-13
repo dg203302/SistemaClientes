@@ -139,10 +139,25 @@ header h1 span {
   header h1 {
     font-size: 1.5rem;
     text-align: center;
+    /* Reserva espacio a izquierda/derecha para íconos (hamburguesa y acciones) */
+    padding: 0 3.2rem;
   }
   
   .header-actions {
     justify-content: center;
+  }
+
+  /* Ajusta el tamaño/posición del ícono de menú para móviles medianos */
+  .menu-icon {
+    font-size: 1.8rem;
+    left: 1rem;
+    top: 1rem;
+  }
+
+  /* Reduce un poco los íconos derechos para dar más aire */
+  .header-icons {
+    font-size: 1.3rem;
+    right: 1rem;
   }
 }
 
@@ -161,6 +176,22 @@ header h1 span {
   
   .btn-text {
     font-size: 0.75rem;
+  }
+
+  /* En pantallas más pequeñas, reserva aún más espacio para evitar solapado */
+  header h1 {
+    padding: 0 3.8rem; /* espacio para menú izq. y acciones der. */
+  }
+
+  .menu-icon {
+    font-size: 1.6rem;
+    left: 0.8rem;
+    top: 0.9rem;
+  }
+
+  .header-icons {
+    font-size: 1.2rem;
+    right: 0.8rem;
   }
 }
 

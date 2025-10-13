@@ -18,6 +18,7 @@ window.onload = async function () {
   }
 
   let contenedor_promos = document.getElementById("Conten_promos");
+  data.reverse();
   data.forEach(element => {
     contenedor_promos.appendChild(crearPromoCard(element));
   });

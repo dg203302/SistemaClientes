@@ -161,6 +161,41 @@ main.ofertas {
 .badge-2x1 { background: rgba(0,255,204,.15); color: #00ffcc; border-color: rgba(0,255,204,.3); }
 .badge-desc { background: rgba(255,99,132,.15); color: #ff6b8a; border-color: rgba(255,99,132,.35); }
 .badge-combo { background: rgba(140,130,197,.18); color: #b7b0f0; border-color: rgba(140,130,197,.35); }
+/* Badges */
+.badge {
+	display: inline-flex;
+	align-items: center;
+	gap: .35rem;
+	padding: .25rem .55rem;
+	font-size: .85rem;
+	font-weight: 700;
+	border-radius: 999px;
+	border: 1px solid rgba(255,255,255,.18);
+	background: rgba(255,255,255,.08);
+	color: var(--color-light);
+	white-space: nowrap;
+}
+
+/* % -> rojo */
+.badge-percent {
+	background: rgba(255, 99, 132, .16);
+	color: #ff6b8a;
+	border-color: rgba(255, 99, 132, .35);
+}
+
+/* x/× -> verde */
+.badge-x {
+	background: rgba(0, 255, 204, .15);
+	color: #00ffcc;
+	border-color: rgba(0, 255, 204, .3);
+}
+
+/* otro -> naranja */
+.badge-other {
+	background: rgba(255, 165, 0, .18);
+	color: #ffb347;
+	border-color: rgba(255, 165, 0, .35);
+}
 
 /* Footer interno */
 .ofertas-footer { display: flex; justify-content: center; }

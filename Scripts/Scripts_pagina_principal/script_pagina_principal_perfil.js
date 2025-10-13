@@ -52,6 +52,7 @@ async function cargar_codigos(){
     }
     else{
         let contenedor_padre = document.getElementById("codigos_canjds");
+        data.reverse();
         for (const element of data) {
             const card = await generar_Codigos(element); // esperar que se genere
             contenedor_padre.appendChild(card);

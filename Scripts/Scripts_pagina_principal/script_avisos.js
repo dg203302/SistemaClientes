@@ -8,6 +8,7 @@ window.onload = async function () {
     const { data, error } = await client
         .from("Avisos")
         .select("*");
+        
 
     if (error) {
         console.error(error);
@@ -16,6 +17,7 @@ window.onload = async function () {
     }
 
     let contenedor_promos = document.getElementById("contenedor_msgs");
+    data.reverse();
     data.forEach(element => {
         contenedor_promos.appendChild(crearmgsCard(element));
         contador+=1;
@@ -26,21 +28,21 @@ window.onload = async function () {
 
 // Normaliza y mapea la categoría a las clases CSS esperadas
 function obtenerCategoria(raw) {
-        const texto = String(raw ?? '').trim().toLowerCase();
-        // quitar acentos
-        const sinAcentos = texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const mapa = {
-                'cierre': 'Cierre',
-                'cerrado': 'Cierre',
-                'horario': 'Horario',
-                'promos': 'Promos',
-                'promo': 'Promos',
-                'promocion': 'Promos',
-                'promoción': 'Promos',
-                'general': 'General'
-        };
-        const clase = mapa[sinAcentos] || 'General';
-        return { cssClass: clase, label: clase };
+  const original = String(raw ?? '').trim();
+  const normalizado = original.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const mapa = {
+    'cierre': 'Cierre',
+    'cerrado': 'Cierre',
+    'horario': 'Horario',
+    'promos': 'Promos',
+    'promo': 'Promos',
+    'promocion': 'Promos',
+    'promoción': 'Promos',
+    'general': 'General'
+  };
+  const clase = mapa[normalizado] || 'General';
+  const label = mapa[normalizado] ? mapa[normalizado] : (original || 'General');
+  return { cssClass: clase, label };
 }
 
 function crearmgsCard(notice) {
