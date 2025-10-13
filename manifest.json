@@ -2,7 +2,7 @@
   "name": "El Lote Clientes",
   "short_name": "el lote clientes",
   "start_url": "https://clienteslote.netlify.app/index.html",
-  "display": "fullscreen",
+  "display": "standalone",
   "description": "A description for your application",
   "lang": "en",
   "dir": "auto",
