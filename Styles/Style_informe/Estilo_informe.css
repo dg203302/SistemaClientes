@@ -86,6 +86,7 @@ body {
 /* Botones estilo links */
 .informe a {
   display: inline-block;
+  text-align: center; /* centra el texto dentro del botón */
   text-decoration: none;
   background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark));
   color: white;
@@ -96,6 +97,7 @@ body {
   letter-spacing: 0.5px;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.4);
   transition: 0.3s;
+  max-width: 100%; /* evita desbordes horizontales */
 }
 
 .informe a:hover {

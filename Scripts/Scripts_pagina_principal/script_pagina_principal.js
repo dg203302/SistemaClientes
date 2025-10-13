@@ -5,6 +5,36 @@ const client = createClient(supabaseUrl, supabaseKey)
 const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
 
 window.onload=function(){
+    (() => {
+        if (!usuario_l || !usuario_l.tele_u) return
+
+        client
+            .channel(`clientes-watch-${usuario_l.tele_u}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'Clientes',
+                    filter: `Telef=eq.${usuario_l.tele_u}`
+                },
+                (payload) => {
+                    const nuevoNombre = payload.new?.Nombre ?? payload.new?.nombre ?? payload.new?.nombre_u
+                    const nuevosPuntos = payload.new?.Puntos
+
+                    const cambioNombre = typeof nuevoNombre === 'string' && nuevoNombre !== usuario_l.nombre_u
+                    const cambioPuntos = typeof nuevosPuntos !== 'undefined' && nuevosPuntos !== usuario_l.puntos_u
+
+                    if (cambioNombre || cambioPuntos) {
+                        try { localStorage.removeItem('usuario_loggeado') } catch (_) {}
+                        const motivo = 'Se detectaron cambios en sus datos. Inicie sesión nuevamente.'
+                        const valor = 1
+                        window.location.replace(`/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(motivo)}&valor=${encodeURIComponent(valor)}`)
+                    }
+                }
+            )
+            .subscribe()
+    })()
     console.log(usuario_l.nombre_u, usuario_l.puntos_u, usuario_l.tele_u, usuario_l.f_creacion_u)
     let saludo = document.getElementById("nombre-usuario")
     saludo.textContent = usuario_l.nombre_u

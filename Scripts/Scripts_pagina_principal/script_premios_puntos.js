@@ -99,14 +99,11 @@ function crearPromoCard(promo) {
   return article;
 }
 
-function verificar_validez(puntosusu, puntoscanje){
-  if (puntosusu>=puntoscanje){
-    return true
-  }
-  else{
-    return false
-  }
+function verificar_validez(puntosUsu, puntosCanje) {
+  if (isNaN(puntosUsu) || isNaN(puntosCanje)) return false;
+  return puntosUsu >= puntosCanje;
 }
+
 function verificar_vencimiento(fecha_venc){
   const [dia, mes, anio] = fecha_venc.split("/").map(Number);
   const fecha = new Date(anio, mes - 1, dia);
