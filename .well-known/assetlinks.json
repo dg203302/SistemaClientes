@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "app.netlify.clienteslote.twa",
-        "sha256_cert_fingerprints": ["82:BD:8F:A2:6C:7C:8A:98:2D:78:5C:BF:C6:B0:81:BA:D2:83:65:A5:B2:77:C7:64:4C:A2:3F:3D:40:0D:F9:EF"]
+        "sha256_cert_fingerprints": ["5C:62:0D:8D:2E:5B:91:53:1C:91:E7:48:89:B3:A9:A7:7C:68:EA:40:6A:DB:1E:CA:0E:48:05:68:45:9F:30:0C"]
       }
     }]
