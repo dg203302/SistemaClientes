@@ -1,19 +1,19 @@
 import {hashing} from "../script_hash.js"
 function verificar_contra(contra){
     if (contra.length < 4){
-        alert("La Contraseña debe tener como minimo 4 caracteres");
+        window.showError('La Contraseña debe tener como mínimo 4 caracteres', 'Validación');
         return false
     }
     else if (contra.length > 10){
-        alert("La contraseña no puede superar los 10 caracteres");
+        window.showError('La contraseña no puede superar los 10 caracteres', 'Validación');
         return false
     }
     else if (!(/\d/.test(contra))){
-        alert("La contraseña debe contener por lo menos un numero");
+        window.showError('La contraseña debe contener por lo menos un número', 'Validación');
         return false
     }
     else if (!(/[-_:;!@#$%^&*]/.test(contra))){
-        alert("La contraseña debe tener por lo menos un caracter especial: - _ : ; ! @ # $ % ^ & * ")
+        window.showError('La contraseña debe tener por lo menos un caracter especial: - _ : ; ! @ # $ % ^ & * ', 'Validación')
         return false
     }
     else{
@@ -50,6 +50,6 @@ document.getElementById("form_actualizar").addEventListener("submit", async (e) 
         }
     }
     else{
-        alert("Las contraseñas deben coincidir!")
+        window.showError('Las contraseñas deben coincidir!', 'Validación')
     }
 })

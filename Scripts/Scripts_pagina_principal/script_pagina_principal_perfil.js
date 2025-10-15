@@ -37,7 +37,7 @@ async function cargar_codigos(){
     .select("codigo_canjeado, id_promo, fecha_creac, Canjeado")
     .eq("Telef", usuario_l.tele_u)
     if (error){
-        alert("error al acceder las promos")
+    await window.showError('Error al acceder las promociones', 'Error')
     }
     else if (!data || data.length === 0) {
       const cardUltimo = document.getElementsByClassName("card ultimo-canje");

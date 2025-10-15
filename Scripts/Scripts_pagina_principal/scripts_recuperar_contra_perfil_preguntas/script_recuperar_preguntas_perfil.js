@@ -40,7 +40,7 @@ document.getElementById('Preguntas_seg').addEventListener("submit", async(e)=>{
                 const valor = 2;
                 window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(mensaje)}&valor=${encodeURIComponent(valor)}`;
             }else{
-                alert("Respuestas de seguridad actualizadas correctamente!")
+                await window.showSuccess('Respuestas de seguridad actualizadas correctamente!')
                 window.location.href = "/Templates/Templates_pagina_principal/Perfil_usuario.html";
             }
 })
