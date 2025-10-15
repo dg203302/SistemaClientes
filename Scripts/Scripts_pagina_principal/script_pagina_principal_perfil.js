@@ -170,5 +170,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error(e);
   }
 });
-
-// ...existing code...
