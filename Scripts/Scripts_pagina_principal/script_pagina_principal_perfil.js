@@ -161,12 +161,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       nombrePromo = aux?.Nombre_promo;
     }
 
-    if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
-    codeEl.textContent = data?.codigo_canjeado || '—'
+    if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos invalidados aún';
+    codeEl.textContent = data?.codigo_canjeado || (codeEl.parentNode.style.display = 'none');
   } catch (e) {
     if (promoEl) promoEl.textContent = '—';
     codeEl.textContent = '—';
-    codeEl.title = 'Sin códigos canjeados aún';
+    codeEl.title = 'Sin códigos invalidados aún';
     console.error(e);
   }
 });

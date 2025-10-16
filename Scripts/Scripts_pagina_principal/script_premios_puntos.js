@@ -69,7 +69,7 @@ function crearPromoCard(promo) {
 
   const termsP = document.createElement("p");
   // Texto fijo 👇
-  termsP.textContent = "Válido un canje por usuario. Sujeto a disponibilidad. No acumulable con otras promociones.";
+  termsP.textContent = "Válido para canje desde la app. Sujeto a disponibilidad. Acumulable con otras promociones.";
 
   terms.appendChild(summary);
   terms.appendChild(termsP);
