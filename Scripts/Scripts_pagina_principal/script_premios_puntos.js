@@ -69,7 +69,7 @@ function crearPromoCard(promo) {
 
   const termsP = document.createElement("p");
   // Texto fijo 👇
-  termsP.textContent = "Válido para canje desde la app. Sujeto a disponibilidad. Acumulable con otras promociones.";
+  termsP.textContent = "Válido para canje desde la app. Sujeto a disponibilidad. Válido para utilizar hasta dos semanas posteriores al canje.";
 
   terms.appendChild(summary);
   terms.appendChild(termsP);
