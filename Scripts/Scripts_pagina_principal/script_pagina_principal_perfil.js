@@ -127,7 +127,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       .select(`
         codigo_canjeado,
         nom_promo,
-        Promos_puntos ( Nombre_promo )
       `)
       .eq('Telef', usuario_l.tele_u)
       .eq("Canjeado", 0)
