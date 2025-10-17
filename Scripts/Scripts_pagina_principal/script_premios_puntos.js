@@ -166,7 +166,10 @@ async function Canjearpuntos(event){
         const { error: insertError } = await client
         .from("Codigos_promos_puntos")
         .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
-        if (insertError){
+        const { error: insertError2 } = await client
+        .from("Historial_Puntos")
+        .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
+        if (insertError||insertError2){
           await window.showError('Error al registrar el canjeo', 'Error')
         }
         else{
