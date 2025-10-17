@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
     codeEl.textContent = data?.codigo_canjeado || (codeEl.style.display = 'none');
   } catch (e) {
-    if (promoEl) promoEl.style.display = 'none';
+    if (promoEl) promoEl.parentNode.style.display = 'none';
     codeEl.style.display = 'none';
     codeEl.title = 'Sin códigos canjeados aún';
     console.error(e);
