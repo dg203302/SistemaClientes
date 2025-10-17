@@ -134,7 +134,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const promoEl = document.getElementById('ultimo-canje-promo'); // ahora existe en el HTML
   const codeEl = document.getElementById('ultimo-canje-code') || document.getElementById('ultimo-codigo-valor');
   if (!codeEl) return;
-
   try {
     const { data, error } = await client
       .from('Codigos_promos_puntos')
@@ -147,16 +146,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       .order('fecha_creac', { ascending: false })
       .limit(1)
       .maybeSingle();
-
     if (error) throw error;
-
-    // Obtiene el nombre desde la relación o hace fallback por id_promo
-    let nombrePromo =
-      data?.nom_promo ??
-      (Array.isArray(data?.Promos_puntos) ? data.Promos_puntos[0]?.Nombre_promo : undefined);
-
+    let nombrePromo = data.nom_promo ?? '';
     if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
-    codeEl.textContent = data?.codigo_canjeado || '—'
+    codeEl.textContent = data?.codigo_canjeado || (codeEl.style.display = 'none');
   } catch (e) {
     if (promoEl) promoEl.textContent = '—';
     codeEl.textContent = '—';
