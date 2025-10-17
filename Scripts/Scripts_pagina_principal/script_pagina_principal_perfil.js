@@ -34,7 +34,7 @@ window.onload = function (){
 async function cargar_codigos(){
     const {data, error} = await client
     .from("Codigos_promos_puntos")
-    .select("codigo_canjeado, id_promo, fecha_creac, Canjeado")
+    .select("codigo_canjeado, nom_promo, fecha_creac, Canjeado")
     .eq("Telef", usuario_l.tele_u)
     if (error){
     await window.showError('Error al acceder las promociones', 'Error')
@@ -74,8 +74,8 @@ async function generar_Codigos(datos_codigo){
 
     const titulo = document.createElement("h2");
     titulo.classList.add("codigo-title");
-    const promo = await obtener_nombre_promo(datos_codigo.id_promo);
-    titulo.textContent = promo ? promo.Nombre_promo : "Promo desconocida";
+    const promo = datos_codigo.nom_promo;
+    titulo.textContent = promo ? promo : "Promo desconocida";
 
     head.appendChild(titulo);
 
@@ -112,20 +112,6 @@ async function generar_Codigos(datos_codigo){
     return article;
 
 }
-async function obtener_nombre_promo(id) {
-  const { data, error } = await client
-    .from("Promos_puntos")
-    .select("Nombre_promo")
-    .eq("id_promo", id)
-    .single();
-
-  if (error) {
-    console.error("Error al recuperar el nombre del código canjeado:", error.message);
-    return null;
-  }
-
-  return data; // { Nombre_promo: "..." }
-}
 
 // ...existing code...
 
@@ -140,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       .from('Codigos_promos_puntos')
       .select(`
         codigo_canjeado,
-        id_promo,
+        nom_promo,
         Promos_puntos ( Nombre_promo )
       `)
       .eq('Telef', usuario_l.tele_u)
@@ -155,11 +141,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     let nombrePromo =
       data?.Promos_puntos?.Nombre_promo ??
       (Array.isArray(data?.Promos_puntos) ? data.Promos_puntos[0]?.Nombre_promo : undefined);
-
-    if (!nombrePromo && data?.id_promo) {
-      const aux = await obtener_nombre_promo(data.id_promo);
-      nombrePromo = aux?.Nombre_promo;
-    }
 
     if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos invalidados aún';
     codeEl.textContent = data?.codigo_canjeado || (codeEl.parentNode.style.display = 'none');

@@ -164,7 +164,7 @@ async function Canjearpuntos(event){
         const codigoGenerado = generar_codigo();
         const { error: insertError } = await client
         .from("Codigos_promos_puntos")
-        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, id_promo: id_btn}]);
+        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: obtener_nombre_promo(id_btn)}]);
         if (insertError){
           await window.showError('Error al registrar el canjeo', 'Error')
         }
@@ -204,4 +204,16 @@ async function refrescarPuntos(){
         localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
         cantidad_puntos.textContent = usuario_l.puntos_u;
     }
+}
+async function obtener_nombre_promo(id_promo){
+  const {data, error} = await client
+  .from("Promos_puntos")
+  .select("Nombre_promo")
+  .eq("id_promo", id_promo)
+  .single()
+  if (error) {
+    await window.showError('Error al obtener el nombre de la promoción', 'Error')
+    return null;
+  }
+  return data.Nombre_promo;
 }
