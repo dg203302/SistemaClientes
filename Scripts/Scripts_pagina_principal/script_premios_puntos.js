@@ -162,9 +162,10 @@ async function Canjearpuntos(event){
       }
       else{
         const codigoGenerado = generar_codigo();
+        const nombrePromo = await obtener_nombre_promo(id_btn);
         const { error: insertError } = await client
         .from("Codigos_promos_puntos")
-        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: obtener_nombre_promo(id_btn)}]);
+        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
         if (insertError){
           await window.showError('Error al registrar el canjeo', 'Error')
         }
