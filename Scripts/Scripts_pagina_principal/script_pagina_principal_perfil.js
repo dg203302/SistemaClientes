@@ -34,7 +34,7 @@ window.onload = function (){
 async function cargar_codigos(){
     const {data, error} = await client
     .from("Codigos_promos_puntos")
-    .select("codigo_canjeado, id_promo, fecha_creac, Canjeado")
+    .select("codigo_canjeado, nom_promo, fecha_creac, Canjeado")
     .eq("Telef", usuario_l.tele_u)
     if (error){
     await window.showError('Error al acceder las promociones', 'Error')
@@ -74,8 +74,8 @@ async function generar_Codigos(datos_codigo){
 
     const titulo = document.createElement("h2");
     titulo.classList.add("codigo-title");
-    const promo = await obtener_nombre_promo(datos_codigo.id_promo);
-    titulo.textContent = promo ? promo.Nombre_promo : "Promo desconocida";
+    const promo = datos_codigo.nom_promo;
+    titulo.textContent = promo ? promo : "Promo desconocida";
 
     head.appendChild(titulo);
 
