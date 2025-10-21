@@ -20,6 +20,201 @@
 .social { list-style: none; padding-left: 0; display: flex; gap: .6rem; flex-wrap: wrap; }
 .link-btn { display: inline-block; padding: .5rem .8rem; background: rgba(255,255,255,.12); color: var(--color-light); border-radius: 10px; text-decoration: none; border: 1px solid rgba(255,255,255,.2); }
 
+/* Sección de redes sociales profesional */
+.social-card .social-subtitle {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.85;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.social-link:hover::before {
+  opacity: 1;
+}
+
+.social-link:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.social-icon-wrapper {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.social-svg {
+  width: 28px;
+  height: 28px;
+  transition: transform 0.3s ease;
+}
+
+.social-link:hover .social-svg {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.social-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex: 1;
+}
+
+.social-name {
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  transition: transform 0.2s ease;
+}
+
+.social-link:hover .social-name {
+  transform: translateX(3px);
+}
+
+.social-handle {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-weight: 500;
+}
+
+/* Estilos específicos por red social */
+.social-link.phone .social-icon-wrapper {
+  background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.social-link.phone {
+  border-color: rgba(16, 185, 129, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.phone:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+.social-link.facebook .social-icon-wrapper {
+  background: linear-gradient(135deg, #1877F2, #0C63D4);
+}
+
+.social-link.facebook {
+  border-color: rgba(24, 119, 242, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.facebook:hover {
+  border-color: rgba(24, 119, 242, 0.5);
+  background: linear-gradient(135deg, rgba(24, 119, 242, 0.1), rgba(12, 99, 212, 0.1));
+  box-shadow: 0 10px 30px rgba(24, 119, 242, 0.3);
+}
+
+.social-link.whatsapp .social-icon-wrapper {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.social-link.whatsapp {
+  border-color: rgba(37, 211, 102, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.whatsapp:hover {
+  border-color: rgba(37, 211, 102, 0.5);
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(18, 140, 126, 0.1));
+  box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+}
+
+.social-link.gmail .social-icon-wrapper {
+  background: linear-gradient(135deg, #EA4335, #C5221F);
+}
+
+.social-link.gmail {
+  border-color: rgba(234, 67, 53, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.gmail:hover {
+  border-color: rgba(234, 67, 53, 0.5);
+  background: linear-gradient(135deg, rgba(234, 67, 53, 0.1), rgba(197, 34, 31, 0.1));
+  box-shadow: 0 10px 30px rgba(234, 67, 53, 0.3);
+}
+
+.social-link.maps .social-icon-wrapper {
+  background: linear-gradient(135deg, #4285F4, #357AE8);
+}
+
+.social-link.maps {
+  border-color: rgba(66, 133, 244, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.maps:hover {
+  border-color: rgba(66, 133, 244, 0.5);
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(53, 122, 232, 0.1));
+  box-shadow: 0 10px 30px rgba(66, 133, 244, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .social-link {
+    padding: 0.9rem 1rem;
+  }
+  
+  .social-icon-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .social-svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 .policies { list-style: disc; padding-left: 1.2rem; display: grid; gap: .3rem; }
 
 /* Formulario */
