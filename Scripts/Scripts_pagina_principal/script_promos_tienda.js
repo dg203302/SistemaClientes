@@ -11,7 +11,7 @@ window.onload = async function () {
 
     if (error) {
         console.error(error);
-        alert("Error al cargar las promociones");
+        await window.showError('Error al cargar las promociones', 'Error');
         return;
     }
 

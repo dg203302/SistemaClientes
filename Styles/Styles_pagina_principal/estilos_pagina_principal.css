@@ -378,3 +378,16 @@ footer{
   flex-direction: row-reverse;
   justify-content: space-between;
 }
+
+.card.featured-card.points-card, .card.promo-card.points-promo, .card.promo-card.store-promo{
+  display: flex;
+  flex-direction: row;
+}
+.points-actions, .card-actions, .card-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-left: 2rem;
+  margin-top: 1rem;
+  justify-content: center;
+}

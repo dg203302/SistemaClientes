@@ -11,9 +11,9 @@ window.onload = async function () {
         
 
     if (error) {
-        console.error(error);
-        alert("Error al cargar las promociones");
-        return;
+    console.error(error);
+    await window.showError('Error al cargar las promociones', 'Error');
+    return;
     }
 
     let contenedor_promos = document.getElementById("contenedor_msgs");

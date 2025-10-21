@@ -2,7 +2,7 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "app.netlify.clienteslote.twa",
-        "sha256_cert_fingerprints": ["5C:62:0D:8D:2E:5B:91:53:1C:91:E7:48:89:B3:A9:A7:7C:68:EA:40:6A:DB:1E:CA:0E:48:05:68:45:9F:30:0C"]
+        "package_name": "app.netlify.loteclientes.twa",
+        "sha256_cert_fingerprints": ["79:70:5B:21:0C:E4:81:7C:1F:E3:66:F7:E2:08:67:4D:40:E5:00:B4:7D:DD:2A:C4:B2:48:B5:D6:F2:33:41:41"]
       }
     }]

@@ -27,19 +27,19 @@ window.onload = async () => {
 document.getElementById("Preguntas_seg").addEventListener('submit', function(e){
     e.preventDefault();
     if (document.getElementById("Pregunta_1").value === ''){
-        alert("debe ingresar la respuesta a la primer pregunta!")
+    window.showError('Debe ingresar la respuesta a la primer pregunta!', 'Validación')
         return
     }
     else if (document.getElementById("Pregunta_2").value === ''){
-        alert("debe ingresar la respuesta a la segunda pregunta!")
+    window.showError('Debe ingresar la respuesta a la segunda pregunta!', 'Validación')
         return
     }
     else if (document.getElementById("Pregunta_3").value === ''){
-        alert("debe ingresar la respuesta a la tercer pregunta!")
+    window.showError('Debe ingresar la respuesta a la tercer pregunta!', 'Validación')
         return
     }
     else if ((document.getElementById("Pregunta_1").value === '')&&(document.getElementById("Pregunta_2").value === '')&&(document.getElementById("Pregunta_3").value === '')){
-        alert("debe responder las preguntas!")
+    window.showError('Debe responder las preguntas!', 'Validación')
         return
     }
 

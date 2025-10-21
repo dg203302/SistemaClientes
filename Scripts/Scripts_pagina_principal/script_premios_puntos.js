@@ -13,7 +13,7 @@ window.onload = async function () {
 
   if (error) {
     console.error(error);
-    alert("Error al cargar las promociones");
+    await window.showError('Error al cargar las promociones', 'Error');
     return;
   }
 
@@ -69,7 +69,7 @@ function crearPromoCard(promo) {
 
   const termsP = document.createElement("p");
   // Texto fijo 👇
-  termsP.textContent = "Válido un canje por usuario. Sujeto a disponibilidad. No acumulable con otras promociones.";
+  termsP.textContent = "Sujeto a disponibilidad. Válido para utilizar hasta dos semanas posteriores al canje.";
 
   terms.appendChild(summary);
   terms.appendChild(termsP);
@@ -122,19 +122,19 @@ function generar_codigo(){
 }
 function verificar_promo(usuario_l,data){
   if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
-    return true
+     return true
   }
   else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
-    alert("promocion vencida y puntos insuficientes!")
+     window.showError('Promoción vencida y puntos insuficientes!', 'Atención');
     return false
   }
   else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
     console.log(usuario_l.puntos_u+" "+data.cantidad_puntos_canjeo)
-    alert("Puntos insuficientes")
+     window.showError('Puntos insuficientes', 'Atención')
     return false
   }
   else if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
-    alert("Promocion vencida!")
+     window.showError('Promoción vencida!', 'Atención')
     return false
   }
 }
@@ -146,8 +146,8 @@ async function Canjearpuntos(event){
   .select("cantidad_puntos_canjeo, validez")
   .eq("id_promo", id_btn)
   .single()
-  if (promoError){
-    alert("error al canjear los puntos" + promoError.message)
+    if (promoError){
+    await window.showError('Error al canjear los puntos: ' + promoError.message, 'Error')
   }
   else{
     // Validar la promoción antes de restar puntos
@@ -158,15 +158,19 @@ async function Canjearpuntos(event){
       .update({Puntos: nuevosPuntos})
       .eq("Telef", usuario_l.tele_u)
       if (updateError){
-        alert("error al actualizar los puntos")
+        await window.showError('Error al actualizar los puntos', 'Error')
       }
       else{
         const codigoGenerado = generar_codigo();
+        const nombrePromo = await obtener_nombre_promo(id_btn);
         const { error: insertError } = await client
         .from("Codigos_promos_puntos")
-        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, id_promo: id_btn}]);
-        if (insertError){
-          alert("error al registrar el canjeo")
+        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
+        const { error: insertError2 } = await client
+        .from("Historial_Puntos")
+        .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
+        if (insertError||insertError2){
+          await window.showError('Error al registrar el canjeo', 'Error')
         }
         else{
           // Actualizar cache local y UI solo tras éxito
@@ -174,7 +178,7 @@ async function Canjearpuntos(event){
           localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
           let cantidad_puntos = document.getElementById("puntos-usuario");
           if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-          alert("Promo canjeada exitosamente, revise el codigo en su perfil")
+          await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
         }
       }
     }
@@ -204,4 +208,16 @@ async function refrescarPuntos(){
         localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
         cantidad_puntos.textContent = usuario_l.puntos_u;
     }
+}
+async function obtener_nombre_promo(id_promo){
+  const {data, error} = await client
+  .from("Promos_puntos")
+  .select("Nombre_promo")
+  .eq("id_promo", id_promo)
+  .single()
+  if (error) {
+    await window.showError('Error al obtener el nombre de la promoción', 'Error')
+    return null;
+  }
+  return data.Nombre_promo;
 }

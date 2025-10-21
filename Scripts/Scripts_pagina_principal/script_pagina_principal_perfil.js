@@ -34,10 +34,10 @@ window.onload = function (){
 async function cargar_codigos(){
     const {data, error} = await client
     .from("Codigos_promos_puntos")
-    .select("codigo_canjeado, id_promo, fecha_creac, Canjeado")
+    .select("codigo_canjeado, nom_promo, fecha_creac, Canjeado")
     .eq("Telef", usuario_l.tele_u)
     if (error){
-        alert("error al acceder las promos")
+    await window.showError('Error al acceder las promociones', 'Error')
     }
     else if (!data || data.length === 0) {
       const cardUltimo = document.getElementsByClassName("card ultimo-canje");
@@ -74,8 +74,8 @@ async function generar_Codigos(datos_codigo){
 
     const titulo = document.createElement("h2");
     titulo.classList.add("codigo-title");
-    const promo = await obtener_nombre_promo(datos_codigo.id_promo);
-    titulo.textContent = promo ? promo.Nombre_promo : "Promo desconocida";
+    const promo = datos_codigo.nom_promo;
+    titulo.textContent = promo ? promo : "Promo desconocida";
 
     head.appendChild(titulo);
 
@@ -134,41 +134,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   const promoEl = document.getElementById('ultimo-canje-promo'); // ahora existe en el HTML
   const codeEl = document.getElementById('ultimo-canje-code') || document.getElementById('ultimo-codigo-valor');
   if (!codeEl) return;
-
   try {
     const { data, error } = await client
       .from('Codigos_promos_puntos')
       .select(`
         codigo_canjeado,
-        id_promo,
-        Promos_puntos ( Nombre_promo )
+        nom_promo
       `)
       .eq('Telef', usuario_l.tele_u)
       .eq("Canjeado", 0)
       .order('fecha_creac', { ascending: false })
       .limit(1)
       .maybeSingle();
-
     if (error) throw error;
-
-    // Obtiene el nombre desde la relación o hace fallback por id_promo
-    let nombrePromo =
-      data?.Promos_puntos?.Nombre_promo ??
-      (Array.isArray(data?.Promos_puntos) ? data.Promos_puntos[0]?.Nombre_promo : undefined);
-
-    if (!nombrePromo && data?.id_promo) {
-      const aux = await obtener_nombre_promo(data.id_promo);
-      nombrePromo = aux?.Nombre_promo;
-    }
-
+    let nombrePromo = data.nom_promo ?? '';
     if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
-    codeEl.textContent = data?.codigo_canjeado || '—'
+    codeEl.textContent = data?.codigo_canjeado || (codeEl.style.display = 'none');
   } catch (e) {
-    if (promoEl) promoEl.textContent = '—';
-    codeEl.textContent = '—';
+    if (promoEl) promoEl.parentNode.style.display = 'none';
+    codeEl.style.display = 'none';
     codeEl.title = 'Sin códigos canjeados aún';
     console.error(e);
   }
 });
-
-// ...existing code...

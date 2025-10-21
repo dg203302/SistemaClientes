@@ -61,62 +61,68 @@
   <main>
     <!-- Tarjeta grande de puntos -->
     <section class="card featured-card points-card" aria-label="Resumen de puntos">
-      <div class="card-header">
-        <div class="card-icon points-icon">💎</div>
-        <div class="card-title-group">
-          <h2 class="card-title">Mis Puntos</h2>
-          <p class="card-subtitle"></p>
+      <div class="texto_card">
+          <div class="card-header">
+            <div class="card-icon points-icon">💎</div>
+            <div class="card-title-group">
+              <h2 class="card-title">Mis Puntos</h2>
+              <p class="card-subtitle"></p>
+            </div>
+          </div>
+          
+          <div class="card-content">
+          <div class="points-display">
+            <span id="cant_puntos" class="points-value" data-points="0">Tiene: Puntos</span>
+          </div>
         </div>
       </div>
-      
-      <div class="card-content">
-        <div class="points-display">
-          <span id="cant_puntos" class="points-value" data-points="0">Tiene: Puntos</span>
-        </div> <br>
-        
-        <div class="points-actions">
-          <button type="button" 
-                  class="btn btn-primary refresh-btn" 
-                  onclick="refrescarPuntos()"
-                  aria-label="Actualizar cantidad de puntos">
-            <span class="btn-icon">🔄</span>
-            Refrescar Puntos
-          </button>
-        </div>
+
+      <div class="points-actions">
+        <button type="button" 
+                class="btn btn-primary refresh-btn" 
+                onclick="refrescarPuntos()"
+                aria-label="Actualizar cantidad de puntos">
+          <span class="btn-icon">🔄</span><br>
+          Refrescar Puntos
+        </button>
       </div>
     </section>
 
     <!-- Tarjetas de Promos y Promociones -->
     <section class="card promo-card points-promo" aria-label="Promociones con puntos">
-      <div class="card-header">
-        <div class="card-icon promo-icon">🎁</div>
-        <div class="card-title-group">
-          <h3 class="card-title">Canje de Puntos</h3><br>
+      <div class="texto_card">
+        <div class="card-header">
+          <div class="card-icon promo-icon">🎁</div>
+          <div class="card-title-group">
+            <h3 class="card-title">Canje de Promociones</h3><br>
+          </div>
         </div>
+        
+        <div class="card-content">
+          <p class="card-description">Canjea tus puntos por beneficios exclusivos.</p>
+        </div> <br>
       </div>
-      
-      <div class="card-content">
-        <p class="card-description">Canjea tus puntos por beneficios exclusivos.</p>
-      </div> <br>
-      
+
       <div class="card-actions">
         <button type="button" class="btn btn-secondary" onclick="window.location.href='Promociones_puntos.html'">
-          Ver promos
+          Ver Promociones
         </button> 
       </div>
     </section>
 
     <section class="card promo-card store-promo" aria-label="Promociones de tienda">
-      <div class="card-header">
-        <div class="card-icon store-icon">🏪</div>
-        <div class="card-title-group">
-          <h3 class="card-title">Ofertas de Tienda</h3> <br>
+      <div class="texto_card">
+        <div class="card-header">
+          <div class="card-icon store-icon">🏪</div>
+          <div class="card-title-group">
+            <h3 class="card-title">Ofertas</h3> <br>
+        </div>
+        
+        <div class="card-content">
+          <p class="card-description">Ofertas y descuentos semanales vigentes.</p>
+        </div> <br>
+        </div>
       </div>
-      
-      <div class="card-content">
-        <p class="card-description">Ofertas vigentes y descuentos semanales.</p>
-      </div> <br>
-      
       <div class="card-actions">
         <button type="button" class="btn btn-secondary" onclick="window.location.href='Ofertas_tienda.html'">
           Ver ofertas
@@ -153,6 +159,7 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzIFykBS4anUaW8Ff0sGw0MlWe6jfMABo&callback=initStreetView">
     </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Scripts/sweetalert_helper.js"></script>
   <script src="/Scripts/Scripts_pagina_principal/script_pagina_principal.js"></script>
 </body>
 </html>
