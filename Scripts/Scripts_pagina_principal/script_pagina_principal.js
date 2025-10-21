@@ -6,6 +6,7 @@ const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
 
 window.onload=async function(){
     await actualizar_datos();
+    await cargarHorarios();
     initStreetView();
     let saludo = document.getElementById("nombre-usuario")
     saludo.textContent = usuario_l.nombre_u
@@ -59,4 +60,93 @@ function initStreetView() {
         pov: { heading: 34, pitch: 10 }, // orientación inicial
         zoom: 1
     });
+}
+
+async function cargarHorarios() {
+    try {
+        // Primero intentamos con diferentes variaciones del nombre de columna
+        let data, error;
+        
+        // Intento 1: con "id" (minúscula)
+        ({ data, error } = await client
+            .from("Avisos")
+            .select("descripcion_aviso")
+            .eq("titulo_aviso", "Horarios_Main")
+            .single());
+
+        if (error) {
+            console.error("Error al cargar horarios:", error);
+            mostrarHorariosDefecto();
+            return;
+        }
+
+        if (!data || !data.descripcion_aviso) {
+            console.warn("No se encontró la descripción de horarios");
+            mostrarHorariosDefecto();
+            return;
+        }
+
+        let descripcion = data.descripcion_aviso;
+        console.log("Descripción original:", descripcion); // Debug
+        
+        // Remover el prefijo "Horarios de atención" si existe
+        descripcion = descripcion.replace(/^Horarios de atención\s*/i, '').trim();
+        console.log("Después de remover prefijo:", descripcion); // Debug
+        
+        // Separar por el carácter "|"
+        const lineas = descripcion.split('|').map(linea => linea.trim()).filter(linea => linea);
+        console.log("Líneas separadas:", lineas); // Debug
+        
+        const contenedor = document.getElementById("horarios-container");
+        
+        if (!contenedor) {
+            console.error("No se encontró el contenedor 'horarios-container'");
+            return;
+        }
+        
+        contenedor.innerHTML = ''; // Limpiar contenido previo
+        
+        lineas.forEach(linea => {
+            // Buscar el primer número para separar día de horario
+            // Formato: "Lunes  8:00 – 20:00" o "Domingo  Cerrado"
+            const match = linea.match(/^([A-Za-záéíóúÁÉÍÓÚ]+)\s+(.+)$/);
+            
+            if (match) {
+                const dia = match[1].trim();
+                const horario = match[2].trim();
+                
+                console.log(`Día: ${dia}, Horario: ${horario}`); // Debug
+                
+                const div = document.createElement("div");
+                div.className = "row";
+                
+                // Si contiene "cerrado" agregar clase especial
+                if (horario.toLowerCase().includes('cerrado')) {
+                    div.classList.add('cerrado');
+                }
+                
+                div.innerHTML = `<span>${dia}</span><span>${horario}</span>`;
+                contenedor.appendChild(div);
+            }
+        });
+        
+        console.log("Horarios cargados exitosamente"); // Debug
+        
+    } catch (err) {
+        console.error("Error en cargarHorarios:", err);
+        mostrarHorariosDefecto();
+    }
+}
+
+function mostrarHorariosDefecto() {
+    const contenedor = document.getElementById("horarios-container");
+    contenedor.innerHTML = `
+        <div class="row"><span>Lunes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Martes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Miércoles</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Jueves</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Viernes</span><span>8:00 – 20:00</span></div>
+        <div class="row"><span>Sábado</span><span>9:00 – 14:00</span></div>
+        <div class="row cerrado"><span>Domingo</span><span>Cerrado</span></div>
+    `;
 }
