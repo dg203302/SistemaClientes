@@ -143,7 +143,7 @@ async function Canjearpuntos(event){
   const id_btn = boton_promo.dataset.id;
   const {data: promoData, error: promoError} = await client
   .from("Promos_puntos")
-  .select("cantidad_puntos_canjeo, validez")
+  .select("Nombre_promo, cantidad_puntos_canjeo, validez")
   .eq("id_promo", id_btn)
   .single()
     if (promoError){
@@ -152,33 +152,69 @@ async function Canjearpuntos(event){
   else{
     // Validar la promoción antes de restar puntos
     if (verificar_promo(usuario_l, promoData)){
-      const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-      const { error: updateError } = await client
-      .from("Clientes")
-      .update({Puntos: nuevosPuntos})
-      .eq("Telef", usuario_l.tele_u)
-      if (updateError){
-        await window.showError('Error al actualizar los puntos', 'Error')
-      }
-      else{
-        const codigoGenerado = generar_codigo();
-        const nombrePromo = await obtener_nombre_promo(id_btn);
-        const { error: insertError } = await client
-        .from("Codigos_promos_puntos")
-        .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
-        const { error: insertError2 } = await client
-        .from("Historial_Puntos")
-        .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
-        if (insertError||insertError2){
-          await window.showError('Error al registrar el canjeo', 'Error')
+      if (promoData.Nombre_promo.includes("Sorteo")){
+        const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
+        const { error: updateError } = await client
+        .from("Clientes")
+        .update({Puntos: nuevosPuntos})
+        .eq("Telef", usuario_l.tele_u)
+        if (updateError){
+          await window.showError('Error al actualizar los puntos', 'Error')
         }
         else{
-          // Actualizar cache local y UI solo tras éxito
-          usuario_l.puntos_u = nuevosPuntos;
-          localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-          let cantidad_puntos = document.getElementById("puntos-usuario");
-          if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-          await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
+          const codigoGenerado = generar_codigo();
+          const { error: insertError } = await client
+          .from("Codigos_sorteos")
+          .insert([{Telef: usuario_l.tele_u, codigo_sorteo: codigoGenerado}]);
+          const { error: insertError2 } = await client
+          .from("Historial_Puntos")
+          .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
+          if (insertError||insertError2){
+            if (insertError?.status === 409 || insertError?.code === '409' || insertError?.code === '23505'){
+              await window.showError('Ya has canjeado este sorteo anteriormente', 'Error')
+              return
+            }
+            await window.showError('Error al registrar el canjeo', 'Error')
+          }
+          else{
+            // Actualizar cache local y UI solo tras éxito
+            usuario_l.puntos_u = nuevosPuntos;
+            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+            let cantidad_puntos = document.getElementById("puntos-usuario");
+            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
+            await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
+          }
+        }
+      }
+      else{
+        const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
+        const { error: updateError } = await client
+        .from("Clientes")
+        .update({Puntos: nuevosPuntos})
+        .eq("Telef", usuario_l.tele_u)
+        if (updateError){
+          await window.showError('Error al actualizar los puntos', 'Error')
+        }
+        else{
+          const codigoGenerado = generar_codigo();
+          const nombrePromo = await obtener_nombre_promo(id_btn);
+          const { error: insertError } = await client
+          .from("Codigos_promos_puntos")
+          .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
+          const { error: insertError2 } = await client
+          .from("Historial_Puntos")
+          .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
+          if (insertError||insertError2){
+            await window.showError('Error al registrar el canjeo', 'Error')
+          }
+          else{
+            // Actualizar cache local y UI solo tras éxito
+            usuario_l.puntos_u = nuevosPuntos;
+            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+            let cantidad_puntos = document.getElementById("puntos-usuario");
+            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
+            await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
+          }
         }
       }
     }

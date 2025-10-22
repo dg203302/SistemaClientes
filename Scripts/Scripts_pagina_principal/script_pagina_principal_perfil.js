@@ -150,7 +150,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     let nombrePromo = data.nom_promo ?? '';
     if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
     codeEl.textContent = data?.codigo_canjeado || (codeEl.style.display = 'none');
-  } catch (e) {
+
+    let sorteoEl = document.getElementById('ultimo-canje-sorteo-code');
+      try {
+        const { data: sortData, error: sortErr } = await client
+          .from('Codigos_sorteos')
+          .select('codigo_sorteo')
+          .eq('Telef', usuario_l.tele_u)
+          .maybeSingle();
+        if (sortErr) throw sortErr;
+        if (sortData && sortData.codigo_sorteo) {
+          sorteoEl.textContent = sortData.codigo_sorteo;
+        } else {
+          document.getElementById("section-sorteo").style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Error cargando codigo sorteo:', err);
+      }
+  }
+  catch (e) {
     if (promoEl) promoEl.parentNode.style.display = 'none';
     codeEl.style.display = 'none';
     codeEl.title = 'Sin códigos canjeados aún';
