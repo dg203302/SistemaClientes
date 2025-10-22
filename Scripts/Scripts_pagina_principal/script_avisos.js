@@ -8,7 +8,14 @@ window.onload = async function () {
     const { data, error } = await client
         .from("Avisos")
         .select("*");
-        
+        if (!error && Array.isArray(data)) {
+          for (let i = data.length - 1; i >= 0; i--) {
+            const t = (data[i].titulo_aviso || '').trim().toLowerCase();
+            if (t === 'politicas' || t === 'horarios_main') {
+              data.splice(i, 1);
+            }
+          }
+        }
 
     if (error) {
     console.error(error);

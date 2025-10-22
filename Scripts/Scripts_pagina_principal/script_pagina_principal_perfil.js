@@ -40,8 +40,11 @@ async function cargar_codigos(){
     await window.showError('Error al acceder las promociones', 'Error')
     }
     else if (!data || data.length === 0) {
-      const cardUltimo = document.getElementsByClassName("card ultimo-canje");
-      if (cardUltimo[0]) cardUltimo[0].style.display = "none";
+      // Hide only the promo-related 'ultimo-canje' elements (promo name and code)
+      const promoPromoEl = document.getElementById('ultimo-canje-promo');
+      const promoCodeEl = document.getElementById('ultimo-canje-code');
+      if (promoPromoEl && promoPromoEl.parentNode) promoPromoEl.parentNode.style.display = 'none';
+      if (promoCodeEl && promoCodeEl.parentNode) promoCodeEl.parentNode.style.display = 'none';
 
       const contenedor_padre = document.getElementById("codigos_canjds");
       if (contenedor_padre) {
@@ -127,29 +130,22 @@ async function obtener_nombre_promo(id) {
   return data; // { Nombre_promo: "..." }
 }
 
-// ...existing code...
-
-// Sección: Último código canjeado (solo promo + código desde BD)
 document.addEventListener('DOMContentLoaded', async () => {
-  const promoEl = document.getElementById('ultimo-canje-promo'); // ahora existe en el HTML
+
+  const promoEl = document.getElementById('ultimo-canje-promo');
   const codeEl = document.getElementById('ultimo-canje-code') || document.getElementById('ultimo-codigo-valor');
   if (!codeEl) return;
-  try {
     const { data, error } = await client
       .from('Codigos_promos_puntos')
-      .select(`
-        codigo_canjeado,
-        nom_promo
-      `)
+      .select(`*`)
       .eq('Telef', usuario_l.tele_u)
       .eq("Canjeado", 0)
       .order('fecha_creac', { ascending: false })
       .limit(1)
       .maybeSingle();
-    if (error) throw error;
-    let nombrePromo = data.nom_promo ?? '';
-    if (promoEl) promoEl.textContent = nombrePromo || 'Sin códigos canjeados aún';
-    codeEl.textContent = data?.codigo_canjeado || (codeEl.style.display = 'none');
+    // Ensure this block runs even if `data` is null. Use safe defaults.
+    const nombrePromo = data?.nom_promo ?? '';
+    if (promoEl) promoEl.textContent = nombrePromo || (promoEl.parentNode.style.display = 'none');
 
     let sorteoEl = document.getElementById('ultimo-canje-sorteo-code');
       try {
@@ -158,7 +154,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           .select('codigo_sorteo')
           .eq('Telef', usuario_l.tele_u)
           .maybeSingle();
-        if (sortErr) throw sortErr;
         if (sortData && sortData.codigo_sorteo) {
           sorteoEl.textContent = sortData.codigo_sorteo;
         } else {
@@ -167,11 +162,5 @@ document.addEventListener('DOMContentLoaded', async () => {
       } catch (err) {
         console.error('Error cargando codigo sorteo:', err);
       }
-  }
-  catch (e) {
-    if (promoEl) promoEl.parentNode.style.display = 'none';
-    codeEl.style.display = 'none';
-    codeEl.title = 'Sin códigos canjeados aún';
-    console.error(e);
-  }
 });
+
