@@ -192,6 +192,21 @@
   box-shadow: 0 10px 30px rgba(66, 133, 244, 0.3);
 }
 
+.social-link.instagram .social-icon-wrapper {
+  background: linear-gradient(135deg, #833AB4, #E1306C, #FD1D1D, #F77737);
+}
+
+.social-link.instagram {
+  border-color: rgba(225, 48, 108, 0.2);
+  color: var(--color-light);
+}
+
+.social-link.instagram:hover {
+  border-color: rgba(225, 48, 108, 0.5);
+  background: linear-gradient(135deg, rgba(131, 58, 180, 0.1), rgba(225, 48, 108, 0.1));
+  box-shadow: 0 10px 30px rgba(225, 48, 108, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .social-grid {
