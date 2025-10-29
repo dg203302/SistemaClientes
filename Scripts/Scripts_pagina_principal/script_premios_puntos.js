@@ -138,6 +138,18 @@ function verificar_promo(usuario_l,data){
     return false
   }
 }
+async function verificar_sorteo_canjeado(telef){
+  const { data: existingSorteo } = await client
+    .from('Codigos_sorteos')
+    .select('id')
+    .eq('Telef', usuario_l.tele_u)
+    .maybeSingle();
+  if (existingSorteo) {
+    await window.showError('Ya has canjeado este sorteo anteriormente', 'Error');
+    return false;
+  }
+  return true;
+}
 async function Canjearpuntos(event){
   const boton_promo= event.currentTarget;
   const id_btn = boton_promo.dataset.id;
@@ -152,19 +164,8 @@ async function Canjearpuntos(event){
   else{
     // Validar la promoción antes de restar puntos
     if (verificar_promo(usuario_l, promoData)){
-  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes("sorteo")){
+  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes("sorteo") && await verificar_sorteo_canjeado(usuario_l.tele_u)){
         const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-        // Check if the user already redeemed this sorteo
-        const { data: existingSorteo } = await client
-          .from('Codigos_sorteos')
-          .select('id')
-          .eq('Telef', usuario_l.tele_u)
-          .maybeSingle();
-        if (existingSorteo) {
-          await window.showError('Ya has canjeado este sorteo anteriormente', 'Error');
-          return;
-        }
-
         const { error: updateError } = await client
           .from("Clientes")
           .update({Puntos: nuevosPuntos})
@@ -177,21 +178,14 @@ async function Canjearpuntos(event){
           const { error: insertError } = await client
           .from("Codigos_sorteos")
           .insert([{Telef: usuario_l.tele_u, codigo_sorteo: codigoGenerado}]);
-          const { error: insertError2 } = await client
-          .from("Historial_Puntos")
-          .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
-          if (insertError||insertError2){
-            // If it's a unique-constraint/duplicate error, refund the exact points that were subtracted
+          if (insertError){
             if (insertError?.status === 409 || insertError?.code === '409' || insertError?.code === '23505'){
-              // Refund: compute original points by adding back the cost
-              const refundPoints = usuario_l.puntos_u; // usuario_l already holds the original points before we updated it below
+              const refundPoints = usuario_l.puntos_u;
               await window.showError('Ya has canjeado este sorteo anteriormente', 'Error')
-              // Update DB to refund to the original value
               await client
                 .from("Clientes")
                 .update({ Puntos: refundPoints })
                 .eq("Telef", usuario_l.tele_u);
-              // Ensure local cache and UI match the refunded value
               localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
               const cantidad_puntos = document.getElementById("puntos-usuario");
               if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
@@ -200,7 +194,13 @@ async function Canjearpuntos(event){
             await window.showError('Error al registrar el canjeo', 'Error')
           }
           else{
-            // Actualizar cache local y UI solo tras éxito
+            const { error: insertError2 } = await client
+            .from("Historial_Puntos")
+            .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
+            if (insertError2){
+              await window.showError('Error al registrar el canjeo en el historial', 'Error')
+              return;
+            }
             usuario_l.puntos_u = nuevosPuntos;
             localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
             let cantidad_puntos = document.getElementById("puntos-usuario");
@@ -208,6 +208,9 @@ async function Canjearpuntos(event){
             await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
           }
         }
+      }
+      else if (!(await verificar_sorteo_canjeado(usuario_l.tele_u))){
+        return;
       }
       else{
         const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
