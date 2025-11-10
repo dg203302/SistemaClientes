@@ -100,11 +100,22 @@ window.onload = function(){
             contenedor[0].classList.add("exito");
         }
         else if (valor === "8"){ //fallo en la recuperacion de puntos
-            titulo_info.textContent="Fallo en la recuperacion de puntos"
-            boton_info.href = "/Templates/Templates_pagina_principal/Pagina_principal_inicio.html";
-            boton_info.textContent = "Continuar";
-            let contenedor = document.getElementsByClassName("informe")
-            contenedor[0].classList.add("exito");
+            if (inform === 'Cannot coerce the result to a single JSON object'){
+                texto_info.textContent = "Usuario Eliminado";
+                localStorage.clear();
+                boton_info.href = "/index.html";
+                boton_info.textContent = "Desloggearse";
+                let contenedor = document.getElementsByClassName("informe")
+                contenedor[0].classList.add("exito");
+            }
+            else{
+                titulo_info.textContent="Fallo en la recuperacion de puntos"
+                boton_info.href = "/Templates/Templates_pagina_principal/Pagina_principal_inicio.html";
+                boton_info.textContent = "Continuar";
+                let contenedor = document.getElementsByClassName("informe")
+                contenedor[0].classList.add("exito");
+            }
+            console.log(inform)
         }
     }
 }
