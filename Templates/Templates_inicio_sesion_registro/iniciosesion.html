@@ -20,12 +20,15 @@
         <form id="inicioform">
             <label for="telef">Numero de Telefono</label>
             <input id="telef" type="number" name="telef" 
-                placeholder="Tu Numero de Telefono sin +" 
-                pattern="^54\d{13}$"
+                placeholder="Tu Numero de Telefono sin +54" 
+                pattern="^\d{11}$"
                 required>
 
             <label for="contrasenia">Contraseña</label>
-            <input id="contrasenia" type="password" placeholder="Tu contraseña" required>
+            <div class="contendedor_cont">
+                <input id="contrasenia" type="password" placeholder="Tu contraseña" required>
+                <button class="botonalternar" type="button" id="togglePassword" style="width: 50px; height: 50px;">👁️</button>
+            </div>
 
             <button type="submit">Iniciar Sesión</button>
         </form>
@@ -37,5 +40,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_iniciosecion.js"></script>
+    
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('contrasenia');
+    
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    </script>
+
 </body>
 </html>

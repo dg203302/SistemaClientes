@@ -23,12 +23,19 @@
       <input id="nombre" type="text" placeholder="Tu nombre" required>
 
       <label for="telef">Numero de Telefono</label>
-      <input id="telef" type="number" name="telef" placeholder="54264XXXXXXX"
-       pattern="^54\d{13}$" required>
+      <input id="telef" type="number" name="telef" placeholder="264XXXXXXX"
+       pattern="^\d{11}$" required>
 
       <label for="contraseña">Contraseña</label>
-      <input id="contraseña" type="password" placeholder="Crea una contraseña" required>
+      <div class="contendedor_cont">
+        <input id="contraseña" type="password" placeholder="Crea una contraseña" required>
+        <button class="botonalternar" type="button" id="togglePassword" style="width: 50px; height: 50px;">👁️</button>
+      </div>
 
+      <p class="reglas">
+        La contraseña debe tener al menos 4 caracteres e incluir un número.
+      </p>
+      
       <input type="submit" value="Registrar">
     </form>
 
@@ -36,5 +43,17 @@
   </div>
   <script src="/Scripts/sweetalert_helper.js"></script>
   <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_registro_inicial.js"></script>
+
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('contraseña');
+    
+        togglePassword.addEventListener('click', function () {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    </script>
+
 </body>
 </html>

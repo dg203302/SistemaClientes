@@ -145,7 +145,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       .maybeSingle();
     // Ensure this block runs even if `data` is null. Use safe defaults.
     const nombrePromo = data?.nom_promo ?? '';
+    const codigoCanjeado = data?.codigo_canjeado ?? '';
     if (promoEl) promoEl.textContent = nombrePromo || (promoEl.parentNode.style.display = 'none');
+    if (codeEl) codeEl.textContent = codigoCanjeado || (codeEl.parentNode.style.display = 'none');
 
     let sorteoEl = document.getElementById('ultimo-canje-sorteo-code');
       try {

@@ -12,10 +12,6 @@ function verificar_contra(contra){
         window.showError('La contraseña debe contener por lo menos un número', 'Validación');
         return false
     }
-    else if (!(/[-_:;!@#$%^&*]/.test(contra))){
-        window.showError('La contraseña debe tener por lo menos un caracter especial: - _ : ; ! @ # $ % ^ & * ', 'Validación');
-        return false
-    }
     else{
         return true
     }

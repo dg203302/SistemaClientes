@@ -123,3 +123,17 @@ p {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.contendedor_cont {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center; /* Center children horizontally */
+}
+.botonalternar {
+  /* Center within its container and override previous sizing */
+  width: auto;              /* ignore any fixed width */
+  flex: 0 0 auto;           /* don't stretch or shrink */
+  align-self: center;       /* center on cross-axis within flex */
+  margin: 0 auto 15px;      /* center horizontally */
+}
