@@ -18,6 +18,54 @@ function corregir_fecha(fecha_iso){
     return new Intl.DateTimeFormat("es-AR", opciones).format(fecha)
 }
 
+// Cargar SweetAlert2 si no está disponible
+async function ensureSwal() {
+  if (typeof Swal !== 'undefined') return;
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-lib="sweetalert2"]');
+    if (existing) {
+      existing.addEventListener('load', resolve);
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    s.async = true;
+    s.defer = true;
+    s.setAttribute('data-lib', 'sweetalert2');
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+// SweetAlert2 mixins para estilos consistentes (se inicializan bajo demanda)
+let swalConfirm = null;
+let swalSuccess = null;
+let swalError = null;
+
+function initSwalMixins() {
+  if (typeof Swal === 'undefined') return;
+  swalConfirm = Swal.mixin({
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Eliminar',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true,
+    allowOutsideClick: false,
+  });
+  swalSuccess = Swal.mixin({
+    icon: 'success',
+    confirmButtonText: 'Aceptar',
+    allowOutsideClick: false,
+  });
+  swalError = Swal.mixin({
+    icon: 'error',
+    confirmButtonText: 'Aceptar',
+    allowOutsideClick: false,
+  });
+}
+
 window.onload = function (){
     let nombre_perfil = document.getElementById("perfil-nombre")
     let tele_perfil = document.getElementById("perfil-tele")
@@ -167,9 +215,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function eliminarUsuario() {
-  const confirmacion = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
-  if (!confirmacion) {
-    return;
+  try {
+    await ensureSwal();
+  } catch (e) {
+    console.error('No se pudo cargar SweetAlert2:', e);
+  }
+  initSwalMixins();
+
+  if (swalConfirm) {
+    const { isConfirmed } = await swalConfirm.fire({
+      title: '¿Eliminar cuenta?',
+      text: 'Esta acción no se puede deshacer.',
+    });
+    if (!isConfirmed) return;
+  } else {
+    const confirmacion = confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
+    if (!confirmacion) return;
   }
 
   try {
@@ -182,10 +243,24 @@ async function eliminarUsuario() {
       throw deleteError;
     }
     localStorage.removeItem("usuario_loggeado");
-    alert("Tu cuenta ha sido eliminada exitosamente.");
+    if (swalSuccess) {
+      await swalSuccess.fire({
+        title: 'Cuenta eliminada',
+        text: 'Tu cuenta ha sido eliminada exitosamente.',
+      });
+    } else {
+      alert('Tu cuenta ha sido eliminada exitosamente.');
+    }
     window.location.href = "/index.html";
   } catch (error) {
     console.error("Error al eliminar la cuenta:", error);
-    alert("Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.");
+    if (swalError) {
+      await swalError.fire({
+        title: 'Error',
+        text: 'Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.',
+      });
+    } else {
+      alert('Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.');
+    }
   }
 }
