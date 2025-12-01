@@ -18,6 +18,28 @@ function corregir_fecha(fecha_iso){
     return new Intl.DateTimeFormat("es-AR", opciones).format(fecha)
 }
 
+// SweetAlert2 mixins para estilos consistentes
+const swalConfirm = typeof Swal !== 'undefined' ? Swal.mixin({
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Eliminar',
+  cancelButtonText: 'Cancelar',
+  reverseButtons: true,
+  allowOutsideClick: false,
+}) : null;
+
+const swalSuccess = typeof Swal !== 'undefined' ? Swal.mixin({
+  icon: 'success',
+  confirmButtonText: 'Aceptar',
+  allowOutsideClick: false,
+}) : null;
+
+const swalError = typeof Swal !== 'undefined' ? Swal.mixin({
+  icon: 'error',
+  confirmButtonText: 'Aceptar',
+  allowOutsideClick: false,
+}) : null;
+
 window.onload = function (){
     let nombre_perfil = document.getElementById("perfil-nombre")
     let tele_perfil = document.getElementById("perfil-tele")
@@ -167,14 +189,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function eliminarUsuario() {
-  const { isConfirmed } = await Swal.fire({
+  if (!swalConfirm) {
+    console.error('SweetAlert2 no está disponible.');
+    return;
+  }
+  const { isConfirmed } = await swalConfirm.fire({
     title: '¿Eliminar cuenta?',
     text: 'Esta acción no se puede deshacer.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Eliminar',
-    cancelButtonText: 'Cancelar',
-    reverseButtons: true
   });
 
   if (!isConfirmed) {
@@ -193,22 +214,20 @@ async function eliminarUsuario() {
 
     localStorage.removeItem("usuario_loggeado");
 
-    await Swal.fire({
+    await swalSuccess.fire({
       title: 'Cuenta eliminada',
       text: 'Tu cuenta ha sido eliminada exitosamente.',
-      icon: 'success',
-      confirmButtonText: 'Aceptar'
     });
 
     window.location.href = "/index.html";
   } catch (error) {
     console.error("Error al eliminar la cuenta:", error);
-    await Swal.fire({
-      title: 'Error',
-      text: 'Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.',
-      icon: 'error',
-      confirmButtonText: 'Aceptar'
-    });
+    if (swalError) {
+      await swalError.fire({
+        title: 'Error',
+        text: 'Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.',
+      });
+    }
   }
 }
 window.eliminarUsuario = eliminarUsuario;
