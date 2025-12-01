@@ -166,3 +166,49 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 });
 
+async function eliminarUsuario() {
+  const { isConfirmed } = await Swal.fire({
+    title: '¿Eliminar cuenta?',
+    text: 'Esta acción no se puede deshacer.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Eliminar',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true
+  });
+
+  if (!isConfirmed) {
+    return;
+  }
+
+  try {
+    const { error: deleteError } = await client
+      .from('Clientes')
+      .delete()
+      .eq('Telef', usuario_l.tele_u);
+
+    if (deleteError) {
+      throw deleteError;
+    }
+
+    localStorage.removeItem("usuario_loggeado");
+
+    await Swal.fire({
+      title: 'Cuenta eliminada',
+      text: 'Tu cuenta ha sido eliminada exitosamente.',
+      icon: 'success',
+      confirmButtonText: 'Aceptar'
+    });
+
+    window.location.href = "/index.html";
+  } catch (error) {
+    console.error("Error al eliminar la cuenta:", error);
+    await Swal.fire({
+      title: 'Error',
+      text: 'Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.',
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    });
+  }
+}
+window.eliminarUsuario = eliminarUsuario;
