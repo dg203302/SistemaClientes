@@ -26,7 +26,6 @@ form.addEventListener('submit', async (e) => {
     }
     else{
         localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos, f_creacion_u:data.Fecha_creacion}))
-        //por ahora no voy a usar el telefono
         window.location.href = "/Templates/Templates_pagina_principal/Pagina_principal_inicio.html";
     }
 })
