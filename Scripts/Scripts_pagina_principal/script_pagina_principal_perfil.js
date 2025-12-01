@@ -44,8 +44,21 @@ let swalConfirm = null;
 let swalSuccess = null;
 let swalError = null;
 
+function getThemeColors() {
+  const root = document.documentElement;
+  const styles = getComputedStyle(root);
+  // Intenta leer variables comunes; ajusta nombres si tu CSS usa otros
+  const primary = styles.getPropertyValue('--color-primary')?.trim() || styles.getPropertyValue('--primary')?.trim() || '#0d6efd';
+  const danger = styles.getPropertyValue('--color-danger')?.trim() || styles.getPropertyValue('--danger')?.trim() || '#dc3545';
+  const success = styles.getPropertyValue('--color-success')?.trim() || styles.getPropertyValue('--success')?.trim() || '#198754';
+  const text = styles.getPropertyValue('--color-text')?.trim() || styles.getPropertyValue('--text-color')?.trim() || '#212529';
+  const bg = styles.getPropertyValue('--color-bg')?.trim() || styles.getPropertyValue('--background-color')?.trim() || '#ffffff';
+  return { primary, danger, success, text, bg };
+}
+
 function initSwalMixins() {
   if (typeof Swal === 'undefined') return;
+  const colors = getThemeColors();
   swalConfirm = Swal.mixin({
     icon: 'warning',
     showCancelButton: true,
@@ -53,16 +66,41 @@ function initSwalMixins() {
     cancelButtonText: 'Cancelar',
     reverseButtons: true,
     allowOutsideClick: false,
+    // Colores de botones según paleta
+    confirmButtonColor: colors.danger,
+    cancelButtonColor: colors.primary,
+    // Clases personalizadas para permitir estilo CSS adicional si existe
+    customClass: {
+      popup: 'swal2-theme-popup',
+      title: 'swal2-theme-title',
+      htmlContainer: 'swal2-theme-text',
+      confirmButton: 'swal2-theme-confirm',
+      cancelButton: 'swal2-theme-cancel',
+    },
   });
   swalSuccess = Swal.mixin({
     icon: 'success',
     confirmButtonText: 'Aceptar',
     allowOutsideClick: false,
+    confirmButtonColor: colors.success,
+    customClass: {
+      popup: 'swal2-theme-popup',
+      title: 'swal2-theme-title',
+      htmlContainer: 'swal2-theme-text',
+      confirmButton: 'swal2-theme-confirm',
+    },
   });
   swalError = Swal.mixin({
     icon: 'error',
     confirmButtonText: 'Aceptar',
     allowOutsideClick: false,
+    confirmButtonColor: colors.danger,
+    customClass: {
+      popup: 'swal2-theme-popup',
+      title: 'swal2-theme-title',
+      htmlContainer: 'swal2-theme-text',
+      confirmButton: 'swal2-theme-confirm',
+    },
   });
 }
 
