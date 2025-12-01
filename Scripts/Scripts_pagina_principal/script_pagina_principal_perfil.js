@@ -169,24 +169,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function eliminarUsuario() {
   const confirmacion = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
   if (!confirmacion) {
-    return; // El usuario canceló la eliminación
+    return;
   }
 
   try {
-    // Eliminar el usuario de la tabla "Usuarios"
     const { error: deleteError } = await client
-      .from('Usuarios')
+      .from('Clientes')
       .delete()
       .eq('Telef', usuario_l.tele_u);
 
     if (deleteError) {
       throw deleteError;
     }
-
-    // Limpiar el almacenamiento local y redirigir al usuario
     localStorage.removeItem("usuario_loggeado");
     alert("Tu cuenta ha sido eliminada exitosamente.");
-    window.location.href = "../Templates_pagina_principal/Pagina_principal.html";
+    window.location.href = "/index.html";
   } catch (error) {
     console.error("Error al eliminar la cuenta:", error);
     alert("Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.");
