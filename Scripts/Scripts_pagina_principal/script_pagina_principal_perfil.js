@@ -167,21 +167,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function eliminarUsuario() {
-  const { isConfirmed } = await Swal.fire({
-    title: '¿Eliminar cuenta?',
-    text: 'Esta acción no se puede deshacer.',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Eliminar',
-    cancelButtonText: 'Cancelar',
-    reverseButtons: true
-  });
-
-  if (!isConfirmed) {
-    return;
+  const confirmacion = confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.");
+  if (!confirmacion) {
+    return; // El usuario canceló la eliminación
   }
 
   try {
+    // Eliminar el usuario de la tabla "Usuarios"
     const { error: deleteError } = await client
       .from('Usuarios')
       .delete()
@@ -191,24 +183,12 @@ async function eliminarUsuario() {
       throw deleteError;
     }
 
+    // Limpiar el almacenamiento local y redirigir al usuario
     localStorage.removeItem("usuario_loggeado");
-
-    await Swal.fire({
-      title: 'Cuenta eliminada',
-      text: 'Tu cuenta ha sido eliminada exitosamente.',
-      icon: 'success',
-      confirmButtonText: 'Aceptar'
-    });
-
-    window.location.href = "/index.html";
+    alert("Tu cuenta ha sido eliminada exitosamente.");
+    window.location.href = "../Templates_pagina_principal/Pagina_principal.html";
   } catch (error) {
     console.error("Error al eliminar la cuenta:", error);
-    await Swal.fire({
-      title: 'Error',
-      text: 'Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.',
-      icon: 'error',
-      confirmButtonText: 'Aceptar'
-    });
+    alert("Hubo un error al eliminar tu cuenta. Por favor, intenta nuevamente más tarde.");
   }
 }
-window.eliminarUsuario = eliminarUsuario;
