@@ -12,7 +12,7 @@ async function iniciar_invitado(){
     const {data, error} = await client
     .from('Clientes')
     .select('Nombre, Telef, Contra, Puntos , Fecha_creacion')
-    .eq('Telef', '46792747')
+    .eq('Telef', '123456789')
     .single();
     localStorage.setItem("usuario_loggeado", JSON.stringify({nombre_u:data.Nombre, tele_u:data.Telef, puntos_u:data.Puntos, f_creacion_u:data.Fecha_creacion}))
     window.location.href = './Templates/Templates_pagina_principal/Pagina_principal_inicio.html';
