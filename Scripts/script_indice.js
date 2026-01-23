@@ -8,5 +8,3 @@ window.onload = function(){
         window.location.href = './Templates/Templates_pagina_principal/Pagina_principal_inicio.html';
     }
 }
-
-window.iniciar_invitado = iniciar_invitado;
