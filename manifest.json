@@ -1,6 +1,6 @@
 {
-  "name": "El Lote Clientes",
-  "short_name": "El Lote Clientes",
+  "name": "Clientes El Lote",
+  "short_name": "El Lote",
   "start_url": "https://clienteslote.netlify.app/index.html",
   "display": "standalone",
   "description": "Aplicación para la gestión de clientes de El Lote",
@@ -11,25 +11,25 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "iconos/manifest-icon-192.maskable.png",
+      "src": "/home/dg/Desktop/iconos lote/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "iconos/manifest-icon-192.maskable.png",
+      "src": "/home/dg/Desktop/iconos lote/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "iconos/manifest-icon-512.maskable.png",
+      "src": "/home/dg/Desktop/iconos lote/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "iconos/manifest-icon-512.maskable.png",
+      "src": "/home/dg/Desktop/iconos lote/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
