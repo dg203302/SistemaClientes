@@ -6,30 +6,30 @@
   "description": "Aplicación para la gestión de clientes de El Lote",
   "lang": "es",
   "dir": "auto",
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#FFE1B3",
+  "background_color": "#FFE1B3",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/home/dg/Desktop/iconos lote/manifest-icon-192.maskable.png",
+      "src": "iconos/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/home/dg/Desktop/iconos lote/manifest-icon-192.maskable.png",
+      "src": "iconos/manifest-icon-192.maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/home/dg/Desktop/iconos lote/manifest-icon-512.maskable.png",
+      "src": "iconos/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/home/dg/Desktop/iconos lote/manifest-icon-512.maskable.png",
+      "src": "iconos/manifest-icon-512.maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
