@@ -323,6 +323,61 @@ input:checked + .slider:before {
               0 0 24px rgba(82, 43, 91, 0.4);
 }
 
+/* ===== Lista de códigos de sorteo ===== */
+#ultimo-codigo-sorteo-wrapper {
+  width: 100%;
+}
+
+.sorteo-codes-list {
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.sorteo-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sorteo-code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  color: #FBE4D8;
+  background: linear-gradient(90deg, #854F6C 0%, #522B5B 100%);
+  border: 1px solid rgba(223, 182, 178, 0.7);
+  white-space: nowrap;
+}
+
+.sorteo-meta {
+  display: grid;
+  justify-items: end;
+  gap: 0.15rem;
+  font-size: 0.9rem;
+  color: rgba(251, 228, 216, 0.9);
+}
+
+.sorteo-fecha {
+  opacity: 0.9;
+}
+
+.sorteo-status {
+  font-weight: 700;
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+.sorteo-status.ok { color: #7CFFCB; }
+.sorteo-status.warn { color: #FFD166; }
+
 /* Responsive */
 @media (max-width: 640px) {
   .profile-summary {

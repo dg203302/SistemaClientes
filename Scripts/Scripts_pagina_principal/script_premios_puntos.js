@@ -120,6 +120,31 @@ function verificar_vencimiento(fecha_venc){
 function generar_codigo(){
   return Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
 }
+
+async function insertarCodigoSorteoConReintentos(telef, maxAttempts = 5) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const codigoGenerado = generar_codigo();
+    const { error } = await client
+      .from("Codigos_sorteos")
+      .insert([{ Telef: telef, codigo_sorteo: codigoGenerado }]);
+
+    if (!error) {
+      return { codigo: codigoGenerado };
+    }
+
+    // Si el código es único y hubo colisión, reintentar con otro código.
+    // (Si la tabla tiene una restricción única por Telef, esto no se resolverá desde el frontend.)
+    if (error?.code === '23505' || error?.status === 409 || error?.code === '409') {
+      lastError = error;
+      continue;
+    }
+
+    return { error };
+  }
+
+  return { error: lastError ?? new Error('No se pudo generar un código único') };
+}
 function verificar_promo(usuario_l,data){
   if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
      return true
@@ -164,7 +189,7 @@ async function Canjearpuntos(event){
   else{
     // Validar la promoción antes de restar puntos
     if (verificar_promo(usuario_l, promoData)){
-  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes("sorteo") && await verificar_sorteo_canjeado(usuario_l.tele_u)){
+  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes("sorteo")){
         const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
         const { error: updateError } = await client
           .from("Clientes")
@@ -174,26 +199,23 @@ async function Canjearpuntos(event){
           await window.showError('Error al actualizar los puntos', 'Error')
         }
         else{
-          const codigoGenerado = generar_codigo();
-          const { error: insertError } = await client
-          .from("Codigos_sorteos")
-          .insert([{Telef: usuario_l.tele_u, codigo_sorteo: codigoGenerado}]);
+          const { codigo, error: insertError } = await insertarCodigoSorteoConReintentos(usuario_l.tele_u);
           if (insertError){
-            if (insertError?.status === 409 || insertError?.code === '409' || insertError?.code === '23505'){
-              const refundPoints = usuario_l.puntos_u;
-              await window.showError('Ya has canjeado este sorteo anteriormente', 'Error')
-              await client
-                .from("Clientes")
-                .update({ Puntos: refundPoints })
-                .eq("Telef", usuario_l.tele_u);
-              localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-              const cantidad_puntos = document.getElementById("puntos-usuario");
-              if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-              return;
-            }
-            await window.showError('Error al registrar el canjeo', 'Error')
-          }
-          else{
+            // Si la DB sigue teniendo restricción única por Telef, aquí fallará.
+            // Devolvemos puntos porque el canje no pudo registrarse.
+            const refundPoints = usuario_l.puntos_u;
+            await client
+              .from("Clientes")
+              .update({ Puntos: refundPoints })
+              .eq("Telef", usuario_l.tele_u);
+            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
+            const cantidad_puntos = document.getElementById("puntos-usuario");
+            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
+
+            // Mensaje más neutro: puede ser duplicado de código o restricción de BD.
+            await window.showError('No se pudo registrar el canjeo del sorteo. Intente nuevamente.', 'Error')
+            return;
+          } else {
             const { error: insertError2 } = await client
             .from("Historial_Puntos")
             .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
@@ -205,12 +227,9 @@ async function Canjearpuntos(event){
             localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
             let cantidad_puntos = document.getElementById("puntos-usuario");
             if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-            await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
+            await window.showSuccess(`Promo canjeada exitosamente, revise el código (${codigo}) en su perfil`)
           }
         }
-      }
-      else if (!(await verificar_sorteo_canjeado(usuario_l.tele_u))){
-        return;
       }
       else{
         const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
