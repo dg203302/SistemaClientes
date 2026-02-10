@@ -419,9 +419,13 @@ input[type="text"]::placeholder {
 
 /* Botones modernos */
 button {
-  background: linear-gradient(145deg, var(--color-purple), var(--color-pink-dark));
-  border: none;
-  color: white;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05)),
+    rgba(43, 18, 76, 0.12);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  border: 1px solid var(--glass-border);
+  color: var(--color-light);
   padding: 1rem 2rem;
   border-radius: 12px;
   font-weight: 600;
@@ -429,8 +433,8 @@ button {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.3),
-    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+    0 10px 26px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-highlight);
   position: relative;
   overflow: hidden;
 }
@@ -444,7 +448,7 @@ button::before {
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(255, 255, 255, 0.2), 
+    rgba(255, 255, 255, 0.14), 
     transparent);
   transition: left 0.5s;
 }
@@ -454,36 +458,53 @@ button:hover::before {
 }
 
 button:hover {
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-2px);
   box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.4),
-    0 2px 0 rgba(255, 255, 255, 0.2) inset;
-  background: linear-gradient(145deg, var(--color-pink-dark), var(--color-purple));
+    0 14px 34px rgba(0, 0, 0, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.28);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.20), rgba(255, 255, 255, 0.06)),
+    rgba(43, 18, 76, 0.10);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.40),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 0 0 3px rgba(223, 182, 178, 0.22);
 }
 
 button[type="submit"] {
-  background: linear-gradient(145deg, #00ffcc, #0fb9b1);
-  color: #1a0f33;
+  border-color: rgba(0, 255, 204, 0.35);
   font-weight: 700;
   margin-top: 0.5rem;
 }
 
 button[type="submit"]:hover {
-  background: linear-gradient(145deg, #0fb9b1, #00ffcc);
   box-shadow: 
-    0 15px 35px rgba(0, 255, 204, 0.4),
-    0 2px 0 rgba(255, 255, 255, 0.3) inset;
+    0 14px 34px rgba(0, 255, 204, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 button[type="reset"] {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03)),
+    rgba(0, 0, 0, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: var(--color-light);
 }
 
 button[type="reset"]:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05)),
+    rgba(0, 0, 0, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
 }
 
 /* Enlace de volver */

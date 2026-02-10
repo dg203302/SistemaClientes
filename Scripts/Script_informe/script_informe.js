@@ -7,7 +7,7 @@ function generarmensaje(mensaje){
         case "contraseña incorrecta":
             return "Contraseña Incorrecta"
         case "mal codigo":
-            return "Codigo de recuperacion erroneo"
+            return "Respuestas de seguridad erroneas"
         default:
             return "Ocurrió un error inesperado.";
   }

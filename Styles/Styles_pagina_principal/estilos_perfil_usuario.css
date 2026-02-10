@@ -107,45 +107,7 @@
   justify-content: flex-end;
   margin-top: 0.2rem;
 }
-
-/* Botones */
-.btn {
-  background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark));
-  border: none;
-  color: #fff;
-  padding: 0.7rem 1rem;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-}
-
-.btn.secondary {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.btn.danger {
-  background: linear-gradient(90deg, #a81e40, #e63946);
-}
-
-.link-btn {
-  display: inline-block;
-  padding: 0.65rem 1rem;
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--color-light);
-  border-radius: 10px;
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.link-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
+/* Botones: estilo glass unificado en estilos_pagina_principal.css */
 
 /* Preferencias: switches */
 .prefs {

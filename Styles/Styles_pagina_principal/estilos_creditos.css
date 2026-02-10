@@ -39,8 +39,7 @@
 /* CTA */
 .cta { text-align: center; }
 .cta-actions { margin-top: .6rem; display: flex; gap: .6rem; justify-content: center; flex-wrap: wrap; }
-.btn { background: linear-gradient(90deg, var(--color-purple), var(--color-pink-dark)); border: none; color: #fff; padding: .6rem .9rem; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; }
-.btn.secondary { background: transparent; border: 1px solid rgba(255,255,255,.3); }
+/* Botones: estilo glass unificado en estilos_pagina_principal.css */
 
 @media (min-width: 720px) {
   .team { grid-template-columns: 1fr 1fr; }
