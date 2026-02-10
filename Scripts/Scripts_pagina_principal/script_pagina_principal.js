@@ -7,7 +7,7 @@ const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
 window.onload=async function(){
     await actualizar_datos();
     await cargarHorarios();
-    initStreetView();
+    initLeafletMap();
     let saludo = document.getElementById("nombre-usuario")
     saludo.textContent = usuario_l.nombre_u
     let cant_puntos = document.getElementById("cant_puntos")
@@ -51,15 +51,28 @@ async function actualizar_datos(){
     }
 }
 
-function initStreetView() {
+function initLeafletMap() {
     const ubicacion = { lat: -31.564160131917813, lng: -68.5079447539319 };
-    const panorama = new google.maps.StreetViewPanorama(
-    document.getElementById("street-view"),
-    {
-        position: ubicacion,
-        pov: { heading: 34, pitch: 10 }, // orientación inicial
-        zoom: 1
-    });
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    if (mapEl._leaflet_id) return;
+    if (typeof L === 'undefined') {
+        console.error('Leaflet no está cargado. Verifica que leaflet.js esté incluido.');
+        return;
+    }
+
+    const map = L.map('map', {
+        zoomControl: true,
+        scrollWheelZoom: true,
+    }).setView([ubicacion.lat, ubicacion.lng], 16);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([ubicacion.lat, ubicacion.lng]).addTo(map);
 }
 
 async function cargarHorarios() {
