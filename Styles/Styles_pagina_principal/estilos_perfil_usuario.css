@@ -1,3 +1,7 @@
+button, a, label, input {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Perfil de usuario: estilos específicos sobre la base compartida */
 
 /* Utiliza las variables de colores ya definidas en estilos_pagina_principal.css */

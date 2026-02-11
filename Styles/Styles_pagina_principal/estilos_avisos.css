@@ -1,3 +1,7 @@
+button, a, label, input {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Estilos específicos para la página de Avisos */
 
 /* Activo en el menú */

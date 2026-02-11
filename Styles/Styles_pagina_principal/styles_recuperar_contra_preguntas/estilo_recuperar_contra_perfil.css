@@ -1,5 +1,9 @@
 @import url('/Styles/Styles_pagina_principal/estilos_pagina_principal.css');
 
+button, a, label, input {
+    -webkit-tap-highlight-color: transparent;
+}
+
 /*
 	Estilos específicos: Cambiar/Recuperar contraseña desde Perfil
 	- Mantiene la paleta y componentes del estilo principal

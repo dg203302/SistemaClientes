@@ -1,5 +1,9 @@
 @import url('/Styles/Styles_pagina_principal/estilos_pagina_principal.css');
 
+button, a, label, input {
+	-webkit-tap-highlight-color: transparent;
+}
+
 /* Layout del main para convivir con header/footer fijos */
 main.promos {
 	margin-top: 40px;
