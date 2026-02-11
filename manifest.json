@@ -6,8 +6,8 @@
   "description": "Aplicación para la gestión de clientes de El Lote",
   "lang": "es",
   "dir": "auto",
-  "theme_color": "#2B124C",
-  "background_color": "#2B124C",
+  "theme_color": "#705F95",
+  "background_color": "#705F95",
   "orientation": "portrait",
   "icons": [
     {
