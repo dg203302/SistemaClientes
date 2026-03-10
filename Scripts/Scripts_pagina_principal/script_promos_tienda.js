@@ -5,6 +5,8 @@ const client = createClient(supabaseUrl, supabaseKey)
 
 let modalOferta = null
 let ultimoElementoActivo = null
+let ofertasCargadas = []
+let busquedaInicializada = false
 
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inicializarPaginaOfertas)
@@ -14,6 +16,7 @@ if (document.readyState === 'loading') {
 
 function inicializarPaginaOfertas() {
     inicializarModalOferta()
+    inicializarBusquedaOfertas()
     cargarOfertas()
 }
 
@@ -33,9 +36,9 @@ async function cargarOfertas() {
             throw error
         }
 
-        const ofertas = Array.isArray(data) ? [...data].reverse() : []
-        renderizarOfertas(ofertas)
-        actualizarResumen(ofertas)
+        ofertasCargadas = Array.isArray(data) ? [...data].reverse() : []
+        actualizarResumen(ofertasCargadas)
+        aplicarBusquedaActual()
     } catch (error) {
         console.error(error)
         contenedorPromos.innerHTML = ''
@@ -46,6 +49,97 @@ async function cargarOfertas() {
             await window.showError('Error al cargar las promociones', 'Error')
         }
     }
+}
+
+function inicializarBusquedaOfertas() {
+    if (busquedaInicializada) {
+        return
+    }
+
+    const input = document.getElementById('search-input')
+    if (!input) {
+        return
+    }
+
+    const handler = () => {
+        aplicarBusquedaActual()
+    }
+
+    input.addEventListener('input', handler)
+    busquedaInicializada = true
+}
+
+function aplicarBusquedaActual() {
+    const input = document.getElementById('search-input')
+    const query = input ? String(input.value || '').trim() : ''
+
+    const total = ofertasCargadas.length
+    const filtradas = filtrarOfertasPorTexto(ofertasCargadas, query)
+
+    if (query && filtradas.length === 0) {
+        renderizarSinResultados(query)
+    } else {
+        renderizarOfertas(filtradas)
+    }
+
+    actualizarContadorResultados({ total, visibles: filtradas.length, query })
+}
+
+function filtrarOfertasPorTexto(ofertas, query) {
+    const texto = normalizarTexto(query)
+    if (!texto) {
+        return ofertas
+    }
+
+    return ofertas.filter((oferta) => {
+        const haystack = normalizarTexto(
+            [
+                obtenerNombre(oferta),
+                obtenerDescripcion(oferta),
+                obtenerCategoria(oferta),
+                obtenerBadge(oferta),
+                obtenerVigencia(oferta),
+            ].join(' ')
+        )
+
+        return haystack.includes(texto)
+    })
+}
+
+function normalizarTexto(valor) {
+    return String(valor || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+}
+
+function actualizarContadorResultados({ total, visibles, query }) {
+    const tieneQuery = Boolean(String(query || '').trim())
+
+    if (!tieneQuery) {
+        actualizarTexto('result-count', total === 1 ? '1 oferta activa' : `${total} ofertas activas`)
+        return
+    }
+
+    actualizarTexto('result-count', visibles === 1 ? `1 de ${total} oferta` : `${visibles} de ${total} ofertas`)
+}
+
+function renderizarSinResultados(query) {
+    const contenedorPromos = document.getElementById('conten-ofertas')
+
+    if (!contenedorPromos) {
+        return
+    }
+
+    contenedorPromos.innerHTML = ''
+    contenedorPromos.appendChild(
+        crearEstadoVacio(
+            'Sin resultados',
+            `No encontramos ofertas que coincidan con "${query}".`
+        )
+    )
 }
 
 function renderizarOfertas(ofertas) {

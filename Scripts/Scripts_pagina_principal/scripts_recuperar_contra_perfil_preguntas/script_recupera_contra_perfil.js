@@ -1,24 +1,19 @@
 import {hashing} from "/Scripts/script_hash.js"
 function verificar_contra(contra){
-    if (contra.length < 4){
-        window.showError('La Contraseña debe tener como mínimo 4 caracteres', 'Validación');
+    const len = contra.length
+
+    // Reglas pedidas: más de 4 y menos de 15 caracteres (5..14)
+    if (len <= 4){
+        window.showError('La contraseña debe tener más de 4 caracteres (mínimo 5).', 'Validación')
         return false
     }
-    else if (contra.length > 10){
-        window.showError('La contraseña no puede superar los 10 caracteres', 'Validación');
+
+    if (len >= 15){
+        window.showError('La contraseña debe tener menos de 15 caracteres (máximo 14).', 'Validación')
         return false
     }
-    else if (!(/\d/.test(contra))){
-        window.showError('La contraseña debe contener por lo menos un número', 'Validación');
-        return false
-    }
-    else if (!(/[-_:;!@#$%^&*]/.test(contra))){
-        window.showError('La contraseña debe tener por lo menos un caracter especial: - _ : ; ! @ # $ % ^ & * ', 'Validación')
-        return false
-    }
-    else{
-        return true
-    }
+
+    return true
 }
 
 const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
