@@ -47,6 +47,7 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+  body.modal-open { overflow:hidden; }
 
   /* ── Atmospheric BG — cool blue tones ── */
   .bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
@@ -246,14 +247,15 @@
   /* ════════════════════════════════════════════
      MODAL
   ════════════════════════════════════════════ */
-  .modal-overlay { position:fixed; inset:0; z-index:2000; background:rgba(10,6,3,0.82); backdrop-filter:blur(14px); display:none; place-items:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity .28s; }
+  .modal-overlay { position:fixed; inset:0; z-index:2000; background:rgba(10,6,3,0.82); backdrop-filter:blur(14px); display:none; place-items:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity .28s; overflow-y:auto; }
   .modal-overlay.open { display:grid; opacity:1; pointer-events:all; }
-  .modal { width:100%; max-width:580px; border-radius:var(--r-xl); border:1px solid var(--g-border); background:linear-gradient(145deg,rgba(245,237,216,0.08) 0%,rgba(245,237,216,0.02) 100%), rgba(18,12,8,0.97); box-shadow:0 30px 80px rgba(0,0,0,0.72), inset 0 1px 0 var(--g-shine); overflow:hidden; transform:translateY(24px) scale(.97); transition:transform .3s cubic-bezier(.4,0,.2,1); position:relative; }
+  .modal { width:100%; max-width:760px; max-height:calc(100vh - 3rem); border-radius:var(--r-xl); border:1px solid var(--g-border); background:linear-gradient(145deg,rgba(245,237,216,0.08) 0%,rgba(245,237,216,0.02) 100%), rgba(18,12,8,0.97); box-shadow:0 30px 80px rgba(0,0,0,0.72), inset 0 1px 0 var(--g-shine); overflow:hidden; transform:translateY(24px) scale(.97); transition:transform .3s cubic-bezier(.4,0,.2,1); position:relative; display:flex; flex-direction:column; }
   .modal-overlay.open .modal { transform:translateY(0) scale(1); }
-  .modal-img { width:100%; height:230px; object-fit:cover; display:block; }
+  .modal-media { padding:1.2rem 1.2rem 0; flex-shrink:0; }
+  .modal-img { width:100%; max-height:min(52vh, 560px); height:auto; object-fit:contain; display:block; border-radius:var(--r-lg); background:rgba(10,6,3,0.62); }
   .modal-close { position:absolute; top:1rem; right:1rem; width:36px; height:36px; border-radius:50%; background:rgba(14,10,6,0.70); border:1px solid rgba(245,237,216,0.14); display:grid; place-items:center; font-size:1rem; color:var(--warm-mid); cursor:pointer; transition:all .2s; z-index:10; }
   .modal-close:hover { background:rgba(245,237,216,0.10); color:var(--cream); }
-  .modal-body { padding:1.8rem 2rem; }
+  .modal-body { padding:1.6rem 2rem 2rem; overflow-y:auto; }
   .modal-cat { font-size:.67rem; text-transform:uppercase; letter-spacing:1.6px; color:var(--gold); margin-bottom:.4rem; }
   .modal-title { font-family:'Playfair Display',serif; font-size:1.55rem; font-weight:700; color:var(--cream); margin-bottom:.5rem; line-height:1.2; }
   .modal-desc { font-size:.87rem; color:var(--warm-mid); line-height:1.65; margin-bottom:1.2rem; }
@@ -365,6 +367,8 @@
     #conten-ofertas { grid-template-columns:1fr; }
     .modal-details { grid-template-columns:1fr; }
     .modal-body { padding:1.2rem 1.4rem; }
+    .modal-media { padding:1rem 1rem 0; }
+    .modal-img { max-height:42vh; }
     .oc-actions { width:100%; margin-left:0; justify-content:space-between; }
   }
   </style>
@@ -383,26 +387,28 @@
 <label for="menu-toggle" class="sidebar-overlay" aria-hidden="true"></label>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-label="Detalle de oferta">
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
   <div class="modal">
-    <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
-    <img id="modal-img" class="modal-img" src="" alt="">
+    <button type="button" class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
+    <div class="modal-media">
+      <img id="modal-img" class="modal-img" src="" alt="">
+    </div>
     <div class="modal-body">
       <div id="modal-cat" class="modal-cat"></div>
       <h2 id="modal-title" class="modal-title"></h2>
       <p id="modal-desc" class="modal-desc"></p>
-      <div class="modal-price-row">
+      <div class="modal-price-row" hidden>
         <span id="modal-price-new" class="modal-price-new"></span>
         <span id="modal-price-old" class="modal-price-old"></span>
         <span id="modal-discount-badge" class="modal-discount-badge"></span>
       </div>
       <div class="modal-details">
         <div class="modal-detail-item">
-          <div class="modal-detail-label">Precio original</div>
+          <div class="modal-detail-label">Categoría</div>
           <div id="md-original" class="modal-detail-value"></div>
         </div>
         <div class="modal-detail-item">
-          <div class="modal-detail-label">Ahorrás</div>
+          <div class="modal-detail-label">Beneficio</div>
           <div id="md-ahorro" class="modal-detail-value" style="color:var(--accent)"></div>
         </div>
         <div class="modal-detail-item">
@@ -415,7 +421,7 @@
         </div>
       </div>
       <div class="modal-actions">
-        <button class="btn btn-ghost btn-sm" id="modal-btn-close">Cerrar</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="modal-btn-close">Cerrar</button>
       </div>
     </div>
   </div>

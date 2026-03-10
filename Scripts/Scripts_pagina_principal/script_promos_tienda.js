@@ -3,7 +3,19 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 
-document.addEventListener('DOMContentLoaded', cargarOfertas)
+let modalOferta = null
+let ultimoElementoActivo = null
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarPaginaOfertas)
+} else {
+    inicializarPaginaOfertas()
+}
+
+function inicializarPaginaOfertas() {
+    inicializarModalOferta()
+    cargarOfertas()
+}
 
 async function cargarOfertas() {
     const contenedorPromos = document.getElementById('conten-ofertas')
@@ -143,13 +155,12 @@ function crearPromoTCard(oferta) {
     estado.className = 'btn btn-ghost btn-sm btn-status'
     estado.textContent = `✓ ${obtenerEstadoOferta(oferta)}`
 
-    const verImagen = document.createElement('a')
+    const verImagen = document.createElement('button')
+    verImagen.type = 'button'
     verImagen.className = 'btn btn-ver'
-    verImagen.href = obtenerUrlImagen(oferta)
-    verImagen.target = '_blank'
-    verImagen.rel = 'noopener noreferrer'
     verImagen.textContent = 'Ver imagen'
     verImagen.setAttribute('aria-label', `Ver imagen de ${obtenerNombre(oferta)}`)
+    verImagen.addEventListener('click', () => abrirModalOferta(oferta))
 
     actions.appendChild(estado)
     actions.appendChild(verImagen)
@@ -182,6 +193,97 @@ function actualizarResumen(ofertas) {
     actualizarTexto('stat-cats', categorias.size ? String(categorias.size) : '—')
 }
 
+function inicializarModalOferta() {
+    const overlay = document.getElementById('modal-overlay')
+
+    if (!overlay || overlay.dataset.ready === 'true') {
+        return
+    }
+
+    modalOferta = {
+        overlay,
+        closeButton: document.getElementById('modal-close'),
+        secondaryCloseButton: document.getElementById('modal-btn-close'),
+        image: document.getElementById('modal-img'),
+        category: document.getElementById('modal-cat'),
+        title: document.getElementById('modal-title'),
+        description: document.getElementById('modal-desc'),
+        categoryDetail: document.getElementById('md-original'),
+        benefitDetail: document.getElementById('md-ahorro'),
+        stockDetail: document.getElementById('md-stock'),
+        validityDetail: document.getElementById('md-vigencia'),
+    }
+
+    overlay.dataset.ready = 'true'
+
+    modalOferta.closeButton?.addEventListener('click', cerrarModalOferta)
+    modalOferta.secondaryCloseButton?.addEventListener('click', cerrarModalOferta)
+    overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) {
+            cerrarModalOferta()
+        }
+    })
+
+    document.addEventListener('keydown', manejarCierreConEscape)
+}
+
+function abrirModalOferta(oferta) {
+    if (!modalOferta?.overlay) {
+        inicializarModalOferta()
+    }
+
+    if (!modalOferta?.overlay) {
+        return
+    }
+
+    const nombre = obtenerNombre(oferta)
+    const imagen = obtenerUrlImagen(oferta)
+
+    ultimoElementoActivo = document.activeElement instanceof HTMLElement ? document.activeElement : null
+
+    modalOferta.image.src = imagen
+    modalOferta.image.alt = `Imagen completa de ${nombre}`
+    modalOferta.image.onerror = () => {
+        modalOferta.image.onerror = null
+        modalOferta.image.src = crearPlaceholderImagen(nombre)
+    }
+
+    modalOferta.category.textContent = obtenerCategoria(oferta)
+    modalOferta.title.textContent = nombre
+    modalOferta.description.textContent = obtenerDescripcion(oferta)
+    modalOferta.categoryDetail.textContent = obtenerCategoria(oferta)
+    modalOferta.benefitDetail.textContent = obtenerBeneficio(oferta)
+    modalOferta.stockDetail.textContent = obtenerTextoStock(oferta)
+    modalOferta.validityDetail.textContent = obtenerVigencia(oferta)
+
+    modalOferta.overlay.classList.add('open')
+    modalOferta.overlay.setAttribute('aria-hidden', 'false')
+    document.body.classList.add('modal-open')
+    modalOferta.closeButton?.focus()
+}
+
+function cerrarModalOferta() {
+    if (!modalOferta?.overlay?.classList.contains('open')) {
+        return
+    }
+
+    modalOferta.overlay.classList.remove('open')
+    modalOferta.overlay.setAttribute('aria-hidden', 'true')
+    document.body.classList.remove('modal-open')
+
+    if (ultimoElementoActivo && typeof ultimoElementoActivo.focus === 'function') {
+        ultimoElementoActivo.focus()
+    }
+
+    ultimoElementoActivo = null
+}
+
+function manejarCierreConEscape(event) {
+    if (event.key === 'Escape') {
+        cerrarModalOferta()
+    }
+}
+
 function actualizarTexto(id, valor) {
     const element = document.getElementById(id)
 
@@ -208,6 +310,10 @@ function obtenerCategoria(oferta) {
 
 function obtenerBadge(oferta) {
     return String(leerCampo(oferta, ['campo_flotante', 'badge', 'promo_badge', 'etiqueta']) || '').trim()
+}
+
+function obtenerBeneficio(oferta) {
+    return obtenerBadge(oferta) || obtenerEstadoOferta(oferta)
 }
 
 function obtenerVigencia(oferta) {
