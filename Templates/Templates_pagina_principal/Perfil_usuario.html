@@ -339,30 +339,6 @@
   .sec-btn.danger { color:rgba(196,90,90,0.8); }
   .sec-btn.danger:hover { background:rgba(196,90,90,0.08); border-color:rgba(196,90,90,0.18); color:var(--red); }
 
-  /* Account info mini card (side) */
-  .account-mini {
-    border-radius:var(--r-lg);
-    border:1px solid var(--g-border);
-    background:
-      radial-gradient(ellipse 120% 80% at 100% 0%, rgba(196,154,74,0.10) 0%, transparent 60%),
-      linear-gradient(145deg,rgba(245,237,216,0.07) 0%,rgba(245,237,216,0.01) 100%),
-      rgba(22,16,9,0.75);
-    backdrop-filter:blur(var(--blur));
-    box-shadow:0 6px 28px rgba(0,0,0,0.40), inset 0 1px 0 var(--g-shine);
-    padding:1.4rem 1.5rem;
-  }
-  .account-mini-label { font-size:.67rem; text-transform:uppercase; letter-spacing:1.7px; color:var(--gold); margin-bottom:1rem; }
-
-  .account-stat { display:flex; justify-content:space-between; align-items:center; padding:.55rem 0; }
-  .account-stat + .account-stat { border-top:1px solid rgba(196,154,74,0.08); }
-  .as-label { font-size:.8rem; color:var(--warm-low); }
-  .as-value { font-size:.88rem; font-weight:600; color:var(--cream); }
-  .as-value.pts {
-    font-family:'Playfair Display',serif; font-size:1.1rem;
-    background:linear-gradient(135deg,var(--cream),var(--gold-lite));
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-  }
-
   /* ════════════════════════════════════════════
      DYNAMIC ELEMENTS - CODIGO CARD (from script)
   ════════════════════════════════════════════ */
@@ -377,7 +353,6 @@
   .codigo-card:hover { background:rgba(196,154,74,0.08); border-color:rgba(196,154,74,0.20); }
 
   .codigo-body { display:flex; flex-direction:column; gap:.5rem; }
-  .codigo-head { }
   .codigo-title {
     font-family:'Playfair Display',serif;
     font-size:.92rem; font-weight:600; color:var(--cream);
@@ -480,7 +455,7 @@
   @media (max-width:1000px) {
     .page-wrapper { flex-direction:column; }
     .side-col { width:100%; position:static; height:auto; padding:0 2rem 1rem; flex-direction:row; flex-wrap:wrap; }
-    .security-panel, .account-mini { flex:1; min-width:260px; }
+    .security-panel { flex:1; min-width:260px; }
   }
   @media (max-width:820px) {
     :root { --nav-w: 0px; }
@@ -659,27 +634,6 @@
       <!-- ── RIGHT: side panels ── -->
       <div class="side-col">
 
-        <!-- Account mini stats -->
-        <div class="account-mini">
-          <div class="account-mini-label">💎 Resumen de cuenta</div>
-          <div class="account-stat">
-            <span class="as-label">Puntos</span>
-            <span class="as-value pts" id="side-puntos">—</span>
-          </div>
-          <div class="account-stat">
-            <span class="as-label">Canjes realizados</span>
-            <span class="as-value" id="side-canjes">—</span>
-          </div>
-          <div class="account-stat">
-            <span class="as-label">Códigos de sorteo</span>
-            <span class="as-value" id="side-sorteos">—</span>
-          </div>
-          <div class="account-stat">
-            <span class="as-label">Miembro desde</span>
-            <span class="as-value" id="side-desde">—</span>
-          </div>
-        </div>
-
         <!-- Security -->
         <div class="security-panel">
           <div class="panel-header">
@@ -743,22 +697,11 @@ window.addEventListener('load', () => {
     const profileName = document.getElementById('perfil-nombre')?.textContent || 'U';
     const avatar = document.getElementById('topbar-avatar');
     if (avatar) avatar.textContent = profileName.charAt(0).toUpperCase();
-    
-    const perfil_puntos = document.getElementById('perfil-puntos')?.textContent || '—';
-    const perfil_desde = document.getElementById('perfil-desde')?.textContent || '—';
-    
-    const side_puntos = document.getElementById('side-puntos');
-    const side_desde = document.getElementById('side-desde');
-    
-    if (side_puntos) side_puntos.textContent = perfil_puntos;
-    if (side_desde) side_desde.textContent = perfil_desde;
-    
+
     // Contar elementos en historial
     const historial = document.getElementById('codigos_canjds');
     if (historial) {
       const canjes = historial.querySelectorAll('.codigo-card').length;
-      const countEl = document.getElementById('side-canjes');
-      if (countEl) countEl.textContent = canjes;
       const historialCount = document.getElementById('historial-count');
       if (historialCount) historialCount.textContent = canjes + ' canjes';
       
@@ -771,7 +714,6 @@ window.addEventListener('load', () => {
           emptyMsg.textContent = 'Sin canjes registrados.';
           historial.appendChild(emptyMsg);
         }
-        if (countEl) countEl.textContent = '0';
         if (historialCount) historialCount.textContent = '0 canjes';
       }
     }
@@ -780,8 +722,6 @@ window.addEventListener('load', () => {
     const sorteos = document.getElementById('sorteo-codes-list');
     if (sorteos) {
       const codes = sorteos.querySelectorAll('.sorteo-code-row').length;
-      const countEl = document.getElementById('side-sorteos');
-      if (countEl) countEl.textContent = codes;
       const sorteoCount = document.getElementById('sorteo-count');
       if (sorteoCount) {
         if (codes === 0) {

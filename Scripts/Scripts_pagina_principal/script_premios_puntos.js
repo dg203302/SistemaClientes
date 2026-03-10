@@ -1,103 +1,177 @@
-const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E'
-const { createClient } = supabase
-const client = createClient(supabaseUrl, supabaseKey)
-const usuario_l = JSON.parse(localStorage.getItem("usuario_loggeado"))
+const supabaseUrl = 'https://qxbkfmvugutmggqwxhrb.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF4YmtmbXZ1Z3V0bWdncXd4aHJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNTEzMDEsImV4cCI6MjA3MzgyNzMwMX0.Qsx0XpQaSgt2dKUaLs8GvMmH8Qt6Dp_TQM25a_WOa8E';
+const { createClient } = supabase;
+const client = createClient(supabaseUrl, supabaseKey);
+const usuario_l = leerUsuarioLoggeado();
+const PROMOS_TABLE = 'Promos_puntos';
 
-window.onload = async function () {
-  let cantidad_puntos = document.getElementById("puntos-usuario");
-  cantidad_puntos.textContent = usuario_l.puntos_u;
-  const { data, error } = await client
-    .from("Promos_puntos")
-    .select("*");
-
-  if (error) {
-    console.error(error);
-    await window.showError('Error al cargar las promociones', 'Error');
-    return;
-  }
-
-  let contenedor_promos = document.getElementById("Conten_promos");
-  data.reverse();
-  data.forEach(element => {
-    contenedor_promos.appendChild(crearPromoCard(element));
-  });
+window.promosPuntosPageBridge = {
+  refrescarPuntos: refrescarPuntosServidor,
+  canjearPromo: canjearPromoPorId,
+  recargarPromos: cargarPromociones,
 };
 
-function crearPromoCard(promo) {
-  // Crear el contenedor principal
-  const article = document.createElement("article");
-  article.classList.add("promo-card");
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializarPaginaPromos);
+} else {
+  inicializarPaginaPromos();
+}
 
-  // Media
-  const media = document.createElement("div");
-  media.classList.add("promo-media");
-  media.setAttribute("aria-hidden", "true");
-  media.textContent = promo.emoji_promo;
+async function inicializarPaginaPromos() {
+  sincronizarPuntosEnPagina();
+  await cargarPromociones();
+}
 
-  // Body
-  const body = document.createElement("div");
-  body.classList.add("promo-body");
+async function cargarPromociones() {
+  try {
+    const { data, error } = await client
+      .from(PROMOS_TABLE)
+      .select('*');
 
-  const titulo = document.createElement("h2");
-  titulo.classList.add("promo-title");
-  titulo.textContent = promo.Nombre_promo;
+    if (error) {
+      throw error;
+    }
 
-  const desc = document.createElement("p");
-  desc.classList.add("promo-desc");
-  desc.textContent = promo.descripcion_promo;
+    const promos = Array.isArray(data) ? [...data].reverse().map(mapearPromo) : [];
 
-  const meta = document.createElement("ul");
-  meta.classList.add("promo-meta");
+    if (window.promosPuntosPage?.setData) {
+      window.promosPuntosPage.setData(promos, obtenerPuntosUsuario());
+    }
+  } catch (error) {
+    console.error(error);
 
-  const puntosLi = document.createElement("li");
-  puntosLi.innerHTML = `<span class="meta-label">Puntos necesarios:</span> 
-                        <strong class="meta-value">${promo.cantidad_puntos_canjeo}</strong>`;
+    if (window.promosPuntosPage?.setData) {
+      window.promosPuntosPage.setData([], obtenerPuntosUsuario());
+    }
 
-  const validezLi = document.createElement("li");
-  validezLi.innerHTML = `<span class="meta-label">Validez:</span> 
-                         <span class="meta-value">${promo.validez}</span>`;
+    if (typeof window.showError === 'function') {
+      await window.showError('Error al cargar las promociones', 'Error');
+    }
+  }
+}
 
-  meta.appendChild(puntosLi);
-  meta.appendChild(validezLi);
+function mapearPromo(promo) {
+  const titulo = String(leerCampo(promo, ['Nombre_promo', 'nombre_promo', 'nombre', 'titulo']) || 'Promoción especial');
 
-  const terms = document.createElement("details");
-  terms.classList.add("promo-terms");
+  return {
+    id: leerCampo(promo, ['id_promo', 'id']) ?? crypto.randomUUID(),
+    titulo,
+    descripcion: String(leerCampo(promo, ['descripcion_promo', 'descripcion', 'detalle', 'detalle_promo']) || 'Canjeá esta promo con tus puntos acumulados.'),
+    categoria: String(leerCampo(promo, ['categoria', 'Categoria', 'tipo', 'seccion']) || 'Especial'),
+    costo: obtenerNumero(leerCampo(promo, ['cantidad_puntos_canjeo', 'costo', 'puntos']), 0),
+    stock: obtenerStockPromocion(promo),
+    img: obtenerUrlImagenPromo(promo),
+    fallbackImg: crearPlaceholderImagen(titulo),
+    validez: String(leerCampo(promo, ['validez', 'vigencia']) || ''),
+    raw: promo,
+  };
+}
 
-  const summary = document.createElement("summary");
-  summary.textContent = "Términos y condiciones";
+function leerUsuarioLoggeado() {
+  try {
+    return JSON.parse(localStorage.getItem('usuario_loggeado')) || null;
+  } catch {
+    return null;
+  }
+}
 
-  const termsP = document.createElement("p");
-  // Texto fijo 👇
-  termsP.textContent = "Sujeto a disponibilidad. Válido para utilizar hasta dos semanas posteriores al canje.";
+function obtenerPuntosUsuario() {
+  return obtenerNumero(usuario_l?.puntos_u, 0);
+}
 
-  terms.appendChild(summary);
-  terms.appendChild(termsP);
-  body.appendChild(titulo);
-  body.appendChild(desc);
-  body.appendChild(meta);
-  body.appendChild(terms);
+function sincronizarPuntosEnPagina() {
+  const cantidadPuntos = document.getElementById('puntos-usuario');
 
-  // Acciones
-  const actions = document.createElement("div");
-  actions.classList.add("promo-actions");
+  if (cantidadPuntos) {
+    cantidadPuntos.textContent = obtenerPuntosUsuario();
+  }
 
-  const btn = document.createElement("button");
-  btn.classList.add("btn-canjear");
-  btn.type = "button";
-  btn.dataset.id = promo.id_promo;
-  btn.setAttribute("aria-label", `Canjear ${promo.Nombre_promo}`);
-  btn.textContent = "Canjear";
-  btn.addEventListener("click", (event) => Canjearpuntos(event));
+  if (window.promosPuntosPage?.setPuntos) {
+    window.promosPuntosPage.setPuntos(obtenerPuntosUsuario());
+  }
+}
 
-  actions.appendChild(btn);
+function leerCampo(objeto, campos) {
+  for (const campo of campos) {
+    const valor = objeto?.[campo];
 
-  // Ensamblar todo
-  article.appendChild(media);
-  article.appendChild(body);
-  article.appendChild(actions);
+    if (valor === 0) {
+      return valor;
+    }
 
-  return article;
+    if (typeof valor === 'string' && valor.trim() !== '') {
+      return valor.trim();
+    }
+
+    if (valor !== null && valor !== undefined && valor !== '') {
+      return valor;
+    }
+  }
+
+  return null;
+}
+
+function obtenerNumero(valor, fallback = 0) {
+  const numero = Number(valor);
+  return Number.isFinite(numero) ? numero : fallback;
+}
+
+function obtenerStockPromocion(promo) {
+  const rawStock = leerCampo(promo, ['stock', 'Stock', 'cantidad_stock', 'stock_disponible', 'cupos', 'disponibles']);
+
+  if (rawStock === null) {
+    return null;
+  }
+
+  const numero = Number(rawStock);
+  return Number.isFinite(numero) ? Math.max(0, numero) : null;
+}
+
+function obtenerUrlImagenPromo(promo) {
+  const rawUrl = String(leerCampo(promo, ['Url_img', 'url_img', 'urlImg', 'imagen', 'imagen_url', 'image_url']) || '').trim();
+
+  if (!rawUrl) {
+    return crearPlaceholderImagen(leerCampo(promo, ['Nombre_promo', 'nombre_promo', 'nombre', 'titulo']) || 'Promoción');
+  }
+
+  if (/^(https?:|data:|blob:|\/)/i.test(rawUrl) || rawUrl.startsWith('./') || rawUrl.startsWith('../')) {
+    return rawUrl;
+  }
+
+  return `/${rawUrl.replace(/^\/+/, '')}`;
+}
+
+function crearPlaceholderImagen(texto) {
+  const titulo = String(texto || 'Promoción').slice(0, 28);
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+      <defs>
+        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#3a2a16" />
+          <stop offset="100%" stop-color="#140f0a" />
+        </linearGradient>
+        <linearGradient id="shine" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#f1d08a" stop-opacity="0.28" />
+          <stop offset="100%" stop-color="#f1d08a" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <rect width="800" height="500" fill="url(#bg)" />
+      <circle cx="680" cy="70" r="170" fill="url(#shine)" />
+      <circle cx="130" cy="410" r="150" fill="#c49a4a" fill-opacity="0.12" />
+      <text x="60" y="255" fill="#f5edd8" font-family="Outfit, Arial, sans-serif" font-size="42" font-weight="600">${escapeHtml(titulo)}</text>
+      <text x="60" y="305" fill="#c4b49a" font-family="Outfit, Arial, sans-serif" font-size="24">Imagen no disponible</text>
+    </svg>
+  `)}`;
+}
+
+function escapeHtml(texto) {
+  return String(texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function verificar_validez(puntosUsu, puntosCanje) {
@@ -105,36 +179,36 @@ function verificar_validez(puntosUsu, puntosCanje) {
   return puntosUsu >= puntosCanje;
 }
 
-function verificar_vencimiento(fecha_venc){
-  const [dia, mes, anio] = fecha_venc.split("/").map(Number);
+function verificar_vencimiento(fecha_venc) {
+  const [dia, mes, anio] = String(fecha_venc || '').split('/').map(Number);
   const fecha = new Date(anio, mes - 1, dia);
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
-  if (hoy <= fecha){
-    return true
+
+  if (Number.isNaN(fecha.getTime())) {
+    return true;
   }
-  else{
-    return false
-  }
+
+  return hoy <= fecha;
 }
-function generar_codigo(){
+
+function generar_codigo() {
   return Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
 }
 
 async function insertarCodigoSorteoConReintentos(telef, maxAttempts = 5) {
   let lastError = null;
+
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const codigoGenerado = generar_codigo();
     const { error } = await client
-      .from("Codigos_sorteos")
+      .from('Codigos_sorteos')
       .insert([{ Telef: telef, codigo_sorteo: codigoGenerado }]);
 
     if (!error) {
       return { codigo: codigoGenerado };
     }
 
-    // Si el código es único y hubo colisión, reintentar con otro código.
-    // (Si la tabla tiene una restricción única por Telef, esto no se resolverá desde el frontend.)
     if (error?.code === '23505' || error?.status === 409 || error?.code === '409') {
       lastError = error;
       continue;
@@ -145,160 +219,187 @@ async function insertarCodigoSorteoConReintentos(telef, maxAttempts = 5) {
 
   return { error: lastError ?? new Error('No se pudo generar un código único') };
 }
-function verificar_promo(usuario_l,data){
-  if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
-     return true
+
+function verificar_promo(usuario, data) {
+  if (verificar_validez(usuario.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)) {
+    return true;
   }
-  else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
-     window.showError('Promoción vencida y puntos insuficientes!', 'Atención');
-    return false
-  }
-  else if (!verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)){
-    console.log(usuario_l.puntos_u+" "+data.cantidad_puntos_canjeo)
-     window.showError('Puntos insuficientes', 'Atención')
-    return false
-  }
-  else if (verificar_validez(usuario_l.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)){
-     window.showError('Promoción vencida!', 'Atención')
-    return false
-  }
-}
-async function verificar_sorteo_canjeado(telef){
-  const { data: existingSorteo } = await client
-    .from('Codigos_sorteos')
-    .select('id')
-    .eq('Telef', usuario_l.tele_u)
-    .maybeSingle();
-  if (existingSorteo) {
-    await window.showError('Ya has canjeado este sorteo anteriormente', 'Error');
+
+  if (!verificar_validez(usuario.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)) {
+    window.showError('Promoción vencida y puntos insuficientes!', 'Atención');
     return false;
   }
-  return true;
-}
-async function Canjearpuntos(event){
-  const boton_promo= event.currentTarget;
-  const id_btn = boton_promo.dataset.id;
-  const {data: promoData, error: promoError} = await client
-  .from("Promos_puntos")
-  .select("Nombre_promo, cantidad_puntos_canjeo, validez")
-  .eq("id_promo", id_btn)
-  .single()
-    if (promoError){
-    await window.showError('Error al canjear los puntos: ' + promoError.message, 'Error')
-  }
-  else{
-    // Validar la promoción antes de restar puntos
-    if (verificar_promo(usuario_l, promoData)){
-  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes("sorteo")){
-        const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-        const { error: updateError } = await client
-          .from("Clientes")
-          .update({Puntos: nuevosPuntos})
-          .eq("Telef", usuario_l.tele_u)
-        if (updateError){
-          await window.showError('Error al actualizar los puntos', 'Error')
-        }
-        else{
-          const { codigo, error: insertError } = await insertarCodigoSorteoConReintentos(usuario_l.tele_u);
-          if (insertError){
-            // Si la DB sigue teniendo restricción única por Telef, aquí fallará.
-            // Devolvemos puntos porque el canje no pudo registrarse.
-            const refundPoints = usuario_l.puntos_u;
-            await client
-              .from("Clientes")
-              .update({ Puntos: refundPoints })
-              .eq("Telef", usuario_l.tele_u);
-            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-            const cantidad_puntos = document.getElementById("puntos-usuario");
-            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
 
-            // Mensaje más neutro: puede ser duplicado de código o restricción de BD.
-            await window.showError('No se pudo registrar el canjeo del sorteo. Intente nuevamente.', 'Error')
-            return;
-          } else {
-            const { error: insertError2 } = await client
-            .from("Historial_Puntos")
-            .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
-            if (insertError2){
-              await window.showError('Error al registrar el canjeo en el historial', 'Error')
-              return;
-            }
-            usuario_l.puntos_u = nuevosPuntos;
-            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-            let cantidad_puntos = document.getElementById("puntos-usuario");
-            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-            await window.showSuccess(`Promo canjeada exitosamente, revise el código (${codigo}) en su perfil`)
-          }
-        }
-      }
-      else{
-        const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-        const { error: updateError } = await client
-        .from("Clientes")
-        .update({Puntos: nuevosPuntos})
-        .eq("Telef", usuario_l.tele_u)
-        if (updateError){
-          await window.showError('Error al actualizar los puntos', 'Error')
-        }
-        else{
-          const codigoGenerado = generar_codigo();
-          const nombrePromo = await obtener_nombre_promo(id_btn);
-          const { error: insertError } = await client
-          .from("Codigos_promos_puntos")
-          .insert([{Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: nombrePromo }]);
-          const { error: insertError2 } = await client
-          .from("Historial_Puntos")
-          .insert([{Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0}]);
-          if (insertError||insertError2){
-            await window.showError('Error al registrar el canjeo', 'Error')
-          }
-          else{
-            // Actualizar cache local y UI solo tras éxito
-            usuario_l.puntos_u = nuevosPuntos;
-            localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-            let cantidad_puntos = document.getElementById("puntos-usuario");
-            if (cantidad_puntos) cantidad_puntos.textContent = usuario_l.puntos_u;
-            await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil')
-          }
-        }
-      }
-    }
-    else{
-      return
-    }
+  if (!verificar_validez(usuario.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)) {
+    window.showError('Puntos insuficientes', 'Atención');
+    return false;
   }
+
+  if (verificar_validez(usuario.puntos_u, data.cantidad_puntos_canjeo) && !verificar_vencimiento(data.validez)) {
+    window.showError('Promoción vencida!', 'Atención');
+    return false;
+  }
+
+  return false;
 }
-function rp(){
-  refrescarPuntos();
+
+async function Canjearpuntos(event) {
+  const botonPromo = event.currentTarget;
+  const idPromo = botonPromo.dataset.id;
+  await canjearPromoPorId(idPromo);
 }
-window.rp = rp;
-async function refrescarPuntos(){
-    const { data, error } = await client
-    .from("Clientes")
-    .select("Puntos")
-    .eq("Telef",usuario_l.tele_u)
-    .single()
-    if (error){
-        const valor = 8
-        window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+
+async function canjearPromoPorId(idPromo, options = {}) {
+  const { silentSuccess = false } = options;
+
+  if (!usuario_l?.tele_u) {
+    if (typeof window.showError === 'function') {
+      await window.showError('No se encontró la sesión del usuario', 'Error');
     }
-    else{
-        let cantidad_puntos = document.getElementById("puntos-usuario");
-        console.log(data.Puntos)
-        usuario_l.puntos_u = data.Puntos;
-        localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-        cantidad_puntos.textContent = usuario_l.puntos_u;
+    return { ok: false };
+  }
+
+  const { data: promoData, error: promoError } = await client
+    .from(PROMOS_TABLE)
+    .select('Nombre_promo, cantidad_puntos_canjeo, validez')
+    .eq('id_promo', idPromo)
+    .single();
+
+  if (promoError) {
+    if (typeof window.showError === 'function') {
+      await window.showError('Error al canjear los puntos: ' + promoError.message, 'Error');
     }
+    return { ok: false, error: promoError };
+  }
+
+  if (!verificar_promo(usuario_l, promoData)) {
+    return { ok: false };
+  }
+
+  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes('sorteo')) {
+    return await canjearSorteo(idPromo, promoData, { silentSuccess });
+  }
+
+  return await canjearPromoRegular(idPromo, promoData, { silentSuccess });
 }
-async function obtener_nombre_promo(id_promo){
-  const {data, error} = await client
-  .from("Promos_puntos")
-  .select("Nombre_promo")
-  .eq("id_promo", id_promo)
-  .single()
+
+async function canjearSorteo(idPromo, promoData, options = {}) {
+  const { silentSuccess = false } = options;
+  const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
+
+  const { error: updateError } = await client
+    .from('Clientes')
+    .update({ Puntos: nuevosPuntos })
+    .eq('Telef', usuario_l.tele_u);
+
+  if (updateError) {
+    await window.showError('Error al actualizar los puntos', 'Error');
+    return { ok: false, error: updateError };
+  }
+
+  const { codigo, error: insertError } = await insertarCodigoSorteoConReintentos(usuario_l.tele_u);
+  if (insertError) {
+    await client
+      .from('Clientes')
+      .update({ Puntos: usuario_l.puntos_u })
+      .eq('Telef', usuario_l.tele_u);
+
+    localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
+    sincronizarPuntosEnPagina();
+    await window.showError('No se pudo registrar el canjeo del sorteo. Intente nuevamente.', 'Error');
+    return { ok: false, error: insertError };
+  }
+
+  const { error: historialError } = await client
+    .from('Historial_Puntos')
+    .insert([{ Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0 }]);
+
+  if (historialError) {
+    await window.showError('Error al registrar el canjeo en el historial', 'Error');
+    return { ok: false, error: historialError };
+  }
+
+  usuario_l.puntos_u = nuevosPuntos;
+  localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
+  sincronizarPuntosEnPagina();
+
+  if (!silentSuccess) {
+    await window.showSuccess(`Promo canjeada exitosamente, revise el código (${codigo}) en su perfil`);
+  }
+
+  return {
+    ok: true,
+    promoId: idPromo,
+    puntosActuales: usuario_l.puntos_u,
+    puntosGastados: promoData.cantidad_puntos_canjeo,
+    titulo: promoData.Nombre_promo,
+  };
+}
+
+async function canjearPromoRegular(idPromo, promoData, options = {}) {
+  const { silentSuccess = false } = options;
+  const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
+
+  const { error: updateError } = await client
+    .from('Clientes')
+    .update({ Puntos: nuevosPuntos })
+    .eq('Telef', usuario_l.tele_u);
+
+  if (updateError) {
+    await window.showError('Error al actualizar los puntos', 'Error');
+    return { ok: false, error: updateError };
+  }
+
+  const codigoGenerado = generar_codigo();
+  const { error: insertError } = await client
+    .from('Codigos_promos_puntos')
+    .insert([{ Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: promoData.Nombre_promo }]);
+  const { error: historialError } = await client
+    .from('Historial_Puntos')
+    .insert([{ Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0 }]);
+
+  if (insertError || historialError) {
+    await window.showError('Error al registrar el canjeo', 'Error');
+    return { ok: false, error: insertError || historialError };
+  }
+
+  usuario_l.puntos_u = nuevosPuntos;
+  localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
+  sincronizarPuntosEnPagina();
+
+  if (!silentSuccess) {
+    await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil');
+  }
+
+  return {
+    ok: true,
+    promoId: idPromo,
+    puntosActuales: usuario_l.puntos_u,
+    puntosGastados: promoData.cantidad_puntos_canjeo,
+    titulo: promoData.Nombre_promo,
+  };
+}
+
+async function refrescarPuntosServidor() {
+  if (!usuario_l?.tele_u) {
+    return { ok: false };
+  }
+
+  const { data, error } = await client
+    .from('Clientes')
+    .select('Puntos')
+    .eq('Telef', usuario_l.tele_u)
+    .single();
+
   if (error) {
-    await window.showError('Error al obtener el nombre de la promoción', 'Error')
-    return null;
+    const valor = 8;
+    window.location.href = `/Templates/Template_informe/Informe.html?informe=${encodeURIComponent(error.message)}&valor=${encodeURIComponent(valor)}`;
+    return { ok: false, error };
   }
-  return data.Nombre_promo;
+
+  usuario_l.puntos_u = data.Puntos;
+  localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
+  sincronizarPuntosEnPagina();
+
+  return { ok: true, puntosActuales: usuario_l.puntos_u };
 }
