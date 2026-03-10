@@ -1,39 +1,275 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-  <!--una vez terminado borrar
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  -->
-
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bienvenido</title>
-  <link rel="manifest" href="manifest.json" />  <link rel="stylesheet" href="./Styles/Estilos_inicio.css">
+  <title>Bienvenido | El Lote</title>
+  <meta name="description" content="Bienvenido a El Lote. Inicia sesion o registrate para acumular puntos y canjear beneficios.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+    --bg-deep:   #0E0A06;
+    --gold-dim:  #8B6B3D;
+    --gold:      #C49A4A;
+    --gold-lite: #E8C077;
+    --cream:     #F5EDD8;
+    --warm-mid:  #C4B49A;
+    --warm-low:  #7A6A54;
+    --accent:    #D4875A;
+
+    --g-border:  rgba(196,154,74,0.18);
+    --g-shine:   rgba(245,237,216,0.08);
+
+    --r-xl: 24px;
+    --r-lg: 18px;
+    --r-md: 12px;
+    --r-sm: 8px;
+
+    --blur: 32px;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  a { text-decoration: none; color: inherit; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    background: var(--bg-deep);
+    color: var(--cream);
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+  }
+
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+  .blob-1 {
+    width: 600px;
+    height: 400px;
+    top: -120px;
+    left: -100px;
+    background: radial-gradient(ellipse, rgba(196,154,74,0.13) 0%, transparent 70%);
+  }
+  .blob-2 {
+    width: 500px;
+    height: 500px;
+    bottom: -150px;
+    right: -120px;
+    background: radial-gradient(ellipse, rgba(212,135,90,0.10) 0%, transparent 70%);
+    animation-delay: -5s;
+  }
+  .blob-3 {
+    width: 320px;
+    height: 320px;
+    top: 45%;
+    left: 45%;
+    background: radial-gradient(ellipse, rgba(196,154,74,0.07) 0%, transparent 70%);
+    animation-delay: -9s;
+  }
+  .bg-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    opacity: .5;
+  }
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(30px, 20px) scale(1.08); }
+  }
+
+  .container {
+    width: 100%;
+    max-width: 540px;
+    position: relative;
+    z-index: 1;
+    border-radius: var(--r-xl);
+    padding: 2.4rem 2.2rem;
+    border: 1px solid var(--g-border);
+    background:
+      linear-gradient(135deg, rgba(245,237,216,0.08) 0%, rgba(245,237,216,0.02) 100%),
+      rgba(22,16,9,0.84);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    box-shadow: 0 22px 62px rgba(0,0,0,0.58), inset 0 1px 0 var(--g-shine);
+    animation: slideup .6s cubic-bezier(.4,0,.2,1);
+    text-align: center;
+  }
+
+  @keyframes slideup {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo {
+    width: 98px;
+    height: 98px;
+    margin: 0 auto .9rem;
+    border-radius: 22px;
+    border: 1px solid rgba(196,154,74,0.28);
+    background: rgba(196,154,74,0.08);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 8px 24px rgba(196,154,74,0.22);
+  }
+  .logo img {
+    width: 72px;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.35rem;
+    font-weight: 700;
+    letter-spacing: -.4px;
+    color: var(--cream);
+    margin-bottom: .3rem;
+  }
+
+  .slogan {
+    color: var(--warm-mid);
+    font-size: .94rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(196,154,74,0.4), transparent);
+    margin: 0 auto 1.25rem;
+    width: 86%;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--r-md);
+    padding: .86rem 1rem;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    transition: all .22s cubic-bezier(.4,0,.2,1);
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    color: var(--bg-deep);
+    background: linear-gradient(135deg, var(--gold-lite), var(--gold));
+    box-shadow: 0 4px 16px rgba(196,154,74,0.30);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #f0d08a, var(--gold-lite));
+    box-shadow: 0 6px 22px rgba(196,154,74,0.42);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    color: var(--warm-mid);
+    background: rgba(245,237,216,0.04);
+    border-color: rgba(245,237,216,0.12);
+  }
+  .btn-secondary:hover {
+    color: var(--cream);
+    background: rgba(245,237,216,0.09);
+    border-color: rgba(245,237,216,0.20);
+    transform: translateY(-1px);
+  }
+
+  .info {
+    margin-top: .2rem;
+    color: var(--warm-mid);
+    font-size: .84rem;
+    line-height: 1.6;
+    border: 1px solid rgba(196,154,74,0.12);
+    background: rgba(245,237,216,0.03);
+    border-radius: var(--r-sm);
+    padding: .72rem .8rem;
+  }
+
+  footer {
+    margin-top: 1rem;
+    padding-top: .8rem;
+    border-top: 1px solid rgba(196,154,74,0.10);
+    color: var(--warm-low);
+    font-size: .78rem;
+    letter-spacing: .2px;
+  }
+
+  @media (max-width: 560px) {
+    .container {
+      padding: 1.95rem 1.6rem;
+      border-radius: var(--r-lg);
+    }
+
+    h1 { font-size: 1.95rem; }
+
+    .actions { grid-template-columns: 1fr; }
+
+    .logo {
+      width: 88px;
+      height: 88px;
+    }
+    .logo img { width: 64px; }
+  }
+
+  @media (max-width: 360px) {
+    body { padding: .9rem; }
+    .container { padding: 1.5rem 1.2rem; }
+    h1 { font-size: 1.7rem; }
+    .slogan, .btn, .info { font-size: .82rem; }
+  }
+  </style>
 </head>
 <body>
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+    <div class="bg-grain"></div>
+  </div>
+
   <div class="container">
-    <!-- Logo o ícono -->
-     
     <div class="logo"><img src="/logo_lote.png" alt="El Lote"></div>
 
     <h1>Bienvenido</h1>
     <p class="slogan">El Lote te acompaña en cada compra</p>
     <hr class="divider">
 
-    <!-- Botones -->
-    <a href="./Templates/Templates_inicio_sesion_registro/iniciosesion.html">Iniciar Sesión</a>
-    <a href="./Templates/Templates_inicio_sesion_registro/Registrarse.html">Registrarse</a>
+    <div class="actions">
+      <a class="btn btn-primary" href="./Templates/Templates_inicio_sesion_registro/iniciosesion.html">Iniciar Sesion</a>
+      <a class="btn btn-secondary" href="./Templates/Templates_inicio_sesion_registro/Registrarse.html">Registrarse</a>
+    </div>
 
-    <!-- Info corta -->
     <p class="info">
-      Regístrate para acceder a tu cuenta, acumular puntos y canjear recompensas.
+      Registrate para acceder a tu cuenta, acumular puntos y canjear recompensas.
     </p>
 
-    <!-- Footer -->
     <footer>
       <small>©2025. Todos los derechos reservados.</small>
     </footer>

@@ -2,58 +2,366 @@
 <html lang="es">
 <head>
 
-  <!--una vez terminado borrar
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
- -->
-
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
-  <link rel="stylesheet" href="/Styles/Styles_inicio_sesion_registro/Estilos_registro.css">
+  <title>Registro de Clientes - El Lote</title>
+  <meta name="description" content="Crea tu cuenta y accede a beneficios, canjes y promociones exclusivas de El Lote.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+    --bg-deep:   #0E0A06;
+    --gold-dim:  #8B6B3D;
+    --gold:      #C49A4A;
+    --gold-lite: #E8C077;
+    --cream:     #F5EDD8;
+    --warm-mid:  #C4B49A;
+    --warm-low:  #7A6A54;
+    --accent:    #D4875A;
+
+    --g-border:  rgba(196,154,74,0.18);
+    --g-shine:   rgba(245,237,216,0.08);
+
+    --r-xl: 24px;
+    --r-lg: 18px;
+    --r-md: 12px;
+    --r-sm: 8px;
+
+    --blur: 32px;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  a { text-decoration:none; color:inherit; }
+  button { font-family:inherit; }
+  button, a, label, input { -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-deep);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px);
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+  .blob-1 {
+    width: 600px; height: 400px; top: -120px; left: -100px;
+    background: radial-gradient(ellipse, rgba(196,154,74,0.13) 0%, transparent 70%);
+  }
+  .blob-2 {
+    width: 500px; height: 500px; bottom: -150px; right: -120px;
+    background: radial-gradient(ellipse, rgba(212,135,90,0.10) 0%, transparent 70%);
+    animation-delay: -5s;
+  }
+  .blob-3 {
+    width: 350px; height: 350px; top: 45%; left: 45%;
+    background: radial-gradient(ellipse, rgba(196,154,74,0.07) 0%, transparent 70%);
+    animation-delay: -9s;
+  }
+  .bg-grain {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    opacity: .5;
+  }
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(30px,20px) scale(1.08); }
+  }
+
+  .register-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  .card {
+    border-radius: var(--r-xl);
+    padding: 2.4rem 2.2rem;
+    border: 1px solid var(--g-border);
+    background:
+      linear-gradient(135deg, rgba(245,237,216,0.08) 0%, rgba(245,237,216,0.02) 100%),
+      rgba(22,16,9,0.85);
+    backdrop-filter: blur(var(--blur)) saturate(160%);
+    box-shadow: 0 18px 56px rgba(0,0,0,0.58), inset 0 1px 0 var(--g-shine);
+    animation: slideup .6s cubic-bezier(.4,0,.2,1);
+  }
+
+  @keyframes slideup {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 1.4rem;
+    letter-spacing: -.4px;
+  }
+
+  #registroForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+  }
+
+  label {
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--warm-low);
+    font-weight: 600;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="password"] {
+    width: 100%;
+    padding: .82rem 1.05rem;
+    border-radius: var(--r-md);
+    border: 1px solid var(--g-border);
+    background: rgba(245,237,216,0.04);
+    color: var(--cream);
+    font-family: 'Outfit', sans-serif;
+    font-size: .9rem;
+    outline: none;
+    transition: all .2s;
+    backdrop-filter: blur(12px);
+  }
+
+  input[type="text"]::placeholder,
+  input[type="number"]::placeholder,
+  input[type="password"]::placeholder {
+    color: var(--warm-low);
+  }
+
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="password"]:focus {
+    border-color: rgba(196,154,74,0.35);
+    background: rgba(245,237,216,0.08);
+    box-shadow: 0 0 0 3px rgba(196,154,74,0.10);
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .contendedor_cont {
+    position: relative;
+  }
+
+  #contraseña {
+    padding-right: 3.3rem;
+  }
+
+  .botonalternar {
+    position: absolute;
+    right: .55rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--g-border);
+    background: rgba(196,154,74,0.10);
+    color: var(--warm-mid);
+    font-size: 1rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all .2s;
+  }
+
+  .botonalternar:hover {
+    background: rgba(196,154,74,0.18);
+    color: var(--gold-lite);
+    border-color: rgba(196,154,74,0.30);
+  }
+
+  .reglas {
+    font-size: .8rem;
+    color: var(--warm-mid);
+    line-height: 1.6;
+    margin: .1rem 0 .4rem;
+    padding: .65rem .8rem;
+    border: 1px solid rgba(196,154,74,0.12);
+    border-radius: var(--r-sm);
+    background: rgba(245,237,216,0.03);
+  }
+
+  input[type="submit"] {
+    width: 100%;
+    border: none;
+    border-radius: var(--r-md);
+    padding: .9rem 1rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: var(--bg-deep);
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--gold-lite), var(--gold));
+    box-shadow: 0 4px 16px rgba(196,154,74,0.30);
+    transition: all .22s cubic-bezier(.4,0,.2,1);
+  }
+
+  input[type="submit"]:hover {
+    background: linear-gradient(135deg, #f0d08a, var(--gold-lite));
+    box-shadow: 0 6px 22px rgba(196,154,74,0.42);
+    transform: translateY(-2px);
+  }
+
+  input[type="submit"]:active {
+    transform: translateY(0);
+  }
+
+  .helper-link {
+    margin-top: 1.3rem;
+    padding-top: .9rem;
+    border-top: 1px solid rgba(196,154,74,0.10);
+    text-align: center;
+    font-size: .85rem;
+    color: var(--warm-low);
+  }
+
+  .helper-link a {
+    color: var(--gold-lite);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(196,154,74,0.25);
+    transition: all .2s;
+  }
+
+  .helper-link a:hover {
+    color: var(--cream);
+    border-bottom-color: rgba(196,154,74,0.42);
+  }
+
+  @media (max-width: 560px) {
+    .card {
+      padding: 2rem 1.7rem;
+      border-radius: var(--r-lg);
+    }
+
+    .card h1 {
+      font-size: 1.72rem;
+      margin-bottom: 1.1rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="submit"] {
+      font-size: .87rem;
+    }
+
+    .botonalternar {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    body {
+      padding: 1rem;
+    }
+
+    .card {
+      padding: 1.55rem 1.3rem;
+    }
+
+    .card h1 {
+      font-size: 1.5rem;
+    }
+
+    label {
+      font-size: .73rem;
+    }
+  }
+  </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Registro de Clientes</h1>
-
-    <form id="registroForm">
-      <label for="nombre">Nombre completo</label>
-      <input id="nombre" type="text" placeholder="Tu nombre" required>
-
-      <label for="telef">Numero de Telefono</label>
-      <input id="telef" type="number" name="telef" placeholder="264XXXXXXX"
-       pattern="^\d{11}$" required>
-
-      <label for="contraseña">Contraseña</label>
-      <div class="contendedor_cont">
-        <input id="contraseña" type="password" placeholder="Crea una contraseña" required>
-        <button class="botonalternar" type="button" id="togglePassword" style="width: 50px; height: 50px;">👁️</button>
-      </div>
-
-      <p class="reglas">
-        La contraseña debe tener al menos 4 caracteres e incluir un número.
-      </p>
-      
-      <input type="submit" value="Registrar">
-    </form>
-
-  <p>¿Ya tienes cuenta? <a href="iniciosesion.html">Inicia sesión aquí</a></p>
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+    <div class="bg-blob blob-3"></div>
+    <div class="bg-grain"></div>
   </div>
+
+  <div class="register-wrapper">
+    <div class="card">
+      <h1>Registro de Clientes</h1>
+
+      <form id="registroForm">
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" type="text" placeholder="Tu nombre" required aria-label="Nombre completo">
+        </div>
+
+        <div class="form-group">
+          <label for="telef">Numero de Telefono</label>
+          <input id="telef" type="number" name="telef" placeholder="264XXXXXXX" pattern="^\d{11}$" required aria-label="Numero de telefono">
+        </div>
+
+        <div class="form-group">
+          <label for="contraseña">Contraseña</label>
+          <div class="contendedor_cont">
+            <input id="contraseña" type="password" placeholder="Crea una contraseña" required aria-label="Contraseña">
+            <button class="botonalternar" type="button" id="togglePassword" aria-label="Mostrar u ocultar contraseña">👁️</button>
+          </div>
+        </div>
+
+        <p class="reglas">
+          La contraseña debe tener al menos 4 caracteres e incluir un número.
+        </p>
+
+        <input type="submit" value="Registrar" aria-label="Registrar cuenta">
+      </form>
+
+      <p class="helper-link">¿Ya tienes cuenta? <a href="iniciosesion.html">Inicia sesión aquí</a></p>
+    </div>
+  </div>
+
   <script src="/Scripts/sweetalert_helper.js"></script>
   <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_registro_inicial.js"></script>
 
-    <script>
-        const togglePassword = document.getElementById('togglePassword');
-        const passwordField = document.getElementById('contraseña');
-    
-        togglePassword.addEventListener('click', function () {
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            this.textContent = type === 'password' ? '👁️' : '🙈';
-        });
-    </script>
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('contraseña');
+
+    togglePassword.addEventListener('click', function () {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+  </script>
 
 </body>
 </html>
