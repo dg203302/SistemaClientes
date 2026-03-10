@@ -3,110 +3,333 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const { createClient } = supabase
 const client = createClient(supabaseUrl, supabaseKey)
 
-window.onload = async function () {
-    let contador=0
-    const { data, error } = await client
-        .from("Ofertas")
-        .select("*");
+document.addEventListener('DOMContentLoaded', cargarOfertas)
 
-    if (error) {
-        console.error(error);
-        await window.showError('Error al cargar las promociones', 'Error');
-        return;
+async function cargarOfertas() {
+    const contenedorPromos = document.getElementById('conten-ofertas')
+
+    if (!contenedorPromos) {
+        return
     }
 
-    let contenedor_promos = document.getElementById("conten-ofertas");
-    data.reverse();
-    data.forEach(element => {
-        contenedor_promos.appendChild(crearPromoTCard(element));
-        contador+=1;
-    });
-    let of_act = document.getElementById("ofertas-activas");
-    of_act.textContent=contador
-};
+    try {
+        const { data, error } = await client
+            .from('Ofertas')
+            .select('*')
 
-// Determina la clase de estilo del badge según el texto del campo flotante
-function getBadgeVariant(texto) {
-    const raw = String(texto ?? '').trim();
-    if (!raw) return null; // sin texto, no aplicar variante
+        if (error) {
+            throw error
+        }
 
-    // Prioridad: % (rojo) > X (verde) > otro (naranja)
-    if (raw.includes('%')) return 'badge-percent';
+        const ofertas = Array.isArray(data) ? [...data].reverse() : []
+        renderizarOfertas(ofertas)
+        actualizarResumen(ofertas)
+    } catch (error) {
+        console.error(error)
+        contenedorPromos.innerHTML = ''
+        contenedorPromos.appendChild(crearEstadoVacio('No se pudieron cargar las ofertas', 'Verificá tu conexión o intentá nuevamente en unos segundos.'))
+        actualizarResumen([])
 
-    // Detecta formatos tipo 2x1, 3 x 2, usando x o × entre números (insensible a mayúsculas)
-    const hasXDeal = /\d\s*[x×]\s*\d/i.test(raw);
-    if (hasXDeal) return 'badge-x';
-
-    return 'badge-other';
+        if (typeof window.showError === 'function') {
+            await window.showError('Error al cargar las promociones', 'Error')
+        }
+    }
 }
+
+function renderizarOfertas(ofertas) {
+    const contenedorPromos = document.getElementById('conten-ofertas')
+
+    if (!contenedorPromos) {
+        return
+    }
+
+    contenedorPromos.innerHTML = ''
+
+    if (!ofertas.length) {
+        contenedorPromos.appendChild(crearEstadoVacio('No hay ofertas activas', 'Cuando haya nuevas promociones semanales van a aparecer acá.'))
+        return
+    }
+
+    const fragment = document.createDocumentFragment()
+
+    ofertas.forEach((oferta) => {
+        fragment.appendChild(crearPromoTCard(oferta))
+    })
+
+    contenedorPromos.appendChild(fragment)
+}
+
 function crearPromoTCard(oferta) {
-  // Contenedor principal
-  const article = document.createElement("article");
-  article.classList.add("oferta-card");
+    const article = document.createElement('article')
+    article.className = 'oferta-card'
 
-  // Media
-  const media = document.createElement("div");
-  media.classList.add("oferta-media");
-  media.setAttribute("aria-hidden", "true");
-  media.textContent = oferta.emoji_ofertas;
+    const imageWrapper = document.createElement('div')
+    imageWrapper.className = 'oc-image'
 
-  // Body
-  const body = document.createElement("div");
-  body.classList.add("oferta-body");
+    const imagen = document.createElement('img')
+    imagen.src = obtenerUrlImagen(oferta)
+    imagen.alt = `Imagen de ${obtenerNombre(oferta)}`
+    imagen.loading = 'lazy'
+    imagen.onerror = () => {
+        imagen.onerror = null
+        imagen.src = crearPlaceholderImagen(obtenerNombre(oferta))
+    }
 
-  // Head: título + badge
-  const head = document.createElement("div");
-  head.classList.add("oferta-head");
+    imageWrapper.appendChild(imagen)
 
-  const titulo = document.createElement("h2");
-  titulo.classList.add("oferta-title");
-  titulo.textContent = oferta.nombre;
+    const categoria = document.createElement('span')
+    categoria.className = 'oc-cat'
+    categoria.textContent = obtenerCategoria(oferta).toUpperCase()
+    imageWrapper.appendChild(categoria)
 
-  const badge = document.createElement("span");
-  badge.classList.add("badge");
-  badge.textContent = oferta.campo_flotante;
-    const badgeVariant = getBadgeVariant(oferta.campo_flotante);
-    if (badgeVariant) badge.classList.add(badgeVariant);
+    const badgeTexto = obtenerBadge(oferta)
+    if (badgeTexto) {
+        const badge = document.createElement('span')
+        badge.className = 'oc-discount'
+        badge.textContent = badgeTexto
+        imageWrapper.appendChild(badge)
+    }
 
-  head.appendChild(titulo);
-  head.appendChild(badge);
+    const expiry = document.createElement('div')
+    expiry.className = 'oc-expiry'
 
-  // Descripción
-  const desc = document.createElement("p");
-  desc.classList.add("oferta-desc");
-  desc.textContent = oferta.desripcion;
+    const expiryDot = document.createElement('span')
+    expiryDot.className = 'expiry-dot'
 
-  // Meta
-  const meta = document.createElement("ul");
-  meta.classList.add("oferta-meta");
+    if (esOfertaUrgente(obtenerVigencia(oferta))) {
+        expiryDot.classList.add('ending')
+    }
 
-  const vigenciaLi = document.createElement("li");
-  vigenciaLi.innerHTML = `<span class="meta-label">Vigencia:</span> <span class="meta-value">${oferta.vigencia}</span>`;
+    const expiryText = document.createElement('span')
+    expiryText.textContent = obtenerVigencia(oferta)
 
-  meta.appendChild(vigenciaLi);
+    expiry.appendChild(expiryDot)
+    expiry.appendChild(expiryText)
+    imageWrapper.appendChild(expiry)
 
-  // Términos
-  const terms = document.createElement("details");
-  terms.classList.add("oferta-terms");
+    const body = document.createElement('div')
+    body.className = 'oc-body'
 
-  const summary = document.createElement("summary");
-  summary.textContent = "Términos y condiciones";
+    const titulo = document.createElement('h2')
+    titulo.className = 'oc-title'
+    titulo.textContent = obtenerNombre(oferta)
 
-  const termsP = document.createElement("p");
-  termsP.textContent ="No acumulable con otras promos. Hasta agotar stock.";
+    const desc = document.createElement('p')
+    desc.className = 'oc-desc'
+    desc.textContent = obtenerDescripcion(oferta)
 
-  terms.appendChild(summary);
-  terms.appendChild(termsP);
+    body.appendChild(titulo)
+    body.appendChild(desc)
 
-  // Ensamblar body
-  body.appendChild(head);
-  body.appendChild(desc);
-  body.appendChild(meta);
-  body.appendChild(terms);
+    const footer = document.createElement('div')
+    footer.className = 'oc-footer'
 
-  // Ensamblar artículo
-  article.appendChild(media);
-  article.appendChild(body);
+    const stock = document.createElement('div')
+    stock.className = 'oc-stock'
 
-  return article;
+    const stockDot = document.createElement('span')
+    stockDot.className = `stock-dot ${obtenerClaseStock(oferta)}`.trim()
+
+    const stockText = document.createElement('span')
+    stockText.textContent = obtenerTextoStock(oferta)
+
+    stock.appendChild(stockDot)
+    stock.appendChild(stockText)
+
+    const actions = document.createElement('div')
+    actions.className = 'oc-actions'
+
+    const estado = document.createElement('span')
+    estado.className = 'btn btn-ghost btn-sm btn-status'
+    estado.textContent = `✓ ${obtenerEstadoOferta(oferta)}`
+
+    const verImagen = document.createElement('a')
+    verImagen.className = 'btn btn-ver'
+    verImagen.href = obtenerUrlImagen(oferta)
+    verImagen.target = '_blank'
+    verImagen.rel = 'noopener noreferrer'
+    verImagen.textContent = 'Ver imagen'
+    verImagen.setAttribute('aria-label', `Ver imagen de ${obtenerNombre(oferta)}`)
+
+    actions.appendChild(estado)
+    actions.appendChild(verImagen)
+
+    footer.appendChild(stock)
+    footer.appendChild(actions)
+
+    article.appendChild(imageWrapper)
+    article.appendChild(body)
+    article.appendChild(footer)
+
+    return article
+}
+
+function actualizarResumen(ofertas) {
+    const total = ofertas.length
+    const descuentos = ofertas
+        .map((oferta) => obtenerDescuentoNumerico(obtenerBadge(oferta)))
+        .filter((valor) => Number.isFinite(valor) && valor > 0)
+    const categorias = new Set(
+        ofertas
+            .map((oferta) => obtenerCategoriaReal(oferta))
+            .filter(Boolean)
+    )
+
+    actualizarTexto('result-count', total === 1 ? '1 oferta activa' : `${total} ofertas activas`)
+    actualizarTexto('stat-total', String(total))
+    actualizarTexto('stat-maxdesc', descuentos.length ? `${Math.max(...descuentos)}%` : '—')
+    actualizarTexto('stat-avgdesc', descuentos.length ? `${Math.round(descuentos.reduce((acumulado, valor) => acumulado + valor, 0) / descuentos.length)}%` : '—')
+    actualizarTexto('stat-cats', categorias.size ? String(categorias.size) : '—')
+}
+
+function actualizarTexto(id, valor) {
+    const element = document.getElementById(id)
+
+    if (element) {
+        element.textContent = valor
+    }
+}
+
+function obtenerNombre(oferta) {
+    return String(leerCampo(oferta, ['nombre', 'titulo', 'title']) || 'Oferta destacada')
+}
+
+function obtenerDescripcion(oferta) {
+    return String(leerCampo(oferta, ['desripcion', 'descripcion', 'detalle', 'detalle_oferta']) || 'Consultá en la sucursal por condiciones y disponibilidad.')
+}
+
+function obtenerCategoriaReal(oferta) {
+    return leerCampo(oferta, ['categoria', 'categoria_oferta', 'tipo', 'seccion'])
+}
+
+function obtenerCategoria(oferta) {
+    return String(obtenerCategoriaReal(oferta) || 'Oferta')
+}
+
+function obtenerBadge(oferta) {
+    return String(leerCampo(oferta, ['campo_flotante', 'badge', 'promo_badge', 'etiqueta']) || '').trim()
+}
+
+function obtenerVigencia(oferta) {
+    return String(leerCampo(oferta, ['vigencia', 'fecha_vigencia', 'valido_hasta']) || 'Vigente esta semana')
+}
+
+function obtenerTextoStock(oferta) {
+    return String(leerCampo(oferta, ['stock_texto', 'estado_stock', 'disponibilidad', 'stock']) || 'Stock disponible')
+}
+
+function obtenerEstadoOferta(oferta) {
+    return String(leerCampo(oferta, ['estado_boton', 'estado', 'cta_estado']) || 'Oferta activa')
+}
+
+function obtenerClaseStock(oferta) {
+    const stock = obtenerTextoStock(oferta).toLowerCase()
+
+    if (stock.includes('sin') || stock.includes('agot')) {
+        return 'out'
+    }
+
+    if (stock.includes('poco') || stock.includes('últim') || stock.includes('ultim')) {
+        return 'low'
+    }
+
+    return ''
+}
+
+function obtenerUrlImagen(oferta) {
+    const rawUrl = String(leerCampo(oferta, ['Url_img', 'url_img', 'urlImg', 'imagen', 'imagen_url', 'image_url']) || '').trim()
+
+    if (!rawUrl) {
+        return crearPlaceholderImagen(obtenerNombre(oferta))
+    }
+
+    if (/^(https?:|data:|blob:|\/)/i.test(rawUrl) || rawUrl.startsWith('./') || rawUrl.startsWith('../')) {
+        return rawUrl
+    }
+
+    return `/${rawUrl.replace(/^\/+/, '')}`
+}
+
+function obtenerDescuentoNumerico(textoBadge) {
+    const match = String(textoBadge || '').match(/(\d{1,3})\s*%/)
+    return match ? Number(match[1]) : Number.NaN
+}
+
+function esOfertaUrgente(vigencia) {
+    const texto = String(vigencia || '').toLowerCase()
+    return ['hoy', 'vence', 'últim', 'ultim', 'termina'].some((fragmento) => texto.includes(fragmento))
+}
+
+function leerCampo(objeto, campos) {
+    for (const campo of campos) {
+        const valor = objeto?.[campo]
+
+        if (valor === 0) {
+            return valor
+        }
+
+        if (typeof valor === 'string' && valor.trim() !== '') {
+            return valor.trim()
+        }
+
+        if (valor !== null && valor !== undefined && valor !== '') {
+            return valor
+        }
+    }
+
+    return null
+}
+
+function crearEstadoVacio(titulo, descripcion) {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'empty-state'
+
+    const icono = document.createElement('div')
+    icono.className = 'ei'
+    icono.textContent = '🏪'
+
+    const heading = document.createElement('h3')
+    heading.textContent = titulo
+
+    const texto = document.createElement('p')
+    texto.textContent = descripcion
+
+    wrapper.appendChild(icono)
+    wrapper.appendChild(heading)
+    wrapper.appendChild(texto)
+
+    return wrapper
+}
+
+function crearPlaceholderImagen(texto) {
+    const titulo = String(texto || 'Oferta').slice(0, 28)
+
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+            <defs>
+                <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#3a2a16" />
+                    <stop offset="100%" stop-color="#140f0a" />
+                </linearGradient>
+                <linearGradient id="shine" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#f1d08a" stop-opacity="0.28" />
+                    <stop offset="100%" stop-color="#f1d08a" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+            <rect width="800" height="500" fill="url(#bg)" />
+            <circle cx="680" cy="60" r="160" fill="url(#shine)" />
+            <circle cx="140" cy="420" r="150" fill="#c49a4a" fill-opacity="0.12" />
+            <text x="60" y="255" fill="#f5edd8" font-family="Outfit, Arial, sans-serif" font-size="42" font-weight="600">${escapeHtml(titulo)}</text>
+            <text x="60" y="305" fill="#c4b49a" font-family="Outfit, Arial, sans-serif" font-size="24">Imagen no disponible</text>
+        </svg>
+    `)}`
+}
+
+function escapeHtml(texto) {
+    return String(texto)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
 }
