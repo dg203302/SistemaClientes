@@ -1,34 +1,333 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preguntas de Seguridad</title>
-    <meta name="description" content="Formulario para configurar preguntas de seguridad que ayudarán a recuperar tu contraseña.">
-    <link rel="stylesheet" href="/Styles/Styles_inicio_sesion_registro/Estilos_Preguntas_registro.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Validar Preguntas de Seguridad | El Lote</title>
+        <meta name="description" content="Responde tus preguntas de seguridad para recuperar el acceso a tu cuenta en El Lote.">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+        <style>
+        :root {
+            --bg-deep:   #0E0A06;
+            --gold-dim:  #8B6B3D;
+            --gold:      #C49A4A;
+            --gold-lite: #E8C077;
+            --cream:     #F5EDD8;
+            --warm-mid:  #C4B49A;
+            --warm-low:  #7A6A54;
+            --accent:    #D4875A;
+
+            --g-border:  rgba(196,154,74,0.18);
+            --g-shine:   rgba(245,237,216,0.08);
+
+            --r-xl: 24px;
+            --r-lg: 18px;
+            --r-md: 12px;
+            --r-sm: 8px;
+
+            --blur: 32px;
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        a { text-decoration:none; color:inherit; }
+        button { font-family:inherit; }
+        button, a, label, input { -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--cream);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .bg-canvas {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            overflow: hidden;
+        }
+        .bg-blob {
+            position: absolute; border-radius: 50%;
+            filter: blur(90px);
+            animation: drift 14s ease-in-out infinite alternate;
+        }
+        .blob-1 {
+            width: 600px; height: 400px; top: -120px; left: -100px;
+            background: radial-gradient(ellipse, rgba(196,154,74,0.13) 0%, transparent 70%);
+        }
+        .blob-2 {
+            width: 500px; height: 500px; bottom: -150px; right: -120px;
+            background: radial-gradient(ellipse, rgba(212,135,90,0.10) 0%, transparent 70%);
+            animation-delay: -5s;
+        }
+        .blob-3 {
+            width: 350px; height: 350px; top: 45%; left: 45%;
+            background: radial-gradient(ellipse, rgba(196,154,74,0.07) 0%, transparent 70%);
+            animation-delay: -9s;
+        }
+        .bg-grain {
+            position: absolute; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            opacity: .5;
+        }
+        @keyframes drift {
+            from { transform: translate(0,0) scale(1); }
+            to   { transform: translate(30px,20px) scale(1.08); }
+        }
+
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .card {
+            border-radius: var(--r-xl);
+            padding: 2.6rem 2.35rem;
+            border: 1px solid var(--g-border);
+            background:
+                linear-gradient(135deg, rgba(245,237,216,0.08) 0%, rgba(245,237,216,0.02) 100%),
+                rgba(22,16,9,0.85);
+            backdrop-filter: blur(var(--blur)) saturate(160%);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.58), inset 0 1px 0 var(--g-shine);
+            animation: slideup .6s cubic-bezier(.4,0,.2,1);
+        }
+
+        @keyframes slideup {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -.35px;
+            margin-bottom: .45rem;
+            color: var(--cream);
+        }
+
+        .subtitle {
+            color: var(--warm-mid);
+            font-size: .9rem;
+            line-height: 1.6;
+            margin-bottom: 1.35rem;
+        }
+
+        #Preguntas_seg {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: .55rem;
+        }
+
+        .form-group label {
+            font-size: .78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.15px;
+            color: var(--warm-low);
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: .84rem 1.06rem;
+            border-radius: var(--r-md);
+            border: 1px solid var(--g-border);
+            background: rgba(245,237,216,0.04);
+            color: var(--cream);
+            font-family: 'Outfit', sans-serif;
+            font-size: .9rem;
+            outline: none;
+            transition: all .2s;
+            backdrop-filter: blur(12px);
+        }
+
+        .form-group input::placeholder {
+            color: var(--warm-low);
+        }
+
+        .form-group input:focus {
+            border-color: rgba(196,154,74,0.35);
+            background: rgba(245,237,216,0.08);
+            box-shadow: 0 0 0 3px rgba(196,154,74,0.10);
+        }
+
+        .actions {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-top: .35rem;
+        }
+
+        .actions button {
+            flex: 1;
+            min-width: 148px;
+            border-radius: var(--r-md);
+            padding: .86rem 1rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: .88rem;
+            font-weight: 700;
+            letter-spacing: .32px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all .22s cubic-bezier(.4,0,.2,1);
+        }
+
+        .btn-primary {
+            border: none;
+            color: var(--bg-deep);
+            background: linear-gradient(135deg, var(--gold-lite), var(--gold));
+            box-shadow: 0 4px 16px rgba(196,154,74,0.30);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #f0d08a, var(--gold-lite));
+            box-shadow: 0 6px 22px rgba(196,154,74,0.42);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            border: 1px solid var(--g-border);
+            color: var(--warm-mid);
+            background: rgba(245,237,216,0.04);
+        }
+
+        .btn-secondary:hover {
+            color: var(--cream);
+            background: rgba(245,237,216,0.09);
+            border-color: rgba(245,237,216,0.18);
+            transform: translateY(-1px);
+        }
+
+        .helper-link {
+            margin-top: 1.2rem;
+            padding-top: .85rem;
+            border-top: 1px solid rgba(196,154,74,0.10);
+            text-align: center;
+            font-size: .84rem;
+            color: var(--warm-low);
+        }
+
+        .helper-link a {
+            color: var(--gold-lite);
+            font-weight: 600;
+            border-bottom: 1px solid rgba(196,154,74,0.25);
+            transition: all .2s;
+        }
+
+        .helper-link a:hover {
+            color: var(--cream);
+            border-bottom-color: rgba(196,154,74,0.45);
+        }
+
+        @media (max-width: 560px) {
+            .card {
+                padding: 2rem 1.75rem;
+                border-radius: var(--r-lg);
+            }
+
+            .card h1 {
+                font-size: 1.7rem;
+            }
+
+            .subtitle,
+            .form-group input,
+            .actions button {
+                font-size: .87rem;
+            }
+
+            .actions {
+                gap: .6rem;
+            }
+
+            .actions button {
+                min-width: 130px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            body {
+                padding: 1rem;
+            }
+
+            .card {
+                padding: 1.55rem 1.3rem;
+            }
+
+            .card h1 {
+                font-size: 1.45rem;
+            }
+
+            .form-group label {
+                font-size: .73rem;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions button {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+        </style>
 </head>
 <body>
-    <div class="card">
+        <div class="bg-canvas" aria-hidden="true">
+            <div class="bg-blob blob-1"></div>
+            <div class="bg-blob blob-2"></div>
+            <div class="bg-blob blob-3"></div>
+            <div class="bg-grain"></div>
+        </div>
+
+        <div class="page-wrap">
+            <div class="card">
         <h1>Responder preguntas de seguridad</h1>
-        <p>Responde las siguientes preguntas para recuperar tu contraseña.</p>
+                <p class="subtitle">Responde las siguientes preguntas para recuperar tu contraseña.</p>
 
-        <form id="Preguntas_seg" >
-            <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
-            <input type="text" id="Pregunta_1" name="Pregunta_1" placeholder="Ej: Rocky" autocomplete="off" required>
+                <form id="Preguntas_seg">
+                        <div class="form-group">
+                            <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
+                            <input type="text" id="Pregunta_1" name="Pregunta_1" placeholder="Ej: Rocky" autocomplete="off" required aria-label="Primera mascota">
+                        </div>
 
-            <label for="Pregunta_2">¿En qué ciudad naciste?</label>
-            <input type="text" id="Pregunta_2" name="Pregunta_2" placeholder="Ej: Buenos Aires" autocomplete="off" required>
+                        <div class="form-group">
+                            <label for="Pregunta_2">¿En qué ciudad naciste?</label>
+                            <input type="text" id="Pregunta_2" name="Pregunta_2" placeholder="Ej: Buenos Aires" autocomplete="off" required aria-label="Ciudad de nacimiento">
+                        </div>
 
-            <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
-            <input type="text" id="Pregunta_3" name="Pregunta_3" placeholder="Ej: Matrix" autocomplete="off" required>
+                        <div class="form-group">
+                            <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
+                            <input type="text" id="Pregunta_3" name="Pregunta_3" placeholder="Ej: Matrix" autocomplete="off" required aria-label="Pelicula favorita">
+                        </div>
 
-            <button type="submit">Terminar Validacion</button>
-            <button type="reset">Limpiar Respuestas</button>
+                        <div class="actions">
+                            <button type="submit" class="btn-primary">Terminar Validacion</button>
+                            <button type="reset" class="btn-secondary">Limpiar Respuestas</button>
+                        </div>
         </form>
 
-        <p><a href="/Templates/Templates_inicio_sesion_registro/iniciosesion.html">Volver al inicio de sesión</a></p>
-    </div>
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                <p class="helper-link"><a href="/Templates/Templates_inicio_sesion_registro/iniciosesion.html">Volver al inicio de sesión</a></p>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/Scripts/sweetalert_helper.js"></script>
     <script type="module" src="/Scripts/Scripts_recuperar_contrasenia/script_validar_preguntas.js"></script>
 </body>
