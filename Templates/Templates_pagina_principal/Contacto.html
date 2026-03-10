@@ -3,184 +3,530 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contacto</title>
-  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_pagina_principal.css" />
-  <link rel="stylesheet" href="/Styles/Styles_pagina_principal/estilos_contacto.css" />
+  <title>El Lote — Contacto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <style>
+  /* ════════════════════════════════════════════
+     TOKENS
+  ════════════════════════════════════════════ */
+  :root {
+    --bg-deep:   #0E0A06;
+    --gold-dim:  #8B6B3D;
+    --gold:      #C49A4A;
+    --gold-lite: #E8C077;
+    --cream:     #F5EDD8;
+    --warm-mid:  #C4B49A;
+    --warm-low:  #7A6A54;
+    --accent:    #D4875A;
+
+    --g-border:  rgba(196,154,74,0.18);
+    --g-shine:   rgba(245,237,216,0.08);
+
+    --r-xl: 24px; --r-lg: 18px; --r-md: 12px; --r-sm: 8px;
+    --blur: 32px;
+    --nav-w: 260px;
+    --header-h: 68px;
+    --footer-h: 52px;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  a { text-decoration:none; color:inherit; }
+  button { font-family:inherit; }
+  img { display:block; }
+  button, a, label, input { -webkit-tap-highlight-color:transparent; }
+
+  body {
+    font-family:'Outfit', sans-serif;
+    background-color: var(--bg-deep);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Atmospheric BG ── */
+  .bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .bg-blob { position:absolute; border-radius:50%; filter:blur(90px); animation:drift 14s ease-in-out infinite alternate; }
+  .blob-1 { width:650px; height:420px; top:-130px; left:-80px; background:radial-gradient(ellipse,rgba(196,154,74,0.13) 0%,transparent 70%); }
+  .blob-2 { width:500px; height:500px; bottom:-160px; right:-100px; background:radial-gradient(ellipse,rgba(212,135,90,0.10) 0%,transparent 70%); animation-delay:-5s; }
+  .blob-3 { width:380px; height:380px; top:40%; left:42%; background:radial-gradient(ellipse,rgba(196,154,74,0.07) 0%,transparent 70%); animation-delay:-9s; }
+  .bg-grain { position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E"); opacity:.5; }
+  @keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(28px,18px) scale(1.07)} }
+
+  /* ════════════════════════════════════════════
+     APP SHELL
+  ════════════════════════════════════════════ */
+  .app-shell { display:flex; min-height:100vh; position:relative; z-index:1; }
+
+  /* ════════════════════════════════════════════
+     SIDEBAR
+  ════════════════════════════════════════════ */
+  .sidebar {
+    position:fixed; top:0; left:0; width:var(--nav-w); height:100vh; z-index:500;
+    display:flex; flex-direction:column;
+    background:linear-gradient(180deg,rgba(245,237,216,0.05) 0%,rgba(245,237,216,0.02) 100%), rgba(14,10,6,0.85);
+    backdrop-filter:blur(var(--blur)) saturate(160%);
+    border-right:1px solid var(--g-border);
+    box-shadow:4px 0 40px rgba(0,0,0,0.55);
+    padding:0 0 1.5rem;
+    transition:transform .35s cubic-bezier(.4,0,.2,1), left .35s cubic-bezier(.4,0,.2,1);
+  }
+  .sidebar-logo { padding:1.6rem 1.5rem 1.4rem; border-bottom:1px solid rgba(196,154,74,0.14); display:flex; align-items:center; gap:.85rem; }
+  .logo-mark { width:38px; height:38px; border-radius:11px; background:linear-gradient(135deg,var(--gold-dim),var(--gold)); display:grid; place-items:center; font-size:1.15rem; box-shadow:0 4px 14px rgba(196,154,74,0.30); flex-shrink:0; }
+  .logo-text { font-family:'Playfair Display',serif; font-size:1.18rem; font-weight:700; color:var(--gold-lite); }
+  .logo-sub { font-size:.66rem; color:var(--warm-low); text-transform:uppercase; letter-spacing:1.3px; margin-top:.1rem; }
+  .nav-section { padding:1.2rem 1rem .4rem; }
+  .nav-section-label { font-size:.64rem; text-transform:uppercase; letter-spacing:1.7px; color:var(--warm-low); padding:0 .5rem; margin-bottom:.45rem; }
+  .nav-item { display:flex; align-items:center; gap:.75rem; padding:.65rem .85rem; border-radius:var(--r-md); color:var(--warm-mid); font-size:.9rem; font-weight:400; transition:all .2s; cursor:pointer; position:relative; }
+  .nav-item::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg,rgba(196,154,74,0.10),transparent); opacity:0; transition:opacity .2s; border-radius:var(--r-md); }
+  .nav-item:hover { color:var(--cream); }
+  .nav-item:hover::before { opacity:1; }
+  .nav-item.active { color:var(--gold-lite); background:rgba(196,154,74,0.10); border:1px solid rgba(196,154,74,0.18); }
+  .nav-item.active::after { content:''; position:absolute; right:0; top:22%; bottom:22%; width:3px; border-radius:2px; background:linear-gradient(180deg,var(--gold-lite),var(--gold)); }
+  .nav-icon { font-size:1rem; flex-shrink:0; }
+  .nav-label { font-weight:500; }
+  .nav-spacer { flex:1; }
+  .sidebar-footer { padding:1rem 1rem 0; border-top:1px solid rgba(196,154,74,0.10); }
+  .sidebar-footer .nav-item { color:var(--warm-low); font-size:.87rem; }
+  .sidebar-footer .nav-item:hover { color:var(--accent); }
+
+  /* ════════════════════════════════════════════
+     CONTENT AREA
+  ════════════════════════════════════════════ */
+  .content-area { margin-left:var(--nav-w); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+
+  /* ════════════════════════════════════════════
+     TOPBAR
+  ════════════════════════════════════════════ */
+  .topbar {
+    position:sticky; top:0; z-index:400; height:var(--header-h);
+    display:flex; align-items:center; padding:0 2rem;
+    background:linear-gradient(90deg,rgba(245,237,216,0.05),rgba(245,237,216,0.02)), rgba(14,10,6,0.75);
+    backdrop-filter:blur(var(--blur)) saturate(180%);
+    border-bottom:1px solid rgba(196,154,74,0.12);
+    box-shadow:0 2px 30px rgba(0,0,0,0.45); gap:1rem;
+  }
+  .topbar-left { flex:1; }
+  .topbar-eyebrow { font-size:.66rem; text-transform:uppercase; letter-spacing:1.8px; color:var(--warm-low); margin-bottom:.12rem; }
+  .topbar-title { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; color:var(--cream); line-height:1; }
+  .topbar-title span { color:var(--gold-lite); }
+  .topbar-actions { display:flex; gap:.5rem; align-items:center; }
+  .icon-btn { position:relative; width:40px; height:40px; border-radius:10px; display:grid; place-items:center; font-size:1rem; background:rgba(245,237,216,0.05); border:1px solid var(--g-border); color:var(--warm-mid); transition:all .2s; cursor:pointer; }
+  .icon-btn:hover { background:rgba(196,154,74,0.14); border-color:rgba(196,154,74,0.32); color:var(--cream); transform:translateY(-1px); }
+  .notif-dot { position:absolute; top:7px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--accent); border:1.5px solid var(--bg-deep); }
+  .avatar-btn { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; background:linear-gradient(135deg,var(--gold-dim),var(--gold)); border:1px solid rgba(196,154,74,0.32); color:#fff; font-weight:700; font-size:.85rem; cursor:pointer; transition:all .2s; box-shadow:0 4px 12px rgba(196,154,74,0.22); }
+  .avatar-btn:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(196,154,74,0.34); }
+
+  /* ════════════════════════════════════════════
+     PAGE CONTENT
+  ════════════════════════════════════════════ */
+  .page-content {
+    flex:1; padding:2rem; padding-bottom:calc(var(--footer-h) + 2rem);
+    max-width:1200px; margin:0 auto; width:100%;
+    display:flex; flex-direction:column; gap:1.8rem;
+  }
+
+  /* ════════════════════════════════════════════
+     CARDS
+  ════════════════════════════════════════════ */
+  .card {
+    border-radius:var(--r-xl);
+    padding:2rem;
+    border:1px solid var(--g-border);
+    background:
+      radial-gradient(ellipse 130% 80% at 100% 0%, rgba(196,154,74,0.14) 0%, transparent 55%),
+      linear-gradient(145deg,rgba(245,237,216,0.07) 0%,rgba(245,237,216,0.01) 100%),
+      rgba(22,16,10,0.88);
+    backdrop-filter:blur(var(--blur)) saturate(160%);
+    box-shadow:0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 var(--g-shine);
+    position:relative; overflow:hidden;
+    animation:fadein .45s ease both;
+  }
+  .card::after { content:''; position:absolute; bottom:-40px; left:-40px; width:180px; height:180px; border-radius:50%; border:1px solid rgba(196,154,74,0.10); pointer-events:none; }
+
+  .card h2 {
+    font-family:'Playfair Display',serif; font-size:1.45rem; font-weight:600;
+    color:var(--cream); margin-bottom:.4rem; line-height:1.2;
+  }
+  .card h2 em { font-style:italic; color:var(--gold-lite); }
+
+  .card-subtitle {
+    font-size:.88rem; color:var(--warm-mid); line-height:1.6;
+    margin-bottom:1.8rem;
+  }
+
+  /* ════════════════════════════════════════════
+     SOCIAL GRID
+  ════════════════════════════════════════════ */
+  .social-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:1.2rem;
+  }
+
+  .social-link {
+    display:flex; align-items:center; gap:1.2rem;
+    padding:1.3rem 1.5rem;
+    border-radius:var(--r-lg);
+    background:linear-gradient(145deg,rgba(245,237,216,0.06) 0%,rgba(245,237,216,0.01) 100%), rgba(22,16,10,0.75);
+    border:1px solid var(--g-border);
+    backdrop-filter:blur(20px);
+    box-shadow:0 4px 20px rgba(0,0,0,0.35), inset 0 1px 0 var(--g-shine);
+    transition:all .25s cubic-bezier(.4,0,.2,1);
+    cursor:pointer;
+    position:relative; overflow:hidden;
+  }
+  .social-link::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(196,154,74,0.12), transparent);
+    opacity:0; transition:opacity .25s;
+  }
+  .social-link:hover {
+    transform:translateY(-4px);
+    border-color:rgba(196,154,74,0.32);
+    box-shadow:0 12px 35px rgba(0,0,0,0.45), inset 0 1px 0 rgba(245,237,216,0.12);
+  }
+  .social-link:hover::before { opacity:1; }
+
+  .social-icon-wrapper {
+    width:52px; height:52px; border-radius:14px;
+    display:grid; place-items:center;
+    flex-shrink:0; position:relative; z-index:1;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  }
+  .social-link.facebook .social-icon-wrapper { background:linear-gradient(135deg, #1877F2, #0C63D4); }
+  .social-link.whatsapp .social-icon-wrapper { background:linear-gradient(135deg, #25D366, #128C7E); }
+  .social-link.gmail .social-icon-wrapper { background:linear-gradient(135deg, #EA4335, #C5221F); }
+  .social-link.maps .social-icon-wrapper { background:linear-gradient(135deg, #4285F4, #34A853); }
+  .social-link.instagram .social-icon-wrapper { background:linear-gradient(135deg, #E1306C, #C13584, #833AB4, #5851DB); }
+
+  .social-svg {
+    width:26px; height:26px;
+    color:#fff;
+  }
+
+  .social-content {
+    display:flex; flex-direction:column; gap:.25rem;
+    flex:1; min-width:0; position:relative; z-index:1;
+  }
+  .social-name {
+    font-size:.76rem; font-weight:600; text-transform:uppercase;
+    letter-spacing:1.2px; color:var(--gold);
+  }
+  .social-handle {
+    font-size:.92rem; color:var(--cream); font-weight:500;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  /* ════════════════════════════════════════════
+     POLICIES
+  ════════════════════════════════════════════ */
+  .policies {
+    list-style:none;
+    display:flex; flex-direction:column; gap:.9rem;
+  }
+  .policies li {
+    display:flex; align-items:start; gap:1rem;
+    padding:1.1rem 1.3rem;
+    border-radius:var(--r-md);
+    background:rgba(245,237,216,0.04);
+    border:1px solid rgba(196,154,74,0.12);
+    transition:all .2s;
+    font-size:.92rem; color:var(--warm-mid); line-height:1.5;
+  }
+  .policies li:hover {
+    background:rgba(196,154,74,0.08);
+    border-color:rgba(196,154,74,0.22);
+    transform:translateX(4px);
+  }
+  .policies li::before {
+    content:'✓'; 
+    display:flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:10px;
+    background:linear-gradient(135deg, var(--gold-dim), var(--gold));
+    color:var(--bg-deep); font-weight:700; font-size:.95rem;
+    flex-shrink:0; box-shadow:0 4px 12px rgba(196,154,74,0.25);
+  }
+
+  /* ════════════════════════════════════════════
+     FOOTER
+  ════════════════════════════════════════════ */
+  .footer-bar { position:fixed; bottom:0; left:var(--nav-w); right:0; height:var(--footer-h); display:flex; align-items:center; justify-content:center; gap:1rem; background:rgba(14,10,6,0.85); backdrop-filter:blur(var(--blur)) saturate(160%); border-top:1px solid rgba(196,154,74,0.10); z-index:400; font-size:.75rem; color:var(--warm-low); }
+  .footer-bar img { height:20px; width:auto; opacity:.55; }
+  .footer-sep { width:1px; height:14px; background:rgba(196,154,74,0.20); }
+
+  /* ════════════════════════════════════════════
+     MOBILE TOGGLE
+  ════════════════════════════════════════════ */
+  #menu-toggle { display: none; }
+  .hamburger {
+    display: none;
+    position: fixed; top: 1rem; left: 1rem; z-index: 600;
+    width: 40px; height: 40px; border-radius: var(--r-sm);
+    background: rgba(245,237,216,0.06); border: 1px solid var(--g-border);
+    backdrop-filter: blur(16px); cursor: pointer;
+    place-items: center; font-size: 1.1rem; color: var(--cream);
+    transition: background .2s, left .35s cubic-bezier(.4,0,.2,1);
+  }
+  .hamburger:hover { background: rgba(196,154,74,0.12); }
+
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0; z-index: 450;
+    background: transparent; cursor: pointer;
+  }
+  #menu-toggle:checked ~ .sidebar-overlay { display: block; }
+
+  @media (min-width: 821px) {
+    #menu-toggle:checked ~ .sidebar-overlay { display: none; }
+  }
+
+  /* ════════════════════════════════════════════
+     ANIMATIONS
+  ════════════════════════════════════════════ */
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════ */
+
+  @media (max-width:820px) {
+    :root { --nav-w: 0px; }
+    .sidebar {
+      left: -260px; transform: none; width: 260px;
+      backdrop-filter: none;
+      background: rgba(14,10,6,0.96);
+    }
+    #menu-toggle:checked ~ .app-shell .sidebar { left: 0; }
+    #menu-toggle:checked ~ .app-shell .content-area { filter: blur(4px); }
+    #menu-toggle:checked + .hamburger { left: 212px; }
+    .hamburger { display: grid; }
+    .content-area { margin-left: 0; }
+    .footer-bar { left: 0; }
+    .topbar { padding: 0 1.2rem 0 3.8rem; }
+    .page-content { padding:1.5rem 1rem calc(var(--footer-h) + 1.5rem); }
+    .social-grid { grid-template-columns:1fr; }
+  }
+  @media (max-width:480px) {
+    .card { padding:1.5rem 1.2rem; }
+    .social-link { padding:1rem 1.2rem; }
+    .social-icon-wrapper { width:44px; height:44px; }
+    .social-svg { width:22px; height:22px; }
+  }
+  </style>
 </head>
 <body>
-  <!-- Botón hamburguesa -->
-  <input type="checkbox" id="menu-toggle">
-  <label for="menu-toggle" class="menu-icon">&#9776;</label>
 
-  <!-- Sidebar -->
-  <nav class="sidebar">
-    <ul>
-      <li><a href="Pagina_principal_inicio.html">Inicio</a></li>
-      <li><a href="Contacto.html">Contacto</a></li>
-    </ul>
+<div class="bg-canvas" aria-hidden="true">
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+  <div class="bg-grain"></div>
+</div>
 
-    <ul class="menu-footer">
-    <li>
-      <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;">↩</a>
-    </li>
-    <li>
-      <li><a href="https://djsolutionss.netlify.app/" target="_blank" rel="noopener noreferrer">Créditos</a></li>
-    </li>
-    </ul>
+<input type="checkbox" id="menu-toggle" aria-hidden="true">
+<label for="menu-toggle" class="hamburger" aria-label="Abrir menú">☰</label>
+<label for="menu-toggle" class="sidebar-overlay" aria-hidden="true"></label>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" role="navigation" aria-label="Navegación principal">
+    <div class="sidebar-logo">
+      <div class="logo-mark">🛒</div>
+      <div>
+        <div class="logo-text">El Lote</div>
+        <div class="logo-sub">Panel de Cliente</div>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Principal</div>
+      <a href="Pagina_principal_inicio.html" class="nav-item">
+        <span class="nav-icon">🏠</span><span class="nav-label">Inicio</span>
+      </a>
+      <a href="Avisos.html" class="nav-item">
+        <span class="nav-icon">🔔</span><span class="nav-label">Avisos</span>
+      </a>
+      <a href="Perfil_usuario.html" class="nav-item">
+        <span class="nav-icon">👤</span><span class="nav-label">Mi Perfil</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Beneficios</div>
+      <a href="Promociones_puntos.html" class="nav-item">
+        <span class="nav-icon">🎁</span><span class="nav-label">Canje de Puntos</span>
+      </a>
+      <a href="Ofertas_tienda.html" class="nav-item">
+        <span class="nav-icon">🏪</span><span class="nav-label">Ofertas Semanales</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">Soporte</div>
+      <a href="Contacto.html" class="nav-item active">
+        <span class="nav-icon">💬</span><span class="nav-label">Contacto</span>
+      </a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="sidebar-footer">
+      <a href="https://djsolutionss.netlify.app/" target="_blank" rel="noopener noreferrer" class="nav-item"><span class="nav-icon">✦</span><span class="nav-label">Créditos</span></a>
+      <a href="#" onclick="localStorage.removeItem('usuario_loggeado'); window.location.href='/index.html'; return false;" class="nav-item"><span class="nav-icon">↩</span><span class="nav-label">Cerrar Sesión</span></a>
+    </div>
   </nav>
 
-  <!-- Header mejorado -->
-  <header class="header-bar" role="banner">
-    <div class="header-content">
-      <h1 id="saludo-principal" class="welcome-text">
-        <span class="greeting">Contactanos</span>
-       </h1>
-      
-      <nav class="header-actions" aria-label="Acciones rápidas">
-        <a href="/Templates/Templates_pagina_principal/Avisos.html" 
-           class="action-btn notifications-btn" 
-           aria-label="Ver avisos y notificaciones"
-           title="Avisos">
-          <span class="btn-icon">🔔</span>
-          <span class="btn-text">Avisos</span>
-        </a>
-        <a href="/Templates/Templates_pagina_principal/Perfil_usuario.html" 
-           class="action-btn profile-btn" 
-           aria-label="Ver perfil de usuario"
-           title="Mi Perfil">
-          <span class="btn-icon">👤</span>
-          <span class="btn-text">Perfil</span>
-        </a>
-      </nav>
-    </div>
-  </header>
+  <!-- CONTENT -->
+  <div class="content-area">
 
-  <!-- Contenido principal -->
-  <main>
-    <!-- Redes sociales -->
-    <section class="card social-card" aria-label="Redes sociales">
-      <h2>Conectá con nosotros</h2>
-      <p class="social-subtitle">Seguinos en nuestras redes para no perderte ninguna novedad</p>
-      
-      <div class="social-grid">
-        <!-- Teléfono 
-        <a href="tel:+5491155555555" 
-           class="social-link phone"
-           aria-label="Llamar al teléfono del negocio">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">Teléfono</span>
-            <span class="social-handle">+54 9 11 5555-5555</span>
-          </div>
-        </a>
-        -->
-        <!-- Facebook -->
-        <a href="fb://profile/61576602516558" 
-           onclick="window.location.href='fb://profile/61576602516558'; setTimeout(function(){ window.location.href='https://www.facebook.com/profile.php?id=61576602516558'; }, 500); return false;"
-           class="social-link facebook"
-           aria-label="Visitar nuestra página de Facebook">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">Facebook</span>
-            <span class="social-handle">El Lote</span>
-          </div>
-        </a>
+    <header class="topbar" role="banner">
+      <div class="topbar-left">
+        <div class="topbar-eyebrow">Estamos para ayudarte</div>
+        <div class="topbar-title"><span>Contacto</span> y Soporte</div>
+      </div>
+      <div class="topbar-actions">
+        <a href="Avisos.html" class="icon-btn" aria-label="Avisos">🔔<span class="notif-dot"></span></a>
+        <a href="Perfil_usuario.html" class="avatar-btn" id="avatar-initials" aria-label="Perfil">U</a>
+      </div>
+    </header>
+
+    <main class="page-content">
+
+      <!-- Redes sociales -->
+      <section class="card" aria-label="Redes sociales y contacto">
+        <h2>Conectá <em>con nosotros</em></h2>
+        <p class="card-subtitle">Seguinos en nuestras redes para no perderte ninguna novedad, promoción o aviso importante</p>
+        
+        <div class="social-grid">
+
+          <!-- Facebook -->
+          <a href="fb://profile/61576602516558" 
+             onclick="window.location.href='fb://profile/61576602516558'; setTimeout(function(){ window.location.href='https://www.facebook.com/profile.php?id=61576602516558'; }, 500); return false;"
+             class="social-link facebook"
+             aria-label="Visitar nuestra página de Facebook">
+            <div class="social-icon-wrapper">
+              <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </div>
+            <div class="social-content">
+              <span class="social-name">Facebook</span>
+              <span class="social-handle">El Lote</span>
+            </div>
+          </a>
 
           <!-- WhatsApp -->
-        <a href="https://chat.whatsapp.com/KetBxc89oMWCWAVxeGLq7v?mode=gi_t" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="social-link whatsapp"
-           aria-label="Contactar por WhatsApp">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">WhatsApp</span>
-            <span class="social-handle">Grupo Oficial</span>
-          </div>
-        </a>
+          <a href="https://chat.whatsapp.com/KetBxc89oMWCWAVxeGLq7v?mode=gi_t" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="social-link whatsapp"
+             aria-label="Contactar por WhatsApp">
+            <div class="social-icon-wrapper">
+              <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </div>
+            <div class="social-content">
+              <span class="social-name">WhatsApp</span>
+              <span class="social-handle">Grupo Oficial</span>
+            </div>
+          </a>
 
-        <!-- Gmail -->
-        <a href="mailto:lotee201@gmail.com?subject=Consulta%20desde%20la%20web%20-%20El%20Lote&body=Hola%2C%20me%20contacto%20desde%20la%20app...%0A%0A" 
+          <!-- Gmail -->
+          <a href="mailto:lotee201@gmail.com?subject=Consulta%20desde%20la%20web%20-%20El%20Lote&body=Hola%2C%20me%20contacto%20desde%20la%20app...%0A%0A" 
              class="social-link gmail"
-           aria-label="Enviar correo electrónico">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">Email</span>
-            <span class="social-handle">lotee201@gmail.com</span>
-          </div>
-        </a>
+             aria-label="Enviar correo electrónico">
+            <div class="social-icon-wrapper">
+              <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+              </svg>
+            </div>
+            <div class="social-content">
+              <span class="social-name">Email</span>
+              <span class="social-handle">lotee201@gmail.com</span>
+            </div>
+          </a>
 
+          <!-- Google Maps -->
+          <a href="https://maps.app.goo.gl/Xjnd8nxRH4xhVzQv9" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="social-link maps"
+             aria-label="Ver ubicación en Google Maps">
+            <div class="social-icon-wrapper">
+              <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </div>
+            <div class="social-content">
+              <span class="social-name">Ubicación</span>
+              <span class="social-handle">Abraham Tapia, San Juan</span>
+            </div>
+          </a>
+
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/el_lote_2025?igsh=azZtbXJiODN6NzNh" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="social-link instagram"
+             aria-label="Visitar nuestro Instagram">
+            <div class="social-icon-wrapper">
+              <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </div>
+            <div class="social-content">
+              <span class="social-name">Instagram</span>
+              <span class="social-handle">@El_lote_2025</span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- Políticas -->
+      <section class="card" aria-label="Políticas y garantías">
+        <h2>Políticas <em>y garantías</em></h2>
+        <p class="card-subtitle">Información importante sobre nuestras políticas de atención y servicio</p>
         
-        <!-- Google Maps -->
-        <a href="https://maps.app.goo.gl/Xjnd8nxRH4xhVzQv9" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="social-link maps"
-           aria-label="Ver ubicación en Google Maps">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">Ubicación</span>
-            <span class="social-handle">Abraham Tapia, San Juan</span>
-          </div>
-        </a>
+        <ul class="policies" id="politicas-list">
+          <!-- Las políticas se cargarán dinámicamente desde script_contacto.js -->
+        </ul>
+      </section>
 
-        <!-- Instagram -->
-        <a href="https://www.instagram.com/el_lote_2025?igsh=azZtbXJiODN6NzNh" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="social-link instagram"
-           aria-label="Visitar nuestro Instagram">
-          <div class="social-icon-wrapper">
-            <svg class="social-svg" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-            </svg>
-          </div>
-          <div class="social-content">
-            <span class="social-name">Instagram</span>
-            <span class="social-handle">@El_lote_2025</span>
-          </div>
-        </a>
-      </div>
-    </section>
+    </main>
 
-    <!-- Políticas relevantes -->
-    <section class="card" aria-label="Políticas y garantías">
-      <h2>Políticas y garantías</h2>
-      <ul class="policies" id="politicas-list">
-        <!-- Las políticas se cargarán dinámicamente -->
-      </ul>
-    </section>
+    <footer class="footer-bar" role="contentinfo">
+      <img src="/logo_lote.png" alt="El Lote">
+      <span class="footer-sep"></span>
+      <span>©2025 El Lote — Todos los derechos reservados</span>
+    </footer>
 
-    
-  </main>
+  </div>
+</div>
 
-  <footer><img src="/logo_lote.png" alt="El Lote">
-    <p>©2025 - Todos los derechos reservados</p>
-  </footer>
-  <script src="/Scripts/sidebar_outside_close.js"></script>
-  <script src="/Scripts/Scripts_pagina_principal/script_contacto.js">
-  </script>
+<script>
+/* Close sidebar on nav click (mobile) */
+document.querySelectorAll('.sidebar .nav-item').forEach(el => {
+  el.addEventListener('click', () => {
+    document.getElementById('menu-toggle').checked = false;
+  });
+});
+
+// Avatar inicial del usuario
+const usuarioLoggeado = JSON.parse(localStorage.getItem('usuario_loggeado') || '{}');
+const avatarEl = document.getElementById('avatar-initials');
+if (usuarioLoggeado.nombre) {
+  avatarEl.textContent = usuarioLoggeado.nombre.charAt(0).toUpperCase();
+}
+</script>
+<script src="/Scripts/sidebar_outside_close.js"></script>
+<script src="/Scripts/Scripts_pagina_principal/script_contacto.js"></script>
 </body>
 </html>

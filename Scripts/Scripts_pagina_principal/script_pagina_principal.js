@@ -11,7 +11,7 @@ window.onload=async function(){
     let saludo = document.getElementById("nombre-usuario")
     saludo.textContent = usuario_l.nombre_u
     let cant_puntos = document.getElementById("cant_puntos")
-    cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
+    cant_puntos.textContent = usuario_l.puntos_u
 }
 
 async function refrescarPuntos(){
@@ -28,7 +28,7 @@ async function refrescarPuntos(){
         let cant_puntos = document.getElementById("cant_puntos")
         usuario_l.puntos_u = data.Puntos;
         localStorage.setItem("usuario_loggeado", JSON.stringify(usuario_l))
-        cant_puntos.textContent = "Tiene: "+ usuario_l.puntos_u +" Puntos"
+        cant_puntos.textContent = usuario_l.puntos_u
     }
 }
 
