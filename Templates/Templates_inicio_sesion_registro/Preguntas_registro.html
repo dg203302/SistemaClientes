@@ -3,32 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preguntas de Seguridad</title>
-    <meta name="description" content="Formulario para configurar preguntas de seguridad que ayudarán a recuperar tu contraseña.">
-    <link rel="stylesheet" href="/Styles/Styles_inicio_sesion_registro/Estilos_Preguntas_registro.css">
+    <title>Preguntas de Seguridad — El Lote</title>
+    <meta name="description" content="Configura tus preguntas de seguridad para recuperar tu contraseña cuando sea necesario.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+    /* ════════════════════════════════════════════
+         TOKENS
+    ════════════════════════════════════════════ */
+    :root {
+        --bg-deep:   #0E0A06;
+        --gold-dim:  #8B6B3D;
+        --gold:      #C49A4A;
+        --gold-lite: #E8C077;
+        --cream:     #F5EDD8;
+        --warm-mid:  #C4B49A;
+        --warm-low:  #7A6A54;
+        --accent:    #D4875A;
+
+        --g-border:  rgba(196,154,74,0.18);
+        --g-shine:   rgba(245,237,216,0.08);
+
+        --r-xl: 24px;
+        --r-lg: 18px;
+        --r-md: 12px;
+        --r-sm: 8px;
+
+        --blur: 32px;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    a { text-decoration:none; color:inherit; }
+    button { font-family:inherit; }
+    img { display:block; }
+    button, a, label, input { -webkit-tap-highlight-color: transparent; }
+
+    body {
+        font-family: 'Outfit', sans-serif;
+        background-color: var(--bg-deep);
+        color: var(--cream);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+    }
+
+    /* ── Atmospheric BG ── */
+    .bg-canvas {
+        position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        overflow: hidden;
+    }
+    .bg-blob {
+        position: absolute; border-radius: 50%;
+        filter: blur(90px);
+        animation: drift 14s ease-in-out infinite alternate;
+    }
+    .blob-1 {
+        width: 600px; height: 400px; top: -120px; left: -100px;
+        background: radial-gradient(ellipse, rgba(196,154,74,0.13) 0%, transparent 70%);
+    }
+    .blob-2 {
+        width: 500px; height: 500px; bottom: -150px; right: -120px;
+        background: radial-gradient(ellipse, rgba(212,135,90,0.10) 0%, transparent 70%);
+        animation-delay: -5s;
+    }
+    .blob-3 {
+        width: 350px; height: 350px; top: 45%; left: 45%;
+        background: radial-gradient(ellipse, rgba(196,154,74,0.07) 0%, transparent 70%);
+        animation-delay: -9s;
+    }
+    .bg-grain {
+        position: absolute; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+        opacity: .5;
+    }
+    @keyframes drift {
+        from { transform: translate(0,0) scale(1); }
+        to   { transform: translate(30px,20px) scale(1.08); }
+    }
+
+    .register-wrapper {
+        position: relative; z-index: 1;
+        width: 100%; max-width: 520px;
+    }
+
+    .card {
+        border-radius: var(--r-xl);
+        padding: 2.8rem 2.5rem;
+        border: 1px solid var(--g-border);
+        background:
+            linear-gradient(135deg, rgba(245,237,216,0.08) 0%, rgba(245,237,216,0.02) 100%),
+            rgba(22,16,9,0.85);
+        backdrop-filter: blur(var(--blur)) saturate(160%);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6), inset 0 1px 0 var(--g-shine);
+        display: flex;
+        flex-direction: column;
+        gap: 1.6rem;
+        animation: slideup .6s cubic-bezier(.4,0,.2,1);
+    }
+
+    @keyframes slideup {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--cream);
+        line-height: 1.2;
+        margin-bottom: .2rem;
+        letter-spacing: -.4px;
+    }
+
+    .card > p:first-of-type {
+        font-size: .9rem;
+        color: var(--warm-mid);
+        line-height: 1.65;
+        margin-bottom: .4rem;
+    }
+
+    #Preguntas_seg {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: .6rem;
+    }
+
+    label {
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--warm-low);
+        font-weight: 600;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: .85rem 1.1rem;
+        border-radius: var(--r-md);
+        border: 1px solid var(--g-border);
+        background: rgba(245,237,216,0.04);
+        color: var(--cream);
+        font-family: 'Outfit', sans-serif;
+        font-size: .9rem;
+        backdrop-filter: blur(12px);
+        transition: all .2s;
+        outline: none;
+    }
+
+    input[type="text"]::placeholder {
+        color: var(--warm-low);
+    }
+
+    input[type="text"]:focus {
+        border-color: rgba(196,154,74,0.35);
+        background: rgba(245,237,216,0.08);
+        box-shadow: 0 0 0 3px rgba(196,154,74,0.10);
+    }
+
+    .form-buttons {
+        display: flex;
+        gap: .8rem;
+        flex-wrap: wrap;
+        margin-top: .8rem;
+    }
+
+    button[type="submit"],
+    button[type="reset"] {
+        flex: 1;
+        min-width: 140px;
+        padding: .85rem 1.2rem;
+        border-radius: var(--r-md);
+        border: none;
+        font-family: 'Outfit', sans-serif;
+        font-size: .9rem;
+        font-weight: 700;
+        letter-spacing: .3px;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(196,154,74,0.30);
+        transition: all .22s cubic-bezier(.4,0,.2,1);
+        text-transform: uppercase;
+    }
+
+    button[type="submit"] {
+        background: linear-gradient(135deg, var(--gold-lite), var(--gold));
+        color: var(--bg-deep);
+    }
+
+    button[type="submit"]:hover {
+        background: linear-gradient(135deg, #f0d08a, var(--gold-lite));
+        box-shadow: 0 6px 22px rgba(196,154,74,0.42);
+        transform: translateY(-2px);
+    }
+
+    button[type="submit"]:active {
+        transform: translateY(0);
+    }
+
+    button[type="reset"] {
+        background: rgba(245,237,216,0.04);
+        color: var(--warm-mid);
+        border: 1px solid var(--g-border);
+        box-shadow: none;
+    }
+
+    button[type="reset"]:hover {
+        background: rgba(245,237,216,0.09);
+        border-color: rgba(245,237,216,0.18);
+        color: var(--cream);
+        transform: translateY(-1px);
+    }
+
+    button[type="reset"]:active {
+        transform: translateY(0);
+    }
+
+    .card p:last-child {
+        text-align: center;
+        font-size: .85rem;
+        color: var(--warm-low);
+        line-height: 1.6;
+        padding-top: .6rem;
+        border-top: 1px solid rgba(196,154,74,0.10);
+    }
+
+    .card p:last-child a {
+        color: var(--gold-lite);
+        font-weight: 600;
+        border-bottom: 1px solid rgba(196,154,74,0.25);
+        transition: all .2s;
+        cursor: pointer;
+    }
+
+    .card p:last-child a:hover {
+        color: var(--cream);
+        border-bottom-color: rgba(196,154,74,0.45);
+    }
+
+    /* ════════════════════════════════════════════
+         RESPONSIVE
+    ════════════════════════════════════════════ */
+    @media (max-width: 560px) {
+        .card {
+            padding: 2rem 1.8rem;
+            border-radius: var(--r-lg);
+            gap: 1.3rem;
+        }
+
+        .card h1 {
+            font-size: 1.7rem;
+        }
+
+        .card > p:first-of-type {
+            font-size: .87rem;
+        }
+
+        input[type="text"] {
+            font-size: .87rem;
+            padding: .75rem 1rem;
+        }
+
+        label {
+            font-size: .75rem;
+            letter-spacing: 1px;
+        }
+
+        .form-buttons {
+            gap: .6rem;
+        }
+
+        button[type="submit"],
+        button[type="reset"] {
+            padding: .75rem 1rem;
+            font-size: .87rem;
+            min-width: 120px;
+        }
+
+        .card p:last-child {
+            font-size: .8rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .card {
+            padding: 1.6rem;
+        }
+
+        .card h1 {
+            font-size: 1.5rem;
+        }
+
+        #Preguntas_seg {
+            gap: 1.2rem;
+        }
+
+        .form-buttons {
+            flex-direction: column;
+        }
+
+        button[type="submit"],
+        button[type="reset"] {
+            width: 100%;
+            min-width: auto;
+        }
+    }
+    </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Configurar preguntas de seguridad</h1>
-        <p>Responde las siguientes preguntas. Estas respuestas se usarán para recuperar tu contraseña en caso necesario.</p>
-
-        <form id="Preguntas_seg" >
-            <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
-            <input type="text" id="Pregunta_1" name="Pregunta_1" placeholder="Ej: Rocky" autocomplete="off" required>
-
-            <label for="Pregunta_2">¿En qué ciudad naciste?</label>
-            <input type="text" id="Pregunta_2" name="Pregunta_2" placeholder="Ej: Buenos Aires" autocomplete="off" required>
-
-            <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
-            <input type="text" id="Pregunta_3" name="Pregunta_3" placeholder="Ej: Matrix" autocomplete="off" required>
-
-            <button type="submit">Terminar Registro</button>
-            <button type="reset">Borrar Respuestas</button>
-        </form>
-
-        <p><a href="iniciosesion.html">Volver al inicio de sesión</a></p>
+    <div class="bg-canvas" aria-hidden="true">
+        <div class="bg-blob blob-1"></div>
+        <div class="bg-blob blob-2"></div>
+        <div class="bg-blob blob-3"></div>
+        <div class="bg-grain"></div>
     </div>
-      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <div class="register-wrapper">
+        <div class="card">
+            <h1>Configurar preguntas de seguridad</h1>
+            <p>Responde las siguientes preguntas. Estas respuestas te ayudarán a recuperar tu contraseña en caso necesario.</p>
+
+            <form id="Preguntas_seg">
+                <div class="form-group">
+                    <label for="Pregunta_1">¿Cuál es el nombre de tu primera mascota?</label>
+                    <input 
+                        type="text" 
+                        id="Pregunta_1" 
+                        name="Pregunta_1" 
+                        placeholder="Ej: Rocky" 
+                        autocomplete="off" 
+                        required
+                        aria-label="Nombre de tu primera mascota">
+                </div>
+
+                <div class="form-group">
+                    <label for="Pregunta_2">¿En qué ciudad naciste?</label>
+                    <input 
+                        type="text" 
+                        id="Pregunta_2" 
+                        name="Pregunta_2" 
+                        placeholder="Ej: Buenos Aires" 
+                        autocomplete="off" 
+                        required
+                        aria-label="Ciudad donde naciste">
+                </div>
+
+                <div class="form-group">
+                    <label for="Pregunta_3">¿Cuál es tu película favorita?</label>
+                    <input 
+                        type="text" 
+                        id="Pregunta_3" 
+                        name="Pregunta_3" 
+                        placeholder="Ej: Matrix" 
+                        autocomplete="off" 
+                        required
+                        aria-label="Tu película favorita">
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" aria-label="Terminar registro">Terminar Registro</button>
+                    <button type="reset" aria-label="Borrar respuestas">Borrar Respuestas</button>
+                </div>
+            </form>
+
+            <p>¿Cambiar de cuenta? <a href="iniciosesion.html">Volver al inicio de sesión</a></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="/Scripts/Scripts_inicio_sesion_registro/script_registro_final.js"></script>
 </body>
 </html>
