@@ -1,0 +1,19 @@
+[[edge_functions]]
+  path = "/api/registrar-cliente"
+  function = "registrar-cliente"
+
+[[edge_functions]]
+  path = "/api/actualizar-contrasena"
+  function = "actualizar-contrasena"
+
+[[edge_functions]]
+  path = "/api/actualizar-preguntas"
+  function = "actualizar-preguntas"
+
+[[edge_functions]]
+  path = "/api/canjear-promo"
+  function = "canjear-promo"
+
+[[edge_functions]]
+  path = "/api/eliminar-cliente"
+  function = "eliminar-cliente"
