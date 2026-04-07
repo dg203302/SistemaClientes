@@ -13,7 +13,7 @@ export default async function handler(request, context) {
     });
   }
 
-  const SUPABASE_URL = Deno.env.get('Supabase_url');
+  const SUPABASE_URL = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
   const SUPABASE_SERVICE_KEY = Deno.env.get('Supabase_pk');
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {

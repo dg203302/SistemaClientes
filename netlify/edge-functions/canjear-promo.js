@@ -19,7 +19,7 @@ const CODIGOS_SORTEOS_TABLE = 'Codigos_sorteos';
 const CODIGOS_PROMOS_TABLE = 'Codigos_promos_puntos';
 const HISTORIAL_TABLE = 'Historial_Puntos';
 
-const SUPABASE_URL = Deno.env.get('Supabase_url');
+const SUPABASE_URL = 'https://qxbkfmvugutmggqwxhrb.supabase.co'
 const SUPABASE_SERVICE_KEY = Deno.env.get('Supabase_pk');
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
