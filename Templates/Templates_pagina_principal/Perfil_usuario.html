@@ -221,6 +221,95 @@
   .avatar-circle:hover { transform:scale(1.04); }
   .avatar-circle:empty::before { content:'U'; }
 
+  .avatar-stack {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.6rem;
+    flex-shrink:0;
+    position:relative;
+    z-index:1;
+  }
+  .avatar-qr-trigger {
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    display:inline-flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:.62rem;
+    min-width:180px;
+    min-height:58px;
+    padding:.8rem .95rem;
+    border-radius:16px;
+    border:1px solid rgba(196,154,74,0.34);
+    background:
+      linear-gradient(145deg, rgba(196,154,74,0.30), rgba(196,154,74,0.06) 55%),
+      rgba(245,237,216,0.05);
+    color:var(--cream);
+    font-size:.86rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.75px;
+    line-height:1.05;
+    box-shadow:
+      0 10px 20px rgba(0,0,0,0.26),
+      inset 0 1px 0 rgba(245,237,216,0.24);
+    cursor:pointer;
+    transition:transform .22s cubic-bezier(.4,0,.2,1), box-shadow .22s cubic-bezier(.4,0,.2,1), border-color .22s cubic-bezier(.4,0,.2,1), filter .22s cubic-bezier(.4,0,.2,1);
+  }
+  .avatar-qr-trigger::before {
+    content:'';
+    position:absolute;
+    inset:-22% auto -22% -40%;
+    width:56%;
+    background:linear-gradient(100deg, rgba(255,255,255,0.00), rgba(255,255,255,0.32), rgba(255,255,255,0.00));
+    transform:translateX(-120%) rotate(8deg);
+    transition:transform .55s ease;
+    z-index:-1;
+    pointer-events:none;
+  }
+  .avatar-qr-trigger:hover {
+    border-color:rgba(232,192,119,0.55);
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:
+      0 14px 26px rgba(0,0,0,0.34),
+      0 0 0 1px rgba(232,192,119,0.22),
+      inset 0 1px 0 rgba(255,255,255,0.30);
+    filter:brightness(1.04);
+  }
+  .avatar-qr-trigger:hover::before {
+    transform:translateX(330%) rotate(8deg);
+  }
+  .avatar-qr-trigger:active {
+    transform:translateY(0) scale(.99);
+  }
+  .avatar-qr-icon {
+    width:30px;
+    height:30px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    font-size:1.05rem;
+    color:#151210;
+    background:linear-gradient(135deg,var(--gold-lite),var(--gold));
+    border:1px solid rgba(232,192,119,0.40);
+    box-shadow:0 3px 10px rgba(196,154,74,0.36);
+    flex-shrink:0;
+  }
+  .avatar-qr-label {
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:.05rem;
+  }
+  .avatar-qr-label span:last-child {
+    font-size:.66rem;
+    letter-spacing:.62px;
+    color:var(--warm-mid);
+    font-weight:600;
+  }
+
   .hero-info { flex:1; position:relative; z-index:1; }
   .hero-eyebrow { font-size:.67rem; text-transform:uppercase; letter-spacing:1.8px; color:var(--gold); margin-bottom:.4rem; }
   .hero-name {
@@ -241,6 +330,7 @@
   .badge-since { background:rgba(245,237,216,0.05); border:1px solid rgba(245,237,216,0.10); color:var(--warm-low); }
 
   .hero-actions { display:flex; flex-direction:column; gap:.6rem; position:relative; z-index:1; flex-shrink:0; }
+  .hero-actions .avatar-qr-trigger { width:100%; }
 
   /* ════════════════════════════════════════════
      SORTEO CODES SECTION
@@ -399,6 +489,125 @@
   .sorteo-status.warn { background:rgba(212,135,90,0.12); border:1px solid rgba(212,135,90,0.22); color:var(--accent); }
 
   /* ════════════════════════════════════════════
+     PERFIL QR
+  ════════════════════════════════════════════ */
+  .qr-panel-body {
+    padding:1.55rem 1.5rem 1.6rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.95rem;
+    text-align:center;
+  }
+  .qr-help {
+    font-size:.85rem;
+    color:var(--warm-mid);
+    max-width:340px;
+    line-height:1.4;
+  }
+  .qr-canvas-wrap {
+    width:240px;
+    min-height:240px;
+    border-radius:var(--r-md);
+    background:#ffffff;
+    border:1px solid rgba(21,18,16,0.10);
+    box-shadow:0 10px 30px rgba(0,0,0,0.22);
+    display:grid;
+    place-items:center;
+    padding:10px;
+  }
+  #perfil-qr canvas,
+  #perfil-qr img {
+    width:220px !important;
+    height:220px !important;
+    display:block;
+  }
+  .qr-phone {
+    font-family:'Playfair Display',serif;
+    letter-spacing:.9px;
+    color:var(--gold-lite);
+    font-size:1.05rem;
+  }
+  .qr-error {
+    color:var(--warm-low);
+    font-size:.85rem;
+    font-style:italic;
+  }
+
+  .qr-modal {
+    position:fixed;
+    inset:0;
+    z-index:850;
+    display:grid;
+    place-items:center;
+    padding:1rem;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .qr-modal.open {
+    opacity:1;
+    pointer-events:auto;
+  }
+  .qr-modal-backdrop {
+    position:absolute;
+    inset:0;
+    background:rgba(9,7,5,0.62);
+    backdrop-filter:blur(6px);
+  }
+  .qr-modal-card {
+    position:relative;
+    width:min(92vw, 430px);
+    border-radius:var(--r-xl);
+    border:1px solid rgba(196,154,74,0.25);
+    background:
+      radial-gradient(ellipse 95% 130% at 0% 0%, rgba(196,154,74,0.20) 0%, transparent 64%),
+      linear-gradient(165deg,rgba(245,237,216,0.09) 0%,rgba(245,237,216,0.02) 100%),
+      rgba(22,16,9,0.92);
+    box-shadow:0 20px 58px rgba(0,0,0,0.52), inset 0 1px 0 var(--g-shine);
+    overflow:hidden;
+    transform:translateY(16px) scale(.98);
+    transition:transform .26s cubic-bezier(.4,0,.2,1);
+  }
+  .qr-modal.open .qr-modal-card {
+    transform:translateY(0) scale(1);
+  }
+  .qr-modal-head {
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:1rem;
+    padding:1.2rem 1.25rem .9rem;
+    border-bottom:1px solid rgba(196,154,74,0.12);
+  }
+  .qr-modal-title {
+    font-family:'Playfair Display',serif;
+    font-size:1.2rem;
+    color:var(--cream);
+    line-height:1.15;
+  }
+  .qr-modal-subtitle {
+    margin-top:.25rem;
+    color:var(--warm-mid);
+    font-size:.82rem;
+  }
+  .qr-modal-close {
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    border:1px solid rgba(196,154,74,0.20);
+    background:rgba(245,237,216,0.06);
+    color:var(--cream);
+    font-size:1rem;
+    cursor:pointer;
+    transition:all .2s;
+  }
+  .qr-modal-close:hover {
+    background:rgba(196,154,74,0.14);
+    border-color:rgba(196,154,74,0.36);
+  }
+
+  /* ════════════════════════════════════════════
      BUTTONS
   ════════════════════════════════════════════ */
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; padding:.6rem 1.1rem; border-radius:var(--r-md); font-family:'Outfit',sans-serif; font-size:.83rem; font-weight:600; letter-spacing:.25px; cursor:pointer; border:1px solid transparent; transition:all .22s cubic-bezier(.4,0,.2,1); }
@@ -473,7 +682,11 @@
     .topbar { padding: 0 1.2rem 0 3.8rem; }
     .profile-col { padding:1.2rem 1rem; }
     .profile-hero { flex-direction:column; align-items:flex-start; gap:1.2rem; }
+    .avatar-qr-trigger { min-width:160px; min-height:54px; padding:.72rem .86rem; font-size:.8rem; }
+    .avatar-qr-icon { width:28px; height:28px; font-size:.95rem; }
+    .avatar-qr-label span:last-child { font-size:.62rem; }
     .hero-actions { flex-direction:row; }
+    .hero-actions .avatar-qr-trigger { width:auto; }
     .sorteo-grid { grid-template-columns:repeat(2,1fr); }
   }
   @media (max-width:480px) {
@@ -565,7 +778,9 @@
 
         <!-- ① HERO -->
         <div class="profile-hero">
-          <div class="avatar-circle" id="avatar-circle">U</div>
+          <div class="avatar-stack">
+            <div class="avatar-circle" id="avatar-circle">U</div>
+          </div>
           <div class="hero-info">
             <div class="hero-eyebrow">👤 Perfil de usuario</div>
             <h1 class="hero-name" id="perfil-nombre">Cargando…</h1>
@@ -582,6 +797,10 @@
             </button>
             <button class="btn btn-ghost btn-sm" onclick="window.location.href='Pagina_principal_inicio.html'">
               ← Inicio
+            </button>
+            <button class="avatar-qr-trigger" id="open-qr-modal" type="button" aria-haspopup="dialog" aria-controls="qr-modal" aria-label="Mostrar código QR">
+              <span class="avatar-qr-icon" aria-hidden="true">⌁</span>
+              <span class="avatar-qr-label"><span>Mi QR</span><span>Escanear</span></span>
             </button>
           </div>
         </div>
@@ -674,6 +893,26 @@
   </div><!-- /content-area -->
 </div><!-- /app-shell -->
 
+<div class="qr-modal" id="qr-modal" aria-hidden="true">
+  <div class="qr-modal-backdrop" id="close-qr-modal" aria-hidden="true"></div>
+  <section class="qr-modal-card" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+    <header class="qr-modal-head">
+      <div>
+        <h2 class="qr-modal-title" id="qr-modal-title">Código QR personal</h2>
+        <p class="qr-modal-subtitle">Mostrá este código al cajero para sumar puntos</p>
+      </div>
+      <button class="qr-modal-close" type="button" id="qr-modal-close-btn" aria-label="Cerrar código QR">✕</button>
+    </header>
+    <div class="qr-panel-body">
+      <div class="qr-canvas-wrap">
+        <div id="perfil-qr" aria-live="polite"></div>
+      </div>
+      <p class="qr-phone" id="perfil-qr-telefono">—</p>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 /* Close sidebar on nav click (mobile) */
 document.querySelectorAll('.sidebar .nav-item').forEach(el => {
@@ -689,8 +928,92 @@ function eliminarUsuario() {
   }
 }
 
+function obtenerTelefonoUsuario() {
+  try {
+    const usuarioLoggeado = JSON.parse(localStorage.getItem('usuario_loggeado'));
+    const telefonoLocal = usuarioLoggeado?.tele_u;
+    if (typeof telefonoLocal === 'string' && telefonoLocal.trim()) {
+      return telefonoLocal.trim();
+    }
+  } catch (error) {
+    // Si el JSON está corrupto, usamos fallback al texto visible del perfil.
+  }
+
+  const telefonoPerfil = document.getElementById('perfil-tele')?.textContent?.trim();
+  return telefonoPerfil && telefonoPerfil !== '—' ? telefonoPerfil : '';
+}
+
+function renderQrPerfil() {
+  const qrRoot = document.getElementById('perfil-qr');
+  const telefonoLabel = document.getElementById('perfil-qr-telefono');
+  if (!qrRoot || !telefonoLabel) return;
+
+  const telefono = obtenerTelefonoUsuario();
+  qrRoot.innerHTML = '';
+
+  if (!telefono) {
+    qrRoot.innerHTML = '<p class="qr-error">No se encontró el número de teléfono.</p>';
+    telefonoLabel.textContent = 'No se encontró el número de teléfono.';
+    return;
+  }
+
+  if (typeof QRCode === 'undefined') {
+    qrRoot.innerHTML = '<p class="qr-error">No se pudo cargar el generador QR.</p>';
+    telefonoLabel.textContent = telefono;
+    return;
+  }
+
+  new QRCode(qrRoot, {
+    text: telefono,
+    width: 220,
+    height: 220,
+    colorDark: '#151210',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  telefonoLabel.textContent = telefono;
+}
+
+function toggleQrModal(open) {
+  const modal = document.getElementById('qr-modal');
+  if (!modal) return;
+  modal.classList.toggle('open', open);
+  modal.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+function initQrModalActions() {
+  const openBtn = document.getElementById('open-qr-modal');
+  const closeBackdrop = document.getElementById('close-qr-modal');
+  const closeBtn = document.getElementById('qr-modal-close-btn');
+
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      renderQrPerfil();
+      toggleQrModal(true);
+    });
+  }
+
+  if (closeBackdrop) {
+    closeBackdrop.addEventListener('click', () => toggleQrModal(false));
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => toggleQrModal(false));
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      toggleQrModal(false);
+    }
+  });
+}
+
 /* Script adicional para sincronizar datos del panel lateral */
 window.addEventListener('load', () => {
+  initQrModalActions();
+
   // Sincronizar datos con el panel lateral después de que script_pagina_principal_perfil.js cargue
   setTimeout(() => {
     // Actualizar avatar en topbar
@@ -731,6 +1054,7 @@ window.addEventListener('load', () => {
         }
       }
     }
+
   }, 800); // Esperar a que el script principal cargue datos (aumentado a 800ms)
 });
 </script>
