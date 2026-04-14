@@ -196,29 +196,7 @@ function generar_codigo() {
   return Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
 }
 
-async function insertarCodigoSorteoConReintentos(telef, maxAttempts = 5) {
-  let lastError = null;
-
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const codigoGenerado = generar_codigo();
-    const { error } = await client
-      .from('Codigos_sorteos')
-      .insert([{ Telef: telef, codigo_sorteo: codigoGenerado }]);
-
-    if (!error) {
-      return { codigo: codigoGenerado };
-    }
-
-    if (error?.code === '23505' || error?.status === 409 || error?.code === '409') {
-      lastError = error;
-      continue;
-    }
-
-    return { error };
-  }
-
-  return { error: lastError ?? new Error('No se pudo generar un código único') };
-}
+// insertarCodigoSorteoConReintentos movido a la edge function /api/canjear-promo
 
 function verificar_promo(usuario, data) {
   if (verificar_validez(usuario.puntos_u, data.cantidad_puntos_canjeo) && verificar_vencimiento(data.validez)) {
@@ -259,126 +237,55 @@ async function canjearPromoPorId(idPromo, options = {}) {
     return { ok: false };
   }
 
-  const { data: promoData, error: promoError } = await client
-    .from(PROMOS_TABLE)
-    .select('Nombre_promo, cantidad_puntos_canjeo, validez')
-    .eq('id_promo', idPromo)
-    .single();
-
-  if (promoError) {
+  // Todas las escrituras (UPDATE puntos, INSERT códigos, INSERT historial)
+  // se delegan a la edge function del servidor.
+  let respuesta;
+  try {
+    respuesta = await fetch('/api/canjear-promo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ Telef: usuario_l.tele_u, idPromo }),
+    });
+  } catch {
     if (typeof window.showError === 'function') {
-      await window.showError('Error al canjear los puntos: ' + promoError.message, 'Error');
+      await window.showError('Error de red al canjear la promo', 'Error');
     }
-    return { ok: false, error: promoError };
-  }
-
-  if (!verificar_promo(usuario_l, promoData)) {
     return { ok: false };
   }
 
-  if (typeof promoData.Nombre_promo === 'string' && promoData.Nombre_promo.toLowerCase().includes('sorteo')) {
-    return await canjearSorteo(idPromo, promoData, { silentSuccess });
+  const result = await respuesta.json();
+
+  if (!respuesta.ok || result.error) {
+    // Mostrar mensajes de validación específicos
+    if (typeof window.showError === 'function') {
+      await window.showError(result.error || 'Error al canjear la promo', 'Atención');
+    }
+    return { ok: false, error: result.error };
   }
 
-  return await canjearPromoRegular(idPromo, promoData, { silentSuccess });
-}
-
-async function canjearSorteo(idPromo, promoData, options = {}) {
-  const { silentSuccess = false } = options;
-  const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-
-  const { error: updateError } = await client
-    .from('Clientes')
-    .update({ Puntos: nuevosPuntos })
-    .eq('Telef', usuario_l.tele_u);
-
-  if (updateError) {
-    await window.showError('Error al actualizar los puntos', 'Error');
-    return { ok: false, error: updateError };
-  }
-
-  const { codigo, error: insertError } = await insertarCodigoSorteoConReintentos(usuario_l.tele_u);
-  if (insertError) {
-    await client
-      .from('Clientes')
-      .update({ Puntos: usuario_l.puntos_u })
-      .eq('Telef', usuario_l.tele_u);
-
-    localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
-    sincronizarPuntosEnPagina();
-    await window.showError('No se pudo registrar el canjeo del sorteo. Intente nuevamente.', 'Error');
-    return { ok: false, error: insertError };
-  }
-
-  const { error: historialError } = await client
-    .from('Historial_Puntos')
-    .insert([{ Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0 }]);
-
-  if (historialError) {
-    await window.showError('Error al registrar el canjeo en el historial', 'Error');
-    return { ok: false, error: historialError };
-  }
-
-  usuario_l.puntos_u = nuevosPuntos;
+  // Actualizar puntos en localStorage y en la UI
+  usuario_l.puntos_u = result.nuevosPuntos;
   localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
   sincronizarPuntosEnPagina();
 
   if (!silentSuccess) {
-    await window.showSuccess(`Promo canjeada exitosamente, revise el código (${codigo}) en su perfil`);
+    if (result.tipo === 'sorteo') {
+      await window.showSuccess(`Promo canjeada exitosamente, revise el código (${result.codigo}) en su perfil`);
+    } else {
+      await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil');
+    }
   }
 
   return {
     ok: true,
     promoId: idPromo,
-    puntosActuales: usuario_l.puntos_u,
-    puntosGastados: promoData.cantidad_puntos_canjeo,
-    titulo: promoData.Nombre_promo,
+    puntosActuales: result.nuevosPuntos,
+    puntosGastados: result.puntosGastados,
+    titulo: result.titulo,
   };
 }
 
-async function canjearPromoRegular(idPromo, promoData, options = {}) {
-  const { silentSuccess = false } = options;
-  const nuevosPuntos = usuario_l.puntos_u - promoData.cantidad_puntos_canjeo;
-
-  const { error: updateError } = await client
-    .from('Clientes')
-    .update({ Puntos: nuevosPuntos })
-    .eq('Telef', usuario_l.tele_u);
-
-  if (updateError) {
-    await window.showError('Error al actualizar los puntos', 'Error');
-    return { ok: false, error: updateError };
-  }
-
-  const codigoGenerado = generar_codigo();
-  const { error: insertError } = await client
-    .from('Codigos_promos_puntos')
-    .insert([{ Telef: usuario_l.tele_u, codigo_canjeado: codigoGenerado, nom_promo: promoData.Nombre_promo }]);
-  const { error: historialError } = await client
-    .from('Historial_Puntos')
-    .insert([{ Telef_cliente: usuario_l.tele_u, Cantidad_Puntos: -promoData.cantidad_puntos_canjeo, Monto_gastado: 0 }]);
-
-  if (insertError || historialError) {
-    await window.showError('Error al registrar el canjeo', 'Error');
-    return { ok: false, error: insertError || historialError };
-  }
-
-  usuario_l.puntos_u = nuevosPuntos;
-  localStorage.setItem('usuario_loggeado', JSON.stringify(usuario_l));
-  sincronizarPuntosEnPagina();
-
-  if (!silentSuccess) {
-    await window.showSuccess('Promo canjeada exitosamente, revise el código en su perfil');
-  }
-
-  return {
-    ok: true,
-    promoId: idPromo,
-    puntosActuales: usuario_l.puntos_u,
-    puntosGastados: promoData.cantidad_puntos_canjeo,
-    titulo: promoData.Nombre_promo,
-  };
-}
+// canjearSorteo y canjearPromoRegular fueron consolidadas en la edge function /api/canjear-promo
 
 async function refrescarPuntosServidor() {
   if (!usuario_l?.tele_u) {

@@ -300,14 +300,23 @@ async function eliminarUsuario() {
   }
 
   try {
-    const { error: deleteError } = await client
-      .from('Clientes')
-      .delete()
-      .eq('Telef', usuario_l.tele_u);
-
-    if (deleteError) {
-      throw deleteError;
+    let respuesta;
+    try {
+      respuesta = await fetch('/api/eliminar-cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ Telef: usuario_l.tele_u }),
+      });
+    } catch {
+      throw new Error('Error de red al intentar eliminar la cuenta');
     }
+
+    const result = await respuesta.json();
+
+    if (!respuesta.ok || result.error) {
+      throw new Error(result.error || 'Error desconocido');
+    }
+
     localStorage.removeItem("usuario_loggeado");
     if (swalSuccess) {
       await swalSuccess.fire({

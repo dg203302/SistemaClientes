@@ -1,1 +1,3 @@
 .Scripts
+# Local Netlify folder
+.netlify
