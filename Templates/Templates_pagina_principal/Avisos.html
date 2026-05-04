@@ -466,6 +466,16 @@
     .footer-bar { left: 0; }
     .topbar { padding: 0 1.2rem 0 3.8rem; }
     .page-content { padding: 1.2rem 1rem calc(var(--footer-h) + 1rem); }
+      /* Layout de avisos en columnas para pantallas pequeñas */
+      #contenedor_msgs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+        align-items: start;
+      }
+      #contenedor_msgs li.notice {
+        grid-template-columns: 1fr;
+      }
   }
 
   @media (max-width: 480px) {

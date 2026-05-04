@@ -360,6 +360,7 @@
   .modal-detail-item { padding:.7rem .9rem; border-radius:var(--r-sm); background:rgba(245,237,216,0.04); border:1px solid rgba(245,237,216,0.08); }
   .modal-detail-label { font-size:.64rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--warm-low); margin-bottom:.25rem; }
   .modal-detail-value { font-size:.95rem; font-weight:600; color:var(--cream); }
+  .pc-afford.expired { color: var(--accent); background: rgba(212,135,90,0.08); border-color: rgba(212,135,90,0.14); }
   .modal-actions { display:flex; gap:.7rem; align-items:center; }
   .modal-close { position:absolute; top:1rem; right:1rem; width:36px; height:36px; border-radius:50%; background:rgba(14,10,6,0.65); border:1px solid rgba(245,237,216,0.14); display:grid; place-items:center; font-size:1rem; color:var(--warm-mid); cursor:pointer; transition:all .2s; z-index:10; }
   .modal-close:hover { background:rgba(245,237,216,0.10); color:var(--cream); }
@@ -521,6 +522,10 @@
           <div class="modal-detail-label">Estado</div>
           <div id="modal-status" class="modal-detail-value"></div>
         </div>
+          <div class="modal-detail-item">
+            <div class="modal-detail-label">Válido hasta</div>
+            <div id="modal-validez" class="modal-detail-value">—</div>
+          </div>
       </div>
       <div class="modal-actions">
         <button id="modal-btn-canje" class="btn btn-canje" style="flex:1">Confirmar Canje</button>
@@ -699,6 +704,36 @@ function normalizePromo(rawPromo) {
   };
 }
 
+function parsePromoDate(validez) {
+  if (!validez) return null;
+  let d = new Date(validez);
+  if (!isNaN(d)) return d;
+  const m = String(validez).trim().match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if (!m) return null;
+  let day = parseInt(m[1], 10);
+  let month = parseInt(m[2], 10) - 1;
+  let year = parseInt(m[3], 10);
+  if (year < 100) year += year < 50 ? 2000 : 1900;
+  d = new Date(year, month, day);
+  return isNaN(d) ? null : d;
+}
+
+function formatPromoDate(validez) {
+  const d = parsePromoDate(validez);
+  if (!d) return '—';
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+function isPromoExpired(validez) {
+  const d = parsePromoDate(validez);
+  if (!d) return false;
+  const endOfDay = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+  return Date.now() > endOfDay.getTime();
+}
+
 function getStockInfo(promo) {
   const stock = normalizeStock(promo?.stock);
 
@@ -840,6 +875,7 @@ function createPromoCard(promo, index) {
   const can = puntos >= promo.costo;
   const cat = CAT_STYLES[promo.categoria] || CAT_STYLES.Promo;
   const stockInfo = getStockInfo(promo);
+    const expired = isPromoExpired(promo.validez);
 
   const card = document.createElement('article');
   card.className = 'promo-card';
@@ -890,9 +926,14 @@ function createPromoCard(promo, index) {
 
   const stockDot = document.createElement('span');
   stockDot.className = `stock-dot${stockInfo.className}`;
-
-  stock.appendChild(stockDot);
-  stock.appendChild(document.createTextNode(stockInfo.label));
+  // If expired, override visible stock/availability label
+  if (expired) {
+    stock.appendChild(stockDot);
+    stock.appendChild(document.createTextNode('Vencida'));
+  } else {
+    stock.appendChild(stockDot);
+    stock.appendChild(document.createTextNode(stockInfo.label));
+  }
   meta.appendChild(stock);
 
   body.appendChild(title);
@@ -903,15 +944,19 @@ function createPromoCard(promo, index) {
   footer.className = 'pc-footer';
 
   const afford = document.createElement('span');
-  afford.className = `pc-afford ${can ? 'can' : 'cannot'}`;
-  afford.textContent = can ? '✓ Podés canjear' : `Faltan ${fmtPts(promo.costo - puntos)} pts`;
-
   const action = document.createElement('button');
   action.className = 'btn btn-canje';
   action.type = 'button';
   action.textContent = 'Ver y canjear';
-  action.disabled = !can || stockInfo.agotado;
   action.addEventListener('click', () => openModal(promo.id));
+
+  if (expired) {
+    afford.className = 'pc-afford expired';
+    afford.textContent = '✗ Vencida';
+  } else {
+    afford.className = `pc-afford ${can ? 'can' : 'cannot'}`;
+    afford.textContent = can ? '✓ Podés canjear' : `Faltan ${fmtPts(promo.costo - puntos)} pts`;
+  }
 
   footer.appendChild(afford);
   footer.appendChild(action);
@@ -949,7 +994,19 @@ function openModal(id) {
   document.getElementById('modal-status').style.color = can ? 'var(--green)' : 'var(--accent)';
 
   const btn = document.getElementById('modal-btn-canje');
-  btn.disabled = !can || stockInfo.agotado;
+  const expired = isPromoExpired(p.validez);
+  if (expired) {
+    document.getElementById('modal-status').textContent = '✗ Vencida';
+    document.getElementById('modal-status').style.color = 'var(--accent)';
+    btn.disabled = true;
+  } else {
+    document.getElementById('modal-status').textContent = can ? '✓ Disponible' : '✗ Insuficiente';
+    document.getElementById('modal-status').style.color = can ? 'var(--green)' : 'var(--accent)';
+    btn.disabled = !can || stockInfo.agotado;
+  }
+
+  // Mostrar fecha formateada
+  document.getElementById('modal-validez').textContent = formatPromoDate(p.validez);
 
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
