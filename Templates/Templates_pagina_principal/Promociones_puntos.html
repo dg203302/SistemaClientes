@@ -666,6 +666,7 @@ let puntos        = 0;
 let PROMOS        = [];
 let searchQuery   = '';
 let activePromoId = null;
+let isProcessing  = false;
 
 /* ═══════════════════════════════════════════════
    UTILS
@@ -975,6 +976,7 @@ function openModal(id) {
   const p = PROMOS.find(x => String(x.id) === String(id));
   if (!p) return;
   activePromoId = id;
+  isProcessing = false;
   const can = puntos >= p.costo;
   const stockInfo = getStockInfo(p);
 
@@ -994,6 +996,12 @@ function openModal(id) {
   document.getElementById('modal-status').style.color = can ? 'var(--green)' : 'var(--accent)';
 
   const btn = document.getElementById('modal-btn-canje');
+  btn.textContent = 'Confirmar Canje';
+  const btnClose = document.getElementById('modal-btn-close');
+  const closeX = document.getElementById('modal-close');
+  if (btnClose) btnClose.disabled = false;
+  if (closeX) closeX.disabled = false;
+
   const expired = isPromoExpired(p.validez);
   if (expired) {
     document.getElementById('modal-status').textContent = '✗ Vencida';
@@ -1013,6 +1021,7 @@ function openModal(id) {
 }
 
 function closeModal() {
+  if (isProcessing) return;
   document.getElementById('modal-overlay').classList.remove('open');
   document.body.style.overflow = '';
   activePromoId = null;
@@ -1023,29 +1032,57 @@ document.getElementById('modal-btn-close').onclick = closeModal;
 document.getElementById('modal-overlay').onclick = e => { if(e.target===e.currentTarget) closeModal(); };
 
 document.getElementById('modal-btn-canje').onclick = async () => {
-  if (activePromoId === null) return;
+  if (activePromoId === null || isProcessing) return;
   const p = PROMOS.find(x => String(x.id) === String(activePromoId));
   if (!p || puntos < p.costo) return;
 
-  if (window.promosPuntosPageBridge?.canjearPromo) {
-    const result = await window.promosPuntosPageBridge.canjearPromo(activePromoId, { silentSuccess: true });
-    if (!result?.ok) return;
+  const btn = document.getElementById('modal-btn-canje');
+  const btnClose = document.getElementById('modal-btn-close');
+  const closeX = document.getElementById('modal-close');
 
-    syncCanjeState(result);
+  isProcessing = true;
+  btn.disabled = true;
+  btn.textContent = 'Procesando...';
+  if (btnClose) btnClose.disabled = true;
+  if (closeX) closeX.disabled = true;
+
+  try {
+    if (window.promosPuntosPageBridge?.canjearPromo) {
+      const result = await window.promosPuntosPageBridge.canjearPromo(activePromoId, { silentSuccess: true });
+      if (!result?.ok) {
+        isProcessing = false;
+        btn.disabled = false;
+        btn.textContent = 'Confirmar Canje';
+        if (btnClose) btnClose.disabled = false;
+        if (closeX) closeX.disabled = false;
+        return;
+      }
+
+      syncCanjeState(result);
+      isProcessing = false;
+      closeModal();
+      showToast(`✓ ¡"${result.titulo || p.titulo}" canjeado! Te quedan ${fmtPts(puntos)} pts.`);
+      return;
+    }
+
+    puntos -= p.costo;
+    if (typeof p.stock === 'number') {
+      p.stock = Math.max(0, p.stock - 1);
+    }
+
+    updateWallet();
+    renderPromos();
+    isProcessing = false;
     closeModal();
-    showToast(`✓ ¡"${result.titulo || p.titulo}" canjeado! Te quedan ${fmtPts(puntos)} pts.`);
-    return;
+    showToast(`✓ ¡"${p.titulo}" canjeado! Te quedan ${fmtPts(puntos)} pts.`);
+  } catch (error) {
+    console.error(error);
+    isProcessing = false;
+    btn.disabled = false;
+    btn.textContent = 'Confirmar Canje';
+    if (btnClose) btnClose.disabled = false;
+    if (closeX) closeX.disabled = false;
   }
-
-  puntos -= p.costo;
-  if (typeof p.stock === 'number') {
-    p.stock = Math.max(0, p.stock - 1);
-  }
-
-  updateWallet();
-  renderPromos();
-  closeModal();
-  showToast(`✓ ¡"${p.titulo}" canjeado! Te quedan ${fmtPts(puntos)} pts.`);
 };
 
 function setPromosData(promosData, puntosActuales = puntos) {
@@ -1097,7 +1134,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Keyboard: close modal with Escape
-  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key==='Escape' && !isProcessing) closeModal(); });
   updateWallet();
 });
 </script>
